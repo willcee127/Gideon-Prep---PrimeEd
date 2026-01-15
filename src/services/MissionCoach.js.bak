@@ -1,0 +1,570 @@
+// Mission Coach Service - AI-powered tactical guidance
+// Uses Gemini API to provide personalized coaching for students
+
+class MissionCoach {
+  constructor() {
+    this.apiKey = import.meta.env.VITE_GEMINI_KEY
+    this.apiEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+    this.systemInstructions = `You are Gideon Mission Commander, a tactical AI coach for Overcomers reclaiming their education.
+
+CRITICAL LOGIC: > 1. Preparation over Practice: Every response must prepare student for Testing Center environment. 2. Button Accuracy: When mentioning Command Calc, use exact button names in brackets, e.g., [n/d], [2nd], [ENTER], [f<->d]. 3. The 'Why' Logic: Never explain math using abstract rules. Use 'Mental Models' (e.g., 'A fraction is just a division problem waiting to happen'). 4. Preparation Language: Replace 'Study' with 'Train', 'Test' with 'Mission', and 'Incorrect' with 'Recalibrate'.
+
+RESPONSE STRUCTURE:
+
+Acknowledgement: Validate their grit (e.g., 'Warrior, you've put in 10 reps today. Your stamina is growing.')
+
+Tactical Intel: Give as exact [Command Calc] button sequence.
+
+The Shift: Explain as concept in one simple, clear sentence.
+
+AUDIT MISSION LOGIC: Ensure Quality Instruction.
+
+1. Logic Check: Review ProblemEngine.jsx. Ensure that if a student uses the Teaching HUD, Total Reps awarded is 0.5 instead of 1. (This ensures they don't 'fake' their way to preparedness).
+
+2. Command Calc Sync: Add a listener so that when Mission Coach output contains a button in [brackets], that button in CommandCalc.jsx triggers a gold pulse animation shadow-[0_0_20px_rgba(255,215,0,0.8)].
+
+Preparation Tracking: In studentStats, initialize toolCommandLevel: 0. Increment this by +1 whenever a problem is solved while Command Calc is active.
+
+The Pre-Brief (Handshake): Add a useEffect to ProblemEngine.jsx that checks currentProblem.difficulty. If it is 4 or 5, trigger an immediate Coach message: 'Warrior, this stronghold has heavy armor. Deploy Command Calc immediately.'
+
+3. Rep Logic Audit: In checkAnswer function, update scoring logic: If showTeachingHUD or intelActive is true, award 0.5 Reps. If solved independently, award 1 Rep (or 2 for Command Calc missions).
+
+Keep all responses Simple, Clean, and Clear.`
+  }
+
+  // Get current problem context
+  getProblemContext(problem) {
+    if (!problem) return 'No problem available'
+    
+    const context = {
+      problem: problem.problem || problem.question || '',
+      equation: problem.equation || '',
+      tacticalTip: problem.tacticalTip || '',
+      difficulty: problem.difficulty || 1,
+      requiresCommandCalc: problem.requiresGhostCalc || false,
+      zone: problem.zone || 'Unknown'
+    }
+    
+    return context
+  }
+
+  // Generate tactical masterclass for Deep Dive
+  generateTacticalMasterclass(problem, studentProgress = {}) {
+    if (!this.apiKey) {
+      return this.getFallbackAuraCoaching(problem)
+    }
+
+    const context = this.getProblemContext(problem)
+    
+    // Pattern Detection: Analyze student error patterns
+    const errorPatterns = studentProgress.errorLog || []
+    const recentErrors = errorPatterns.slice(-5) // Last 5 errors
+    const patternDetected = this.analyzeErrorPatterns(recentErrors)
+    
+    // Scaffolding Logic: Adjust coaching based on command level
+    const commandLevel = studentProgress.commandLevel || 0
+    const scaffoldingLevel = this.determineScaffoldingLevel(commandLevel)
+    
+    // Peer-to-Peer Tactical Language for Experts
+    const usePeerTacticalLanguage = commandLevel >= 80 && scaffoldingLevel === 'minimal'
+    
+    // Circuit Breaker Detection
+    const circuitBreakerDetected = this.detectCircuitBreaker(studentProgress)
+    
+    // Anti-Stuck AI Instructions
+    const useAntiStuckInstructions = circuitBreakerDetected
+    
+    const prompt = `${this.systemInstructions}
+
+Current Situation:
+- Problem: ${context.problem}
+- Equation: ${context.equation}
+- Difficulty Level: ${context.difficulty}/5
+- Requires Command Calc: ${context.requiresCommandCalc ? 'YES' : 'NO'}
+- Zone: ${context.zone}
+- Tactical Tip: ${context.tacticalTip}
+
+Student Progress:
+- Command Level: ${commandLevel}% (Elite: ${commandLevel >= 80 ? 'YES' : 'NO'})
+- Consecutive Misses: ${studentProgress.consecutiveMisses || 0}
+- Current Streak: ${studentProgress.streak || 0}
+- Total Correct: ${studentProgress.totalCorrect || 0}
+- Circuit Breaker Status: ${circuitBreakerDetected ? 'DETECTED' : 'CLEAR'}
+
+Error Pattern Analysis:
+${patternDetected ? 'PATTERN DETECTED: ' + patternDetected.description + ' This requires tactical adjustment.' : 'Standard coaching approach'}
+
+Scaffolding Level: ${scaffoldingLevel}
+
+Circuit Breaker Intervention:
+${circuitBreakerDetected ? `
+I'm Stuck, Warrior. The circuit is breaking. Let's recalibrate our approach.
+
+Visual Mental Model: Pizza/Slices
+Think of this like a pizza divided into 8 equal slices. Each slice is 1/8 of the whole.
+
+Tactical Adjustment:
+Instead of struggling with the same method, try this alternative approach:
+- Use the [÷] key to find the total first
+- Then divide by 8 to get one slice
+- This gives you the same result with less chance of error
+
+Keep your tactical focus sharp. The Command Calc can help you find the right path.
+` : `
+Standard coaching approach.
+`}
+
+Your Mission:
+Generate tactical coaching for this Overcomer. 
+
+${useAntiStuckInstructions ? `
+Use peer-to-peer tactical language. Focus on strategy and adaptation rather than basic instruction.
+
+Provide strategic insights that would help a fellow expert:
+- "Consider alternative approaches: What if we tried factoring first?"
+- "Share tactical discoveries: 'I found a faster method using the [x²] key sequence."
+- "Discuss problem-solving strategies: 'How do you typically approach multi-step problems?'
+
+Example:
+PEER-TO-PEER TACTICAL: Fellow expert, I notice you're struggling with fraction conversions. Have you considered using the [f<->d] conversion as a shortcut? It could speed up your workflow significantly.
+
+Keep it collaborative, strategic, and focused on mutual tactical growth.
+` : scaffoldingLevel === 'strategic' ? `
+Provide strategic hints instead of full sequences.
+
+Example:
+TACTICAL MASTERCLASS: A fraction is division in disguise | Use [n/d] then [f<->d] to convert | Practice: 3/4 + 2/5
+
+Keep it tactical, encouraging, and focused on building confidence.
+` : scaffoldingLevel === 'minimal' ? `
+Provide only essential button sequences.
+
+Example:
+TACTICAL MASTERCLASS: A fraction is division in disguise | Use [n/d] then [f<->d] to convert | Practice: 3/4 + 2/5
+
+Keep it tactical, encouraging, and focused on building confidence.
+` : `
+Provide standard coaching with one key sequence.
+
+Example:
+TACTICAL MASTERCLASS: A fraction is division in disguise | Use [n/d] then [f<->d] to convert | Practice: 3/4 + 2/5
+
+Keep it tactical, encouraging, and focused on building confidence.
+`}
+
+    try {
+      const response = await fetch(`${this.apiEndpoint}?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const coachingText = data.candidates[0].content.parts[0].text
+      
+      return {
+        success: true,
+        message: coachingText.trim(),
+        tacticalTip: context.tacticalTip,
+        requiresCommandCalc: context.requiresCommandCalc,
+        patternDetected: patternDetected,
+        scaffoldingLevel: scaffoldingLevel,
+        circuitBreakerDetected: circuitBreakerDetected
+      }
+    } catch (error) {
+      console.error('Mission Coach API error:', error)
+      return this.getFallbackAuraCoaching(problem)
+    }
+  }
+
+  // Co-Pilot Mode: Break problem into simplified steps
+  generateCoPilotSteps(problem) {
+    const context = this.getProblemContext(problem)
+    
+    // Analyze the problem type and create simplified steps
+    const steps = this.breakDownProblem(context)
+    
+    return {
+      success: true,
+      coPilotMode: true,
+      steps: steps,
+      message: "Co-Pilot Mode activated. Let's work through this together, step by step.",
+      tacticalTip: "Focus on understanding each step, not just the answer."
+    }
+  }
+
+  // Simplified Problem Generator
+  generateSimplifiedProblem(originalProblem) {
+    const context = this.getProblemContext(originalProblem)
+    
+    // Create easy and standard versions based on problem type
+    if (context.zone.includes('Fraction')) {
+      return {
+        easy: {
+          problem: "Convert 1/2 to decimal",
+          equation: "1 ÷ 2",
+          zone: "Fraction",
+          difficulty: 1,
+          tacticalTip: "Use [÷] key for division"
+        },
+        standard: {
+          problem: "Convert 3/8 to decimal",
+          equation: "3 ÷ 8", 
+          zone: "Fraction",
+          difficulty: 2,
+          tacticalTip: "Use [n/d] then [f<->d] for conversion"
+        }
+      }
+    } else if (context.zone.includes('Algebra')) {
+      return {
+        easy: {
+          problem: "Solve: x + 2 = 7",
+          equation: "x = 7 - 2",
+          zone: "Algebra",
+          difficulty: 1,
+          tacticalTip: "Use subtraction to isolate variable"
+        },
+        standard: {
+          problem: "solve: 2x + 3 = 11",
+          equation: "2x = 11 - 3",
+          zone: "Algebra", 
+          difficulty: 2,
+          tacticalTip: "Use division to isolate variable"
+        }
+      }
+    } else if (context.zone.includes('Geometry')) {
+      return {
+        easy: {
+          problem: "Find area of square with side 4",
+          equation: "Area = 4 × 4",
+          zone: "Geometry",
+          difficulty: 1,
+          tacticalTip: "Use multiplication for area"
+        },
+        standard: {
+          problem: "Find area of triangle with base 6 and height 8",
+          equation: "Area = 0.5 × 6 × 8",
+          zone: "Geometry",
+          difficulty: 2,
+          tacticalTip: "Use triangle area formula"
+        }
+      }
+    } else {
+      // Default for general problems
+      return {
+        easy: {
+          problem: "Add: 25 + 17",
+          equation: "25 + 17 = 42",
+          zone: "General",
+          difficulty: 1,
+          tacticalTip: "Use [+] key for addition"
+        },
+        standard: {
+          problem: "Multiply: 15 × 8",
+          equation: "15 × 8 = 120",
+          zone: "General",
+          difficulty: 2,
+          tacticalTip: "Use [×] key for multiplication"
+        }
+      }
+    }
+  }
+
+  // Analyze error patterns for pedagogical insights
+  analyzeErrorPatterns(errors) {
+    if (!errors || errors.length === 0) {
+      return { detected: false, description: '' }
+    }
+    
+    // Common error patterns to detect
+    const patterns = [
+      {
+        name: 'fraction_conversion',
+        keywords: ['convert', 'fraction', 'decimal'],
+        errors: 3,
+        description: 'Struggles with fraction-to-decimal conversions',
+        suggestion: 'Focus on [n/d][f<->d] sequence mastery'
+      },
+      {
+        name: 'variable_confusion',
+        keywords: ['variable', 'substitute', 'algebra'],
+        errors: 3,
+        description: 'Confusion with variable substitution',
+        suggestion: 'Use [STO][ALPHA] for variable storage'
+      },
+      {
+        name: 'sign_errors',
+        keywords: ['negative', 'minus', 'subtract'],
+        errors: 3,
+        description: 'Consistently makes sign errors',
+        suggestion: 'Practice with [(-)] key for negative numbers'
+      },
+      {
+        name: 'order_of_operations',
+        keywords: ['multiply', 'divide', 'order'],
+        errors: 3,
+        description: 'Incorrect order of operations',
+        suggestion: 'Follow PEMDAS: Parentheses, Exponents, Multiplication, Division, Addition, Subtraction'
+      }
+    ]
+    
+    // Check for pattern matches
+    for (const pattern of patterns) {
+      const matches = errors.filter(error => 
+        pattern.keywords.some(keyword => error.toLowerCase().includes(keyword))
+      ).length
+      
+      if (matches >= pattern.errors) {
+        return {
+          detected: true,
+          pattern: pattern.name,
+          description: pattern.description,
+          suggestion: pattern.suggestion
+        }
+      }
+    }
+    
+    return { detected: false, description: '' }
+  }
+
+  // Determine scaffolding level based on command level
+  determineScaffoldingLevel(commandLevel) {
+    if (commandLevel >= 80) {
+      return 'minimal'  // Elite warriors need only strategic hints
+    } else if (commandLevel >= 50) {
+      return 'strategic'  // Advanced warriors get strategic hints
+    } else if (commandLevel >= 20) {
+      return 'full'  // Developing warriors need full sequences
+    } else {
+      return 'standard'  // New warriors need standard coaching
+    }
+  }
+
+  // Generate combat commendation for skill mastery
+  async generateCombatCommendation(studentStats = {}) {
+    // ... (rest of the code remains the same)
+    if (!this.apiKey) {
+      return this.getFallbackCommendation(studentStats)
+    }
+
+    const prompt = `${this.systemInstructions}
+
+Student Performance Data:
+- Total Correct Answers: ${studentStats.totalCorrect || 0}
+- Current Streak: ${studentStats.streak || 0}
+- Command Calc Usage: ${studentStats.commandCalcUsage || 0}
+- Problems Solved: ${studentStats.problemsSolved || 0}
+- Accuracy Rate: ${studentStats.accuracyRate || 0}%
+
+Recent Skills Demonstrated:
+${studentStats.recentSkills ? studentStats.recentSkills.map(skill => `- ${skill}`).join('\n') : '- No specific skills recorded'}
+
+Your Mission:
+Provide a brief combat commendation (1-2 sentences) that:
+1. Acknowledges the student's effort and grit
+2. Mentions a specific Command Calc skill they're mastering
+3. Uses Overcomer language (Warrior, Reps, Sovereignty, etc.)
+4. Reinforces their tactical competence
+
+Examples:
+- "Warrior, your mastery of the [n/d] key shows excellent sovereignty over fractions. That's 5 solid reps!"
+- "Outstanding grit on these reps! Your Command Calc precision with variable storage is battlefield-ready."
+- "Excellent recalibration skills! Your accuracy with [2nd][STAT] demonstrates true tactical command."
+
+Keep it concise, powerful, and focused on celebrating their persistence and hardware skills.`
+
+    try {
+      const response = await fetch(this.apiEndpoint + `?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const commendationText = data.candidates[0].content.parts[0].text
+      
+      return {
+        success: true,
+        message: commendationText.trim(),
+        type: 'combat_commendation'
+      }
+    } catch (error) {
+      console.error('Mission Coach API error:', error)
+      return this.getFallbackCommendation(studentStats)
+    }
+  }
+
+  // Fallback coaching when API is unavailable
+  getFallbackAuraCoaching(problem) {
+    const context = this.getProblemContext(problem)
+    const fallbackMessages = [
+      "Warrior, you've put in 10 reps today. Your stamina is growing. Use [n/d] to enter the fraction, then press [f<->d] to convert. We don't fail here, we recalibrate.",
+      "Outstanding grit on this mission! Press [STO] to store the value, then use [ALPHA] to recall it. We don't fail here, we recalibrate. This gives you recovery level over the calculation.",
+      "Warrior, your focus is admirable. Use [2nd][STAT] to access statistics mode for the mean. We don't fail here, we recalibrate. This tactical move reveals the central tendency.",
+      "Excellent tactical approach! Press [x²] to square the number, then [√] to find the root. We don't fail here, we recalibrate. This recalibrates the equation to its foundation.",
+      "Warrior, your determination shows strong recovery level. Use [÷] for division, then [×] to multiply. We don't fail here, we recalibrate. This recalibrates the terrain by balancing the operation."
+    ]
+
+    const randomMessage = fallbackMessages[Math.floor(Math.random() * fallbackMessages.length)]
+    
+    return {
+      success: false,
+      message: randomMessage,
+      tacticalTip: context.tacticalTip,
+      requiresCommandCalc: context.requiresCommandCalc
+    }
+  }
+
+  // Fallback commendation when API is unavailable
+  getFallbackCommendation(studentStats) {
+    const commendations = [
+      "Warrior, your mastery of the [n/d] key shows excellent command level over fractions. That's 5 solid reps!",
+      "Outstanding grit on these missions! Your Command Calc precision with variable storage is battlefield-ready.",
+      "Excellent recalibration skills! Your accuracy with [2nd][STAT] demonstrates true tactical command.",
+      "Warrior, your command level over formula calculations is impressive! Your Command Calc deployment is textbook perfect.",
+      "Superb tactical precision! Your mastery of the [x²] and [√] keys shows excellent command of operations."
+    ]
+
+    const randomCommendation = commendations[Math.floor(Math.random() * commendations.length)]
+    
+    return {
+      success: false,
+      message: randomCommendation,
+      type: 'combat_commendation'
+    }
+  }
+
+  // Generate tactical masterclass for Deep Dive
+  generateTacticalMasterclass(problem) {
+    const context = this.getProblemContext(problem)
+    const prompt = `${this.systemInstructions}
+
+Current Situation:
+- Problem: ${context.problem}
+- Equation: ${context.equation}
+- Difficulty Level: ${context.difficulty}/5
+- Requires Command Calc: ${context.requiresCommandCalc ? 'YES' : 'NO'}
+- Zone: ${context.zone}
+- Tactical Tip: ${context.tacticalTip}
+
+Student Progress:
+- Consecutive Misses: 3
+- Current Streak: 0
+- Total Correct: 0
+
+Your Mission:
+Generate a tactical masterclass for this struggling Overcomer. Provide:
+
+1. The Concept: One simple sentence explaining the core math concept
+2. The Tool Trick: One specific Command Calc button sequence
+3. The Safety Rep: One simple practice problem they can solve immediately
+
+Format:
+TACTICAL MASTERCLASS: [Concept] | [Tool Trick] | [Safety Rep]
+
+Example:
+TACTICAL MASTERCLASS: A fraction is division in disguise | Use [n/d] then [f<->d] to convert | Practice: 3/4 + 2/5
+
+Keep it tactical, encouraging, and focused on building confidence.`
+
+    try {
+      const response = await fetch(this.apiEndpoint + `?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const masterclassText = data.candidates[0].content.parts[0].text
+      
+      return {
+        success: true,
+        message: masterclassText.trim(),
+        concept: '',
+        toolTrick: '',
+        safetyRep: ''
+      }
+    } catch (error) {
+      console.error('Mission Coach API error:', error)
+      return {
+        success: false,
+        message: 'Warrior, even the strongest warriors need tactical support. Use [n/d] for fractions and [STO] for variables. This recalibrates your approach to victory.',
+        concept: 'Fraction division and variable storage',
+        toolTrick: '[n/d] → [f<->d]',
+        safetyRep: 'Practice: 1/4 + 2/5'
+      }
+    }
+  }
+  isAvailable() {
+    return !!this.apiKey
+  }
+
+  // Get coach status
+  getStatus() {
+    return {
+      available: this.isAvailable(),
+      personality: 'Gideon Mission Commander for Overcomers',
+      voice: 'Tactical, authoritative, preparation-focused',
+      focus: 'Testing Center preparation with hardware-first Command Calc guidance',
+      capabilities: ['Aura Coaching', 'Combat Commendations', 'Tactical Guidance'],
+      criticalLogic: [
+        'Preparation over Practice: Ensures Testing Center readiness',
+        'Button Accuracy: Exact Command Calc sequences in brackets',
+        'Mental Models: Conceptual explanations over abstract rules',
+        'Preparation Language: Train/Mission/Recalibrate terminology',
+        'Quality Control: Teaching HUD prevents fake preparedness'
+      ],
+      auditStandards: [
+        'Logic Check: ProblemEngine.jsx Teaching HUD logic',
+        'Command Calc Sync: Gold pulse on tactical button brackets',
+        'Preparation Tracking: Tool command level counter',
+        'Pre-Brief (Handshake): Heavy armor immediate deployment',
+        'Rep Logic: 0.5 reps for assisted solving, 1 rep for independent',
+        'Difficulty Anchor: GED-realistic Mock Forge numbers',
+        'Clarity Audit: Recalibrating/Overcomer terminology only'
+      ]
+    }
+  }
+}
+
+// Export singleton instance
+export const missionCoach = new MissionCoach()
+
+// Export class for testing/custom instances
+export default MissionCoach

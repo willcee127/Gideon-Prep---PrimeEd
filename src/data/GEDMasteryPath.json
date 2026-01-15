@@ -1,0 +1,302 @@
+{
+  "title": "GED Mastery Path",
+  "description": "Mathematical Reasoning Curriculum",
+  "nodes": [
+    {
+      "id": "ged-001",
+      "title": "Number Sense",
+      "sector": "Foundations",
+      "status": "unlocked",
+      "description": "Understanding whole numbers and place value.",
+      "prerequisites": [],
+      "masteryLevel": 0,
+      "xpRequired": 0,
+      "coordinates": { "x": 200, "y": 100 },
+      "icon": "🔢",
+      "difficulty": "beginner",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": "ged-002",
+      "title": "Fractions",
+      "sector": "Foundations",
+      "status": "locked",
+      "description": "Mastery of Pieces. Strategic Insight: 'A fraction is just a division problem waiting for a leader.'",
+      "prerequisites": ["ged-001"],
+      "masteryLevel": 0,
+      "xpRequired": 100,
+      "coordinates": { "x": 350, "y": 150 },
+      "icon": "🔷",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "ged-003",
+      "title": "Decimals",
+      "sector": "Foundations",
+      "status": "locked",
+      "description": "Precision in the Smallest Things.",
+      "prerequisites": ["ged-002"],
+      "masteryLevel": 0,
+      "xpRequired": 250,
+      "coordinates": { "x": 500, "y": 120 },
+      "icon": "🔟",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "ged-004",
+      "title": "Percents",
+      "sector": "Applications",
+      "status": "locked",
+      "description": "Percent means 'for every hundred.'",
+      "prerequisites": ["ged-003"],
+      "masteryLevel": 0,
+      "xpRequired": 400,
+      "coordinates": { "x": 650, "y": 200 },
+      "icon": "📊",
+      "difficulty": "intermediate",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "ged-005",
+      "title": "Ratios & Proportions",
+      "sector": "Applications",
+      "status": "locked",
+      "description": "The Balance of Forces.",
+      "prerequisites": ["ged-004"],
+      "masteryLevel": 0,
+      "xpRequired": 550,
+      "coordinates": { "x": 800, "y": 150 },
+      "icon": "⚖️",
+      "difficulty": "intermediate",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "ged-006",
+      "title": "Multi-Step Word Problems",
+      "sector": "Applications",
+      "status": "locked",
+      "description": "Strategic Scaling: A complex problem is just a group of small allies. Break them apart to conquer the whole.",
+      "prerequisites": ["ged-005"],
+      "masteryLevel": 0,
+      "xpRequired": 600,
+      "coordinates": { "x": 950, "y": 120 },
+      "icon": "🎯",
+      "difficulty": "intermediate",
+      "estimatedTime": "4-5 hours",
+      "abstractProblems": [
+        {
+          "id": "wp1",
+          "question": "A store sells shirts for $25 each and pants for $40 each. If they sell 3 shirts and 2 pants, what is the total revenue?",
+          "answer": "$155",
+          "strategicInsight": "Logic is your weapon of precision. Measure twice, strike once."
+        },
+        {
+          "id": "wp2", 
+          "question": "Maria works 15 hours per week at $12/hour. She saves 20% of her earnings. How much does she save weekly?",
+          "answer": "$36",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "wp3",
+          "question": "A car travels 180 miles in 3 hours. What is its average speed?",
+          "answer": "60 mph",
+          "strategicInsight": "Logic is your weapon of precision. Measure twice, strike once."
+        }
+      ],
+      "concreteProblems": [
+        {
+          "id": "wp_conc1",
+          "question": "Visual: 3 boxes × $25 + 2 boxes × $40 = ?",
+          "answer": "$155",
+          "visualInstruction": "Show 3 boxes labeled $25 and 2 boxes labeled $40"
+        }
+      ]
+    },
+    {
+      "id": "ged-007",
+      "title": "Rate & Distance Problems",
+      "sector": "Applications", 
+      "status": "locked",
+      "description": "Strategic Scaling: Calculate rates, distances, and time using logical steps.",
+      "prerequisites": ["ged-006"],
+      "masteryLevel": 0,
+      "xpRequired": 650,
+      "coordinates": { "x": 1100, "y": 200 },
+      "icon": "📏",
+      "difficulty": "intermediate",
+      "estimatedTime": "4-5 hours",
+      "abstractProblems": [
+        {
+          "id": "rd1",
+          "question": "If a factory produces 240 widgets in 8 hours, how many widgets does it produce per hour?",
+          "answer": "30 widgets/hour",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "rd2",
+          "question": "A train travels 300 miles in 4 hours. If it maintains the same speed, how long to travel 450 miles?",
+          "answer": "6 hours",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "rd3",
+          "question": "Water flows from a tank at 3 gallons per minute. How long to empty 180 gallons?",
+          "answer": "60 minutes",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        }
+      ],
+      "concreteProblems": [
+        {
+          "id": "rd_conc1",
+          "question": "Visual: 240 widgets ÷ 8 hours = ? widgets/hour",
+          "answer": "30 widgets/hour",
+          "visualInstruction": "Show division with visual grouping"
+        }
+      ]
+    },
+    {
+      "id": "ged-008",
+      "title": "Percentage Applications",
+      "sector": "Applications",
+      "status": "locked", 
+      "description": "Strategic Scaling: Apply percentage calculations to real-world scenarios.",
+      "prerequisites": ["ged-007"],
+      "masteryLevel": 0,
+      "xpRequired": 700,
+      "coordinates": { "x": 1250, "y": 150 },
+      "icon": "📈",
+      "difficulty": "intermediate",
+      "estimatedTime": "4-5 hours",
+      "abstractProblems": [
+        {
+          "id": "pct1",
+          "question": "A laptop originally costs $800. It's on sale for 25% off. What is the sale price?",
+          "answer": "$600",
+          "strategicInsight": "Logic is your weapon of precision. Measure twice, strike once."
+        },
+        {
+          "id": "pct2",
+          "question": "A company's profit increased from $50,000 to $60,000. What percentage increase is this?",
+          "answer": "20%",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "pct3",
+          "question": "If 30% of students are athletes and there are 240 students total, how many are athletes?",
+          "answer": "72 athletes",
+          "strategicInsight": "Logic is your weapon of precision. Measure twice, strike once."
+        }
+      ],
+      "concreteProblems": [
+        {
+          "id": "pct_conc1",
+          "question": "Visual: $800 × (1 - 0.25) = ?",
+          "answer": "$600",
+          "visualInstruction": "Show discount calculation with visual breakdown"
+        }
+      ]
+    },
+    {
+      "id": "ged-009",
+      "title": "Proportion & Scaling",
+      "sector": "Applications",
+      "status": "locked",
+      "description": "Strategic Scaling: Master proportional reasoning and scaling relationships.",
+      "prerequisites": ["ged-008"],
+      "masteryLevel": 0,
+      "xpRequired": 750,
+      "coordinates": { "x": 1400, "y": 200 },
+      "icon": "⚖️",
+      "difficulty": "advanced",
+      "estimatedTime": "5-6 hours",
+      "abstractProblems": [
+        {
+          "id": "prop1",
+          "question": "If 3 workers can build 2 houses in 6 months, how many houses can 6 workers build in the same time?",
+          "answer": "4 houses",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "prop2",
+          "question": "A recipe calls for 2 cups of flour for 6 servings. How many cups for 15 servings?",
+          "answer": "5 cups",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "prop3",
+          "question": "If a map scale is 1 inch = 10 miles, how many miles represent 3.5 inches?",
+          "answer": "35 miles",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        }
+      ],
+      "concreteProblems": [
+        {
+          "id": "prop_conc1",
+          "question": "Visual: 3 workers : 2 houses = 6 workers : ? houses",
+          "answer": "4 houses",
+          "visualInstruction": "Show proportion with visual scaling"
+        }
+      ]
+    },
+    {
+      "id": "ged-010",
+      "title": "Complex Problem Solving",
+      "sector": "Applications",
+      "status": "locked",
+      "description": "Strategic Scaling: Combine multiple concepts to solve complex real-world problems.",
+      "prerequisites": ["ged-009"],
+      "masteryLevel": 0,
+      "xpRequired": 800,
+      "coordinates": { "x": 1550, "y": 120 },
+      "icon": "🏆",
+      "difficulty": "advanced",
+      "estimatedTime": "5-6 hours",
+      "abstractProblems": [
+        {
+          "id": "cps1",
+          "question": "A contractor charges $50/hour plus $200 materials. If a job takes 6 hours and $400 materials, what's the total cost?",
+          "answer": "$700",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "cps2",
+          "question": "Maria invests $500 at 6% interest. How much will she have after 2 years?",
+          "answer": "$560",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        },
+        {
+          "id": "cps3",
+          "question": "A store offers 30% off, then an additional 10% off on sale price. What's the total discount on a $100 item?",
+          "answer": "37%",
+          "strategicInsight": "A complex problem is just a group of small allies. Break them apart to conquer the whole."
+        }
+      ],
+      "concreteProblems": [
+        {
+          "id": "cps_conc1",
+          "question": "Visual: ($50 × 6) + $200 + $400 = ?",
+          "answer": "$700",
+          "visualInstruction": "Show multi-step calculation with visual breakdown"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    { "from": "ged-001", "to": "ged-002" },
+    { "from": "ged-002", "to": "ged-003" },
+    { "from": "ged-003", "to": "ged-004" },
+    { "from": "ged-004", "to": "ged-005" },
+    { "from": "ged-005", "to": "ged-006" },
+    { "from": "ged-006", "to": "ged-007" },
+    { "from": "ged-007", "to": "ged-008" },
+    { "from": "ged-008", "to": "ged-009" },
+    { "from": "ged-009", "to": "ged-010" }
+  ],
+  "sectors": [
+    { "name": "Foundations", "color": "#9333ea" },
+    { "name": "Applications", "color": "#10b981" },
+    { "name": "Algebraic Thinking", "color": "#f59e0b" },
+    { "name": "Spatial Reasoning", "color": "#ef4444" },
+    { "name": "Analytical Thinking", "color": "#06b6d4" }
+  ]
+}

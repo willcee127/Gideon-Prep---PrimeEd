@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Brand Typography */
+.gideon-prep {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.prime-ed {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-weight: 600;
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* Glowing Gold Effect for PrimeED */
+.prime-ed-glow {
+  font-weight: 700;
+  color: #FFD700;
+  text-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.2),
+    0 0 30px rgba(255, 215, 0, 0.1);
+  animation: goldGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes goldGlow {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px rgba(255, 215, 0, 0.4),
+      0 0 20px rgba(255, 215, 0, 0.2),
+      0 0 30px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    text-shadow: 
+      0 0 15px rgba(255, 215, 0, 0.6),
+      0 0 30px rgba(255, 215, 0, 0.3),
+      0 0 45px rgba(255, 215, 0, 0.15);
+  }
+}
+
+/* Custom Font Classes */
+.font-sans {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.font-bolder {
+  font-weight: 700;
+}
+
+/* Smooth transitions for brand elements */
+.brand-transition {
+  transition: all 0.3s ease;
+}
+
+/* Enhanced focus states */
+.brand-focus:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+}
