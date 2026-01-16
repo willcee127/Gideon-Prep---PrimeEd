@@ -4,125 +4,58 @@ import { getCommanderDashboardData, checkSectorLock } from '../services/syncServ
 import { supabase } from '../services/supabase'
 
 const CommanderDashboard = () => {
-  const [totalMedals, setTotalMedals] = useState(0)
-  const [topFriction, setTopFriction] = useState([])
-  const [activeWarriors, setActiveWarriors] = useState([])
-  const [extractionHeatmap, setExtractionHeatmap] = useState([])
-  const [gritFeed, setGritFeed] = useState([])
-  const [safetyValveLog, setSafetyValveLog] = useState([])
+  const [totalCompletions, setTotalCompletions] = useState(0)
+  const [lifetimeWealth, setLifetimeWealth] = useState(0)
+  const [annualWageBoost, setAnnualWageBoost] = useState(0)
+  const [ghostProtocolAlerts, setGhostProtocolAlerts] = useState([])
+  const [medalForgeStatus, setMedalForgeStatus] = useState({
+    phase01: { completed: 0, total: 15, label: 'Foundations' },
+    phase02: { completed: 0, total: 8, label: 'Algebra' },
+    phase03: { completed: 0, total: 7, label: 'Applied Math' }
+  })
+  const [systemicProgress, setSystemicProgress] = useState(0)
 
-  // Fetch extraction heatmap data
-  const fetchExtractionHeatmap = async () => {
-    try {
-      const { data: intelData } = await supabase
-        .from('users')
-        .select('intel_unlocked')
+  // Calculate economic metrics
+  useEffect(() => {
+    const wealth = totalCompletions * 266760
+    const wageBoost = totalCompletions * 8892
+    setLifetimeWealth(wealth)
+    setAnnualWageBoost(wageBoost)
+  }, [totalCompletions])
 
-      const conceptCounts = {}
-      const totalUsers = intelData?.length || 0
+  // Calculate systemic progress toward 100,000 goal
+  useEffect(() => {
+    const progress = (totalCompletions / 100000) * 100
+    setSystemicProgress(Math.min(progress, 100))
+  }, [totalCompletions])
 
-      intelData?.forEach(user => {
-        if (user.intel_unlocked) {
-          user.intel_unlocked.forEach(intel => {
-            const concept = intel.concept_id
-            conceptCounts[concept] = (conceptCounts[concept] || 0) + 1
-          })
-        }
-      })
-
-      const heatmap = Object.entries(conceptCounts)
-        .map(([concept, count]) => ({
-          concept: concept.replace('_', ' ').toUpperCase(),
-          count,
-          failureRate: (count / totalUsers) * 100,
-          isHighFailure: (count / totalUsers) > 0.5
-        }))
-        .sort((a, b) => b.failureRate - a.failureRate)
-
-      setExtractionHeatmap(heatmap)
-    } catch (error) {
-      console.error('Extraction heatmap fetch error:', error)
-    }
-  }
-
-  // Fetch grit feed (recent medals)
-  const fetchGritFeed = async () => {
-    try {
-      const { data: usersData } = await supabase
-        .from('users')
-        .select('call_sign, medals_earned, updated_at')
-        .not('medals_earned', 'is', null)
-        .order('updated_at', { ascending: false })
-        .limit(10)
-
-      const feed = []
-      usersData?.forEach(user => {
-        if (user.medals_earned && user.medals_earned.length > 0) {
-          user.medals_earned.forEach(medal => {
-            feed.push({
-              call_sign: user.call_sign,
-              medal: medal.replace('_', ' ').toUpperCase(),
-              timestamp: user.updated_at
-            })
-          })
-        }
-      })
-
-      setGritFeed(feed.slice(0, 10))
-    } catch (error) {
-      console.error('Grit feed fetch error:', error)
-    }
-  }
-
-  // Fetch safety valve log
-  const fetchSafetyValveLog = async () => {
-    try {
-      const { data: lockedUsers } = await supabase
-        .from('users')
-        .select('call_sign, lock_reason, locked_at, starting_sector')
-        .eq('sector_locked', true)
-        .order('locked_at', { ascending: false })
-
-      setSafetyValveLog(lockedUsers || [])
-    } catch (error) {
-      console.error('Safety valve log fetch error:', error)
-    }
-  }
-
-  // Mock data - would come from Supabase
-  const mockData = {
-    totalMedals: 47,
-    topFriction: [
-      { concept: 'Division', count: 23 },
-      { concept: 'Linear Equations', count: 18 },
-      { concept: 'Fraction Operations', count: 15 }
-    ],
-    activeWarriors: [
-      { call_sign: 'WOLF_07', combat_power: 850 },
-      { call_sign: 'EAGLE_12', combat_power: 720 },
-      { call_sign: 'TIGER_03', combat_power: 680 }
-    ]
-  }
-
+  // Fetch dashboard data
   useEffect(() => {
     const loadCommanderData = async () => {
       try {
         const data = await getCommanderDashboardData()
         
         if (!data.error) {
-          setTotalMedals(data.totalMedals)
-          setTopFriction(data.topFriction)
-          setActiveWarriors(data.activeWarriors)
+          setTotalCompletions(data.totalMedals || 0)
+          
+          // Generate Ghost Protocol alerts based on friction data
+          const alerts = []
+          data.topFriction?.forEach(concept => {
+            if (concept.count > 2) { // More than 2 failures
+              alerts.push({
+                concept: concept.concept,
+                failureCount: concept.count,
+                probabilityDrop: '60%',
+                status: 'Intervention Required: Identity Protection Active',
+                severity: 'critical',
+                timestamp: new Date().toISOString()
+              })
+            }
+          })
+          setGhostProtocolAlerts(alerts)
         } else {
           console.error('Failed to load commander data:', data.error)
         }
-
-        // Load additional data
-        await Promise.all([
-          fetchExtractionHeatmap(),
-          fetchGritFeed(),
-          fetchSafetyValveLog()
-        ])
       } catch (error) {
         console.error('Commander data load error:', error)
       }
@@ -136,8 +69,17 @@ const CommanderDashboard = () => {
     return () => clearInterval(interval)
   }, [])
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount)
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <style jsx>{`
         .commander-text {
           font-family: 'Courier New', monospace;
@@ -146,174 +88,280 @@ const CommanderDashboard = () => {
         .glow-gold {
           text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
-        .command-panel {
+        .glow-purple {
+          text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+        .glow-cyan {
+          text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+        .glassmorphism {
           background: rgba(0, 0, 0, 0.7);
           backdrop-filter: blur(15px);
-          border: 1px solid rgba(255, 215, 0, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .gold-accent {
-          background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
-          border: 1px solid rgba(255, 215, 0, 0.3);
+        .neon-border {
+          box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
       `}</style>
 
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-5xl font-bold text-yellow-400 glow-gold commander-text mb-2">
+        <div className="text-center mb-8">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-5xl font-bold text-yellow-400 glow-gold commander-text mb-2"
+          >
             COMMANDER DASHBOARD
-          </h1>
+          </motion.h1>
           <div className="text-gray-400 text-sm commander-text uppercase tracking-widest">
-            STRATEGIC OPERATIONS CENTER
+            SYSTEMIC OPERATIONS CENTER
           </div>
         </div>
 
-        {/* Total Medals Forged */}
-        <div className="command-panel rounded-2xl p-8">
-          <h2 className="text-2xl font-bold text-yellow-400 glow-gold commander-text mb-6">
-            TOTAL MEDALS FORGED
+        {/* Mission Progress Gauge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="glassmorphism rounded-2xl p-8 neon-border"
+        >
+          <h2 className="text-2xl font-bold text-purple-300 glow-purple mb-6 text-center">
+            Systemic Shift: Target 10% of Annual GED Math Failure Pipeline
           </h2>
           
-          <div className="text-center">
-            <div className="text-6xl font-bold text-yellow-300 commander-text">
-              {totalMedals}
-            </div>
-            <div className="text-gray-400 text-sm commander-text uppercase tracking-widest">
-              ACROSS ALL WARRIORS
+          <div className="relative w-full h-8 bg-slate-800 rounded-full overflow-hidden mb-4">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${systemicProgress}%` }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full"
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">
+                {systemicProgress.toFixed(1)}%
+              </span>
             </div>
           </div>
-        </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div className="text-3xl font-bold text-white">
+                {totalCompletions.toLocaleString()}
+              </div>
+              <div className="text-gray-400 text-sm commander-text uppercase">
+                Warriors Served
+              </div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-cyan-300 glow-cyan">
+                100,000
+              </div>
+              <div className="text-gray-400 text-sm commander-text uppercase">
+                Annual Target
+              </div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-yellow-400 glow-gold">
+                {systemicProgress.toFixed(1)}%
+              </div>
+              <div className="text-gray-400 text-sm commander-text uppercase">
+                Pipeline Progress
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
-        {/* Extraction Heatmap */}
-        <div className="command-panel rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-yellow-400 glow-gold commander-text mb-4">
-            EXTRACTION HEATMAP
+        {/* Economic Reclamation Ticker */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glassmorphism rounded-2xl p-6 neon-border"
+        >
+          <h2 className="text-xl font-bold text-cyan-300 glow-cyan mb-4">
+            Total Lifetime Wealth Reclaimed
           </h2>
           
-          <div className="space-y-2">
-            {extractionHeatmap.map((item, index) => (
-              <div key={index} className={`rounded-lg p-3 ${
-                item.isHighFailure 
-                  ? 'bg-red-900/30 border border-red-500/50' 
-                  : 'gold-accent'
-              }`}>
-                <div className="flex justify-between items-center">
-                  <div className={`font-bold commander-text ${
-                    item.isHighFailure ? 'text-red-400' : 'text-white'
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Total Completions:</span>
+              <span className="text-white font-bold">{totalCompletions.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Lifetime Wealth:</span>
+              <span className="text-green-400 font-bold text-xl">{formatCurrency(lifetimeWealth)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Annual Wage Boost:</span>
+              <span className="text-green-400 font-bold text-xl">{formatCurrency(annualWageBoost)}</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Ghost Protocol Friction Alerts */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+          className="glassmorphism rounded-2xl p-6 neon-border"
+        >
+          <h2 className="text-xl font-bold text-red-400 mb-4 flex items-center">
+            ⚠️ Critical Friction Points
+          </h2>
+          
+          <div className="space-y-3">
+            {ghostProtocolAlerts.length === 0 ? (
+              <div className="text-center text-gray-400 py-8">
+                <div className="text-2xl mb-2">✓</div>
+                <div>No Critical Friction Detected</div>
+                <div className="text-sm">All systems operating within normal parameters</div>
+              </div>
+            ) : (
+              ghostProtocolAlerts.map((alert, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                  className={`rounded-lg p-4 border ${
+                    alert.severity === 'critical' ? 'bg-red-900/30 border-red-500/50' : 'bg-orange-900/30 border-orange-500/50'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-bold text-white">{alert.concept}</div>
+                      <div className="text-sm text-gray-300">{alert.failureCount} failures</div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`text-sm font-bold ${
+                        alert.severity === 'critical' ? 'text-red-400' : 'text-orange-400'
+                      }`}>
+                        {alert.probabilityDrop}
+                      </div>
+                      <div className={`text-xs ${
+                        alert.severity === 'critical' ? 'text-red-300' : 'text-orange-300'
+                      }`}>
+                        probability drop
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`text-sm font-medium ${
+                    alert.severity === 'critical' ? 'text-red-300' : 'text-orange-300'
                   }`}>
-                    {item.concept}
+                    {alert.status}
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className={`text-sm commander-text ${
-                      item.isHighFailure ? 'text-red-300' : 'text-yellow-400'
-                    }`}>
-                      {item.count} unlocks
-                    </div>
-                    <div className={`text-sm font-bold commander-text ${
-                      item.isHighFailure ? 'text-red-400' : 'text-yellow-400'
-                    }`}>
-                      {item.failureRate.toFixed(1)}%
-                    </div>
+                  <div className="text-xs text-gray-400">
+                    {new Date(alert.timestamp).toLocaleString()}
                   </div>
-                </div>
-                {item.isHighFailure && (
-                  <div className="text-red-300 text-xs commander-text mt-1">
-                    HIGH FAILURE RATE - Requires Intervention
-                  </div>
-                )}
-              </div>
-            ))}
+                </motion.div>
+              ))
+            )}
           </div>
-        </div>
+        </motion.div>
 
-        {/* The Grit Feed */}
-        <div className="command-panel rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-yellow-400 glow-gold commander-text mb-4">
-            THE GRIT FEED
-          </h2>
-          
-          <div className="space-y-2">
-            {gritFeed.map((item, index) => (
-              <div key={index} className="gold-accent rounded-lg p-3">
-                <div className="flex justify-between items-center">
-                  <div className="text-white font-bold commander-text">
-                    {item.call_sign}
-                  </div>
-                  <div className="text-yellow-400 text-sm commander-text">
-                    {item.medal}
-                  </div>
-                </div>
-                <div className="text-gray-400 text-xs commander-text">
-                  {new Date(item.timestamp).toLocaleString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Safety Valve Log */}
-        <div className="command-panel rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-yellow-400 glow-gold commander-text mb-4">
-            SAFETY VALVE LOG
-          </h2>
-          
-          <div className="space-y-2">
-            {safetyValveLog.map((user, index) => (
-              <div key={index} className="bg-red-900/30 border border-red-500/50 rounded-lg p-3">
-                <div className="flex justify-between items-center">
-                  <div className="text-red-400 font-bold commander-text">
-                    {user.call_sign}
-                  </div>
-                  <div className="text-red-300 text-sm commander-text">
-                    Sector {user.starting_sector}
-                  </div>
-                </div>
-                <div className="text-red-300 text-xs commander-text">
-                  {user.lock_reason}
-                </div>
-                <div className="text-gray-400 text-xs commander-text">
-                  {new Date(user.locked_at).toLocaleString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Strategic Overview */}
-        <div className="command-panel rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-yellow-400 glow-gold commander-text mb-4">
-            STRATEGIC OVERVIEW
+        {/* Medal Forge Status */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="glassmorphism rounded-2xl p-6 neon-border"
+        >
+          <h2 className="text-xl font-bold text-yellow-400 glow-gold mb-6">
+            Medal Forge Status
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-yellow-400 text-2xl font-bold commander-text">
-                {activeWarriors.length}
+            {Object.entries(medalForgeStatus).map(([phase, data], index) => (
+              <motion.div
+                key={phase}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + (index * 0.1) }}
+                className="glassmorphism rounded-lg p-4 border border-gray-600/30"
+              >
+                <div className="text-center mb-3">
+                  <div className="text-sm text-gray-400 uppercase tracking-widest mb-1">
+                    Phase {phase.replace('phase', '').padStart(2, '0')}
+                  </div>
+                  <div className="text-lg font-bold text-white mb-1">
+                    {data.label}
+                  </div>
+                  <div className="text-xs text-gray-300">
+                    {data.total === 55 ? '(55% of exam)' : `(${data.total} territories)`}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-400">Completed:</span>
+                    <span className="text-sm font-bold text-green-400">{data.completed}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-400">Total:</span>
+                    <span className="text-sm font-bold">{data.total}</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(data.completed / data.total) * 100}%` }}
+                      transition={{ duration: 1, delay: 0.8 + (index * 0.1) }}
+                      className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Strategic Overview */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.7 }}
+          className="glassmorphism rounded-2xl p-6 neon-border"
+        >
+          <h2 className="text-xl font-bold text-purple-300 glow-purple mb-4">
+            Strategic Overview
+          </h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="p-4 bg-slate-800/50 rounded-lg">
+              <div className="text-2xl font-bold text-white">
+                {totalCompletions.toLocaleString()}
               </div>
-              <div className="text-gray-400 text-sm commander-text uppercase tracking-widest">
-                Active Warriors
+              <div className="text-xs text-gray-400 uppercase tracking-widest">
+                Total Completions
               </div>
             </div>
-            
-            <div className="text-center">
-              <div className="text-yellow-400 text-2xl font-bold commander-text">
-                {topFriction.reduce((sum, item) => sum + item.count, 0)}
+            <div className="p-4 bg-slate-800/50 rounded-lg">
+              <div className="text-2xl font-bold text-cyan-300 glow-cyan">
+                {ghostProtocolAlerts.length}
               </div>
-              <div className="text-gray-400 text-sm commander-text uppercase tracking-widest">
-                Total Intel Unlocks
+              <div className="text-xs text-gray-400 uppercase tracking-widest">
+                Active Alerts
               </div>
             </div>
-            
-            <div className="text-center">
-              <div className="text-yellow-400 text-2xl font-bold commander-text">
-                {Math.round(totalMedals / activeWarriors.length)}
+            <div className="p-4 bg-slate-800/50 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-400 glow-gold">
+                {Object.values(medalForgeStatus).reduce((sum, phase) => sum + phase.completed, 0)}
               </div>
-              <div className="text-gray-400 text-sm commander-text uppercase tracking-widest">
-                Avg Medals Per Warrior
+              <div className="text-xs text-gray-400 uppercase tracking-widest">
+                Medals Forged
+              </div>
+            </div>
+            <div className="p-4 bg-slate-800/50 rounded-lg">
+              <div className="text-2xl font-bold text-green-400">
+                {formatCurrency(lifetimeWealth)}
+              </div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest">
+                Wealth Reclaimed
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
