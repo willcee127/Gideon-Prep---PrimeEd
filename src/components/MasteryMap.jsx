@@ -11,6 +11,7 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
   const [hoveredNode, setHoveredNode] = useState(null)
   const [reclaimedNodes, setReclaimedNodes] = useState([])
   const [reconData, setReconData] = useState(null)
+  const [showReconBriefing, setShowReconBriefing] = useState(false)
   const mapRef = useRef(null)
   const [socraticCoPilot] = useState(() => new SocraticCoPilot())
 
@@ -165,9 +166,11 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
   // Handle Start Recon Mission
   const handleStartRecon = async () => {
     try {
-      const reconConcepts = await socraticCoPilot.fetchReconConcepts()
+      const userId = localStorage.getItem('gideon_user_name') || 'anonymous'
+      const reconConcepts = await socraticCoPilot.fetchReconConcepts(userId)
       console.log('Recon Mission Data:', reconConcepts)
       setReconData(reconConcepts)
+      setShowReconBriefing(true)
     } catch (error) {
       console.error('Failed to start recon mission:', error)
     }
@@ -522,6 +525,88 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
       {reclaimedNodes.length > 0 && (
         <ReconMissionButton onStartRecon={handleStartRecon} />
       )}
+      
+      {/* Recon Briefing Modal */}
+      <AnimatePresence>
+        {showReconBriefing && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6"
+          >
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setShowReconBriefing(false)}
+            />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="relative bg-gray-900 border-2 border-blue-500 rounded-lg shadow-2xl shadow-blue-500/50 p-6 max-w-md w-full mx-4"
+            >
+              {/* Header */}
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold text-blue-400 mb-2">
+                  RECON BRIEFING
+                </h2>
+                <p className="text-gray-400 text-sm">
+                  Review your conquered concepts
+                </p>
+              </div>
+              
+              {/* Intel Content */}
+              <div className="space-y-3 mb-6">
+                {reconData && reconData.length > 0 ? (
+                  reconData.map((concept, index) => (
+                    <div 
+                      key={concept.id || index}
+                      className="bg-gray-800 border border-blue-500/30 rounded-lg p-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-blue-400 font-semibold">
+                          {concept.achievement_type || 'Concept'} #{index + 1}
+                        </span>
+                        <span className="text-gray-400 text-xs">
+                          {new Date(concept.earned_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="text-gray-300 text-sm mt-1">
+                        {concept.concept_id || concept.node_id || 'Unknown Concept'}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-400 py-4">
+                    <div className="text-blue-400 mb-2">🎯</div>
+                    <p>No completed concepts available for recon</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Actions */}
+              <div className="flex justify-center space-x-3">
+                <button
+                  onClick={() => setShowReconBriefing(false)}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                >
+                  Close Briefing
+                </button>
+                {reconData && reconData.length > 0 && (
+                  <button
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-black rounded-lg font-semibold transition-colors"
+                  >
+                    Start Review
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -79,11 +79,12 @@ const SocraticCoPilot = () => {
   }
 
   // Fetch Recon Mission concepts from warrior_achievements
-  const fetchReconConcepts = async () => {
+  const fetchReconConcepts = async (userId) => {
     try {
       const { data, error } = await supabase
         .from('warrior_achievements')
         .select('*')
+        .eq('user_id', userId)
         .eq('status', 'completed')
         .order('earned_at', { ascending: true })
         .limit(3)
