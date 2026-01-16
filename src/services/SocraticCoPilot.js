@@ -24,11 +24,12 @@ class SocraticCoPilot {
     this.interventionHistory.push({
       conceptId,
       timestamp: new Date().toISOString(),
-      type: 'GHOST_PROTOCOL_ACTIVATED',
-      message: `Critical friction detected in ${conceptId}. Activating Warrior Identity Protection.`
+      type: 'TACTICAL_INTEL_DEPLOYED',
+      message: `High friction detected in ${conceptId}. Deploying Tactical Intel for position hold.`
     })
+  }
 
-    // Socratic hint generation with intervention-aware messaging
+  // Socratic hint generation with intervention-aware messaging
   generateSocraticHint(problem, conceptId, failureCount) {
     const baseMessages = [
       "Let's look at this problem together.",
@@ -41,7 +42,7 @@ class SocraticCoPilot {
     if (this.interventionActive) {
       const interventionIndex = Math.floor(Math.random() * baseMessages.length)
       const protectiveMessage = baseMessages[interventionIndex] || 
-        "Warrior, hold your position. The system detects high friction. Let's break this down systematically."
+        "Warrior, hold your position. You aren't failing; you've hit a high-friction zone that stops most. We are deploying intel to help you break through what previously held you back."
 
     return {
       hint: protectiveMessage,

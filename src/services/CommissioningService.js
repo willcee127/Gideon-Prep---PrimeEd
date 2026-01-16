@@ -1,10 +1,11 @@
-// Commissioning Service - Tracks 100% mastery milestone and economic impact
+// Commissioning Service - Tracks 100% mastery milestone and conquest progress
 class CommissioningService {
   constructor() {
     this.commissionMilestones = new Map()
     this.totalCompletions = 0
-    this.lifetimeWealth = 0
-    this.annualWageBoost = 0
+    this.territoriesConquered = 0
+    this.strategicMasteryProgress = 0
+    this.conquestRate = 0
   }
 
   // Track 100% mastery milestone
@@ -16,11 +17,11 @@ class CommissioningService {
       this.commissionMilestones.set('100k_milestone', {
         timestamp: new Date().toISOString(),
         type: 'COMMISSION_MILESTONE',
-        message: '🎉 100K WARRIORS SERVED - Phase 03: Applied Math Complete',
+        message: '🎉 100K WARRIORS COMMISSIONED - Phase 03: Applied Math Complete',
         data: {
           completions: this.totalCompletions,
-          lifetimeWealth: this.totalCompletions * 266760,
-          annualWageBoost: this.totalCompletions * 8892
+          territoriesConquered: this.totalCompletions * 100,
+          strategicMasteryProgress: this.totalCompletions * 10
         }
       })
 
@@ -29,28 +30,28 @@ class CommissioningService {
     }
   }
 
-  // Calculate economic impact
-  calculateEconomicImpact() {
-    const wealth = this.totalCompletions * 266760
-    const wageBoost = this.totalCompletions * 8892
+  // Calculate conquest progress
+  calculateConquestProgress() {
+    const territories = this.totalCompletions * 100 // 100 territories per victory
+    const mastery = this.totalCompletions * 10 // 10 mastery points per victory
     return {
-      lifetimeWealth: wealth,
-      annualWageBoost: wageBoost,
-      totalCompletions: this.totalCompletions
-      impactMessage: `💰 Economic Impact: $${wageBoost.toLocaleString()} annual wage boost for ${this.totalCompletions} warriors`
+      territoriesConquered: territories,
+      strategicMasteryProgress: mastery,
+      totalCompletions: this.totalCompletions,
+      impactMessage: `🏆 Conquest Progress: ${mastery.toLocaleString()} mastery points for ${this.totalCompletions} warriors`
     }
   }
 
   // Trigger commissioning event
   triggerCommissioning() {
-    const impact = this.calculateEconomicImpact()
+    const progress = this.calculateConquestProgress()
     
     // You could integrate with Supabase here to save the milestone
-    console.log('Commissioning milestone reached:', impact.impactMessage)
+    console.log('Commissioning milestone reached:', progress.impactMessage)
     
     // Or trigger a local celebration
     if (typeof window !== 'undefined') {
-      alert(`🎉 ${impact.impactMessage}`)
+      alert(`🎉 ${progress.impactMessage}`)
     }
   }
 
@@ -58,8 +59,9 @@ class CommissioningService {
   getCurrentStats() {
     return {
       totalCompletions: this.totalCompletions,
-      lifetimeWealth: this.lifetimeWealth,
-      annualWageBoost: this.annualWageBoost,
+      territoriesConquered: this.territoriesConquered,
+      strategicMasteryProgress: this.strategicMasteryProgress,
+      conquestRate: this.conquestRate,
       progressTo100k: (this.totalCompletions / 100000) * 100,
       hasReached100k: this.commissionMilestones.has('100k_milestone')
     }

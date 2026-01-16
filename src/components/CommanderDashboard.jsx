@@ -5,8 +5,9 @@ import { supabase } from '../services/supabase'
 
 const CommanderDashboard = () => {
   const [totalCompletions, setTotalCompletions] = useState(0)
-  const [lifetimeWealth, setLifetimeWealth] = useState(0)
-  const [annualWageBoost, setAnnualWageBoost] = useState(0)
+  const [territoriesConquered, setTerritoriesConquered] = useState(0)
+  const [strategicMasteryProgress, setStrategicMasteryProgress] = useState(0)
+  const [conquestRate, setConquestRate] = useState(0)
   const [ghostProtocolAlerts, setGhostProtocolAlerts] = useState([])
   const [medalForgeStatus, setMedalForgeStatus] = useState({
     sector1: { completed: 0, total: 15, label: 'Foundations', description: 'Fractions, Decimals, Ratios' },
@@ -15,12 +16,12 @@ const CommanderDashboard = () => {
   })
   const [systemicProgress, setSystemicProgress] = useState(0)
 
-  // Calculate economic metrics
+  // Calculate conquest metrics
   useEffect(() => {
-    const wealth = totalCompletions * 266760
-    const wageBoost = totalCompletions * 8892
-    setLifetimeWealth(wealth)
-    setAnnualWageBoost(wageBoost)
+    const mastery = totalCompletions * 100 // 100 mastery points per victory
+    const rate = totalCompletions * 10 // 10 conquest rate per victory
+    setStrategicMasteryProgress(mastery)
+    setConquestRate(rate)
   }, [totalCompletions])
 
   // Calculate systemic progress toward 100,000 goal
@@ -46,9 +47,10 @@ const CommanderDashboard = () => {
                 concept: concept.concept,
                 failureCount: concept.count,
                 probabilityDrop: '60%',
-                status: 'Intervention Required: Identity Protection Active',
+                status: 'Tactical Intel Deployed: Position Hold Active',
                 severity: 'critical',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                message: 'Warrior, hold your position. You aren\'t failing; you\'ve hit a high-friction zone that stops most. We are deploying intel to help you break through what previously held you back.'
               })
             }
           })
@@ -146,17 +148,17 @@ const CommanderDashboard = () => {
             <motion.h2
               className="text-3xl font-bold text-purple-300 glow-purple mb-2"
             >
-              SYSTEMIC SHIFT GAUGE
+              SYSTEMIC MASTERY GAUGE
             </motion.h2>
             <motion.p
               className="text-gray-400 text-sm mb-4"
             >
-              The 100K Goal: Target 10% of Annual GED Math Failure Pipeline
+              The 100K Goal: 100,000 GED Victories
             </motion.p>
             <motion.p
               className="text-xs text-gray-500 uppercase tracking-wider mb-6"
             >
-              The Why: 22 million adults are currently locked out of the 2026 labor market; this gauge tracks our reclamation of that territory.
+              Goal: 100,000 Warriors reclaiming their future by conquering the GED Math territory.
             </motion.p>
           </div>
           
@@ -217,7 +219,7 @@ const CommanderDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Economic Reclamation Ticker */}
+        {/* Territories Conquered */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -228,12 +230,12 @@ const CommanderDashboard = () => {
           <motion.h2
             className="text-2xl font-bold text-cyan-300 glow-cyan mb-6"
           >
-            LIFETIME WEALTH RECLAIMED
+            TERRITORIES CONQUERED
           </motion.h2>
           <motion.p
               className="text-gray-400 text-sm mb-2"
             >
-              Completions × $266,760 (The 30-year career cost of missing a GED)
+              Strategic Mastery Progress: Each victory represents conquered mathematical territory
             </motion.p>
           
           <div className="space-y-6">
@@ -241,7 +243,7 @@ const CommanderDashboard = () => {
               className="flex justify-between items-center p-4 bg-slate-800/50 rounded-lg"
               whileHover={{ scale: 1.02 }}
             >
-              <span className="text-gray-400">Total Completions:</span>
+              <span className="text-gray-400">Total Victories:</span>
               <motion.span
                 className="text-white font-bold text-xl"
               >
@@ -252,7 +254,7 @@ const CommanderDashboard = () => {
               className="text-green-400 font-bold text-2xl"
               style={{ '--stagger': 0.4 }}
             >
-                {formatCurrency(lifetimeWealth)}
+                {strategicMasteryProgress.toLocaleString()} Mastery Points
               </motion.div>
             </motion.div>
             
@@ -260,12 +262,12 @@ const CommanderDashboard = () => {
               className="flex justify-between items-center p-4 bg-slate-800/50 rounded-lg"
               whileHover={{ scale: 1.02 }}
             >
-              <span className="text-gray-400">Annual Earnings Boost:</span>
+              <span className="text-gray-400">Conquest Rate:</span>
               <motion.span
                 className="text-green-400 font-bold text-2xl"
                 style={{ '--stagger': 0.5 }}
               >
-                {formatCurrency(annualWageBoost)}
+                {conquestRate.toLocaleString()}
               </motion.span>
             </motion.div>
             </motion.div>
