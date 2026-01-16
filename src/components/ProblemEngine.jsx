@@ -4,7 +4,7 @@ import { useNeuro } from '../context/NeuroProvider'
 import { supabase, memoryAPI } from '../supabase'
 import { getNodeById } from '../data/mathContent'
 import { problemForge } from '../services/ProblemForge'
-import SocraticCoPilot from '../services/SocraticCoPilot.jsx'
+import SocraticCoPilot from '../services/SocraticCoPilotService.jsx'
 import SocraticDialogueBox from './SocraticDialogueBox'
 // import { missionCoach } from '../services/MissionCoach'
 
