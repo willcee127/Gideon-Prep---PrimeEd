@@ -2,13 +2,17 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { mathContent, getNodeById, getAllNodes } from '../data/mathContent'
 import { supabase } from '../supabase'
+import ReconMissionButton from './ReconMissionButton'
+import SocraticCoPilot from '../services/SocraticCoPilotService'
 
 const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
   const [isClient, setIsClient] = useState(false)
   const [viewBox, setViewBox] = useState({ x: 0, y: 0, scale: 1 })
   const [hoveredNode, setHoveredNode] = useState(null)
   const [reclaimedNodes, setReclaimedNodes] = useState([])
+  const [reconData, setReconData] = useState(null)
   const mapRef = useRef(null)
+  const [socraticCoPilot] = useState(() => new SocraticCoPilot())
 
   // Hydration guard - only render on client side
   useEffect(() => {
@@ -156,6 +160,17 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
     // - Show mastery progression
     // - Offer refresher challenges
     // - Display achievement badges
+  }
+
+  // Handle Start Recon Mission
+  const handleStartRecon = async () => {
+    try {
+      const reconConcepts = await socraticCoPilot.fetchReconConcepts()
+      console.log('Recon Mission Data:', reconConcepts)
+      setReconData(reconConcepts)
+    } catch (error) {
+      console.error('Failed to start recon mission:', error)
+    }
   }
 
   const renderConnections = () => {
@@ -502,6 +517,11 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Recon Mission Button - Only show if user has completed missions */}
+      {reclaimedNodes.length > 0 && (
+        <ReconMissionButton onStartRecon={handleStartRecon} />
+      )}
     </div>
   )
 }

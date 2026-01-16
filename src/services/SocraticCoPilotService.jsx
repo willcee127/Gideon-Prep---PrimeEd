@@ -1,5 +1,6 @@
 // Socratic CoPilot Service with Tactical Intel Integration
 import React, { useState } from 'react'
+import { supabase } from '../supabase'
 
 const SocraticCoPilot = () => {
   const [frictionCount, setFrictionCount] = useState(new Map())
@@ -77,13 +78,36 @@ const SocraticCoPilot = () => {
     return data
   }
 
+  // Fetch Recon Mission concepts from warrior_achievements
+  const fetchReconConcepts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('warrior_achievements')
+        .select('*')
+        .eq('status', 'completed')
+        .order('earned_at', { ascending: true })
+        .limit(3)
+
+      if (error) {
+        console.error('Error fetching recon concepts:', error)
+        return []
+      }
+
+      return data || []
+    } catch (err) {
+      console.error('Failed to fetch recon concepts:', err)
+      return []
+    }
+  }
+
   return {
     trackFriction,
     deployTacticalIntel,
     generateSocraticHint,
     resetIntervention,
     getInterventionHistory,
-    getFrictionData
+    getFrictionData,
+    fetchReconConcepts
   }
 }
 
