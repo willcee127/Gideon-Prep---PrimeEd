@@ -1070,10 +1070,8 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
       {/* Command Calculator Warning */}
       {showGhostCalcWarning && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.8, y: -20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           className="fixed top-4 right-4 z-50"
         >
           <div className="bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2">
