@@ -4,10 +4,20 @@ import { mathContent, getNodeById, getAllNodes } from '../data/mathContent'
 import { supabase } from '../supabase'
 
 const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
+  const [isClient, setIsClient] = useState(false)
   const [viewBox, setViewBox] = useState({ x: 0, y: 0, scale: 1 })
   const [hoveredNode, setHoveredNode] = useState(null)
   const [reclaimedNodes, setReclaimedNodes] = useState([])
   const mapRef = useRef(null)
+
+  // Hydration guard - only render on client side
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
+    return <div style={{ background: '#0a0a0a', height: '100vh' }} />
+  }
 
   // Load reclaimed nodes from database on mount
   useEffect(() => {
@@ -136,6 +146,16 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
       'Expert': '#ef4444'
     }
     return sectorColors[sectorName] || '#9333ea'
+  }
+
+  // Recon Mission - Future functionality for reviewing conquered concepts
+  const reconMission = (nodeId) => {
+    console.log(`Recon Mission: Reviewing conquered concept ${nodeId}`)
+    // TODO: Implement concept review interface
+    // - Load historical performance data
+    // - Show mastery progression
+    // - Offer refresher challenges
+    // - Display achievement badges
   }
 
   const renderConnections = () => {
@@ -330,7 +350,7 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
   }
 
   return (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden relative">
+    <div className="mastery-map-container">
       {/* Starfield Background */}
       <div className="absolute inset-0">
         {[...Array(50)].map((_, i) => (
