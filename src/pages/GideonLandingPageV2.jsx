@@ -318,6 +318,14 @@ const GideonLandingPageV2 = () => {
           </div>
           
           <div className="text-center mt-8 text-gray-500 text-sm">
+            <div className="mb-2">
+              <span className="text-orange-400 font-bold">RECRUITMENT PHASE: ALPHA</span>
+              <span className="text-gray-400 mx-2">—</span>
+              <span className="text-orange-300">gideon-prep-prime.vercel.app</span>
+            </div>
+            <div className="text-orange-400 font-bold text-lg mb-2">
+              JOIN THE ELITE — ENROLLMENT OPENING SOON
+            </div>
             © 2026 Gideon Prep - Tactical Training Systems
           </div>
         </div>
