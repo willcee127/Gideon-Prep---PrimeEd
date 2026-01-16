@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../supabase'
 import { SocraticCoPilot } from '../services/SocraticCoPilot'
+import { CommissioningService } from '../services/CommissioningService'
 
 const WarriorOnboarding = ({ onComplete, isVisible }) => {
   const [currentPanel, setCurrentPanel] = useState(0)
   const [spotlightPosition, setSpotlightPosition] = useState({ x: 0, y: 0 })
+  const [commissioningService] = useState(new CommissioningService())
   const [socraticCoPilot] = useState(new SocraticCoPilot())
 
   const panels = [
@@ -23,7 +25,7 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
     },
     {
       title: "GRIT MULTIPLIER",
-      subtitle: "Reward for the Struggle",
+      subtitle: "Reward for Struggle",
       content: "The flame grows stronger every time you complete a Socratic hint sequence. This is your combat power - proof that you're getting stronger through challenge.",
       spotlight: { element: 'grit-multiplier', label: 'GRIT MULTIPLIER' }
     },
@@ -37,6 +39,19 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
 
   useEffect(() => {
     if (!isVisible) return
+
+    // Initialize services
+    const initializeServices = async () => {
+      try {
+        await commissioningService.initialize()
+        await socraticCoPilot.initialize()
+        console.log('Services initialized successfully')
+      } catch (error) {
+        console.error('Failed to initialize services:', error)
+      }
+    }
+
+    initializeServices()
 
     // Set spotlight positions based on panel
     const positions = {
@@ -55,7 +70,16 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
     if (currentPanel < panels.length - 1) {
       setCurrentPanel(currentPanel + 1)
     } else {
-      handleComplete()
+      // Check for 100K milestone
+      const stats = commissioningService.getCurrentStats()
+      
+      // Trigger commissioning if milestone reached
+      if (stats.hasReached100k) {
+        commissioningService.triggerCommissioning()
+      }
+      
+      // Complete onboarding
+      onComplete()
     }
   }
 
@@ -64,7 +88,6 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
     
     // Show intervention alert if needed
     if (hint.requiresIntervention) {
-      // You could integrate with Ghost Protocol alerts here
       console.log('Intervention triggered for concept:', conceptId)
     }
     
