@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
 import Initiation from './components/Initiation'
 import MasteryMap from './components/MasteryMap'
@@ -9,6 +10,7 @@ import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
+import RangeQual from './components/RangeQual'
 import { getNodeById } from './data/mathContent'
 
 function App() {
@@ -103,89 +105,102 @@ function App() {
     console.log('Tactical tip received:', data)
   }
 
-  if (!isInitiated) {
-    return (
-      <NeuroProvider>
-        <div className="min-h-screen bg-black">
-          <Initiation onComplete={handleInitiationComplete} />
-        </div>
-      </NeuroProvider>
-    )
-  }
-
   return (
-    <NeuroProvider>
-      <div className="min-h-screen bg-black relative overflow-hidden">
-        {/* Background Layer - MasteryMap */}
-        <div className="absolute inset-0">
-          <MasteryMap 
-            onNodeSelect={handleNodeSelect}
-            selectedNode={selectedNode}
-            completedNodes={completedNodes}
-          />
-        </div>
+    <Router>
+      <NeuroProvider>
+        <Routes>
+          <Route path="/" element={
+            !isInitiated ? (
+              <div className="min-h-screen bg-black">
+                <Initiation onComplete={handleInitiationComplete} />
+              </div>
+            ) : (
+              <Navigate to="/mastery-map" replace />
+            )
+          } />
+          
+          <Route path="/mastery-map" element={
+            <div className="min-h-screen bg-black relative overflow-hidden">
+              {/* Background Layer - MasteryMap */}
+              <div className="absolute inset-0">
+                <MasteryMap 
+                  onNodeSelect={handleNodeSelect}
+                  selectedNode={selectedNode}
+                  completedNodes={completedNodes}
+                />
+              </div>
 
-        {/* Daily Objective - Shows when no node is selected */}
-        {!isPanelOpen && !showWelcomeKit && (
-          <DailyObjective 
-            userName={userName}
-            completedNodes={completedNodes}
-            onNodeSelect={handleNodeSelect}
-          />
-        )}
+              {/* Daily Objective - Shows when no node is selected */}
+              {!isPanelOpen && !showWelcomeKit && (
+                <DailyObjective 
+                  userName={userName}
+                  completedNodes={completedNodes}
+                  onNodeSelect={handleNodeSelect}
+                />
+              )}
 
-        {/* Slide-In Studio Panel */}
-        <SlideInPanel 
-          isOpen={isPanelOpen}
-          onClose={handlePanelClose}
-          selectedNode={selectedNode}
-          userName={userName}
-          completedNodes={completedNodes}
-          onProblemSuccess={handleProblemSuccess}
-          onShowCommandCalc={handleShowCommandCalc}
-        />
+              {/* Slide-In Studio Panel */}
+              <SlideInPanel 
+                isOpen={isPanelOpen}
+                onClose={handlePanelClose}
+                selectedNode={selectedNode}
+                userName={userName}
+                completedNodes={completedNodes}
+                onProblemSuccess={handleProblemSuccess}
+                onShowCommandCalc={handleShowCommandCalc}
+              />
 
-        {/* Permanent Status Dock */}
-        <StatusBar 
-          userName={userName}
-          completedNodes={completedNodes}
-          correctAnswers={correctAnswers}
-          isWelcomeKitActive={showWelcomeKit}
-          onShowIntel={handleShowIntel}
-        />
+              {/* Permanent Status Dock */}
+              <StatusBar 
+                userName={userName}
+                completedNodes={completedNodes}
+                correctAnswers={correctAnswers}
+                isWelcomeKitActive={showWelcomeKit}
+                onShowIntel={handleShowIntel}
+              />
 
-        {/* Warrior Welcome Kit */}
-        {showWelcomeKit && (
-          <WelcomeKit onComplete={handleWelcomeKitComplete} />
-        )}
+              {/* Warrior Welcome Kit */}
+              {showWelcomeKit && (
+                <WelcomeKit onComplete={handleWelcomeKitComplete} />
+              )}
 
-        {/* Tactical Intel Overlay */}
-        <TacticalIntel 
-          isOpen={showTacticalIntel}
-          onClose={handleCloseIntel}
-          currentStronghold={selectedNode?.title}
-        />
+              {/* Tactical Intel Overlay */}
+              <TacticalIntel 
+                isOpen={showTacticalIntel}
+                onClose={handleCloseIntel}
+                currentStronghold={selectedNode?.title}
+              />
 
-        {/* Command Calculator Overlay */}
-        <CommandCalc 
-          isOpen={showCommandCalc}
-          onClose={handleCloseCommandCalc}
-          currentStronghold={selectedNode}
-          onTacticalTip={handleTacticalTip}
-        />
+              {/* Command Calculator Overlay */}
+              <CommandCalc 
+                isOpen={showCommandCalc}
+                onClose={handleCloseCommandCalc}
+                currentStronghold={selectedNode}
+                onTacticalTip={handleTacticalTip}
+              />
 
-        {/* Victory Report Overlay */}
-        <VictoryReport 
-          userName={userName}
-          completedNodes={completedNodes}
-          correctAnswers={correctAnswers}
-          onDownloadComplete={() => {
-            // Victory celebration complete
-            console.log('Certificate downloaded successfully')
-          }}
-        />
-      </div>
-    </NeuroProvider>
+              {/* Victory Report Overlay */}
+              <VictoryReport 
+                userName={userName}
+                completedNodes={completedNodes}
+                correctAnswers={correctAnswers}
+                onDownloadComplete={() => {
+                  // Victory celebration complete
+                  console.log('Certificate downloaded successfully')
+                }}
+              />
+            </div>
+          } />
+          
+          <Route path="/range-qual" element={<RangeQual />} />
+          
+          {/* Commander Dashboard Route */}
+          <Route path="/commander" element={<div className="min-h-screen bg-black text-white flex items-center justify-center">
+            <h1 className="text-4xl font-bold">Commander Dashboard - Coming Soon</h1>
+          </div>} />
+        </Routes>
+      </NeuroProvider>
+    </Router>
   )
 }
 
