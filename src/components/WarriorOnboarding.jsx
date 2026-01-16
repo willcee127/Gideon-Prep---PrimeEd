@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../supabase'
+import { SocraticCoPilot } from '../services/SocraticCoPilot'
 
 const WarriorOnboarding = ({ onComplete, isVisible }) => {
   const [currentPanel, setCurrentPanel] = useState(0)
   const [spotlightPosition, setSpotlightPosition] = useState({ x: 0, y: 0 })
+  const [socraticCoPilot] = useState(new SocraticCoPilot())
 
   const panels = [
     {
@@ -55,6 +57,23 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
     } else {
       handleComplete()
     }
+  }
+
+  const handleSocraticHint = async (problem, conceptId, failureCount) => {
+    const hint = socraticCoPilot.generateSocraticHint(problem, conceptId, failureCount)
+    
+    // Show intervention alert if needed
+    if (hint.requiresIntervention) {
+      // You could integrate with Ghost Protocol alerts here
+      console.log('Intervention triggered for concept:', conceptId)
+    }
+    
+    return hint
+  }
+
+  const handleInterventionReset = (conceptId) => {
+    socraticCoPilot.resetIntervention(conceptId)
+    console.log('Intervention reset for concept:', conceptId)
   }
 
   const handleComplete = async () => {
