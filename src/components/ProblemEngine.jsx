@@ -4,6 +4,8 @@ import { useNeuro } from '../context/NeuroProvider'
 import { supabase, memoryAPI } from '../supabase'
 import { getNodeById } from '../data/mathContent'
 import { problemForge } from '../services/ProblemForge'
+import SocraticCoPilot from '../services/SocraticCoPilot.jsx'
+import SocraticDialogueBox from './SocraticDialogueBox'
 // import { missionCoach } from '../services/MissionCoach'
 
 const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
@@ -45,6 +47,13 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
   const [missionCoachMessage, setMissionCoachMessage] = useState('')
   const [combatCommendation, setCombatCommendation] = useState('')
   const [showCombatCommendation, setShowCombatCommendation] = useState(false)
+
+  // Socratic CoPilot Integration
+  const [socraticCoPilot] = useState(() => new SocraticCoPilot())
+  const [frictionLevel, setFrictionLevel] = useState(0)
+  const [showSocraticDialogue, setShowSocraticDialogue] = useState(false)
+  const [socraticQuestion, setSocraticQuestion] = useState('')
+  const [hintButtonGlow, setHintButtonGlow] = useState(false)
 
   // Get node content from the library
   const nodeContent = getNodeById(nodeId)
@@ -98,6 +107,56 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
       checkForCombatCommendation()
     }
   }, [correctAnswers, checkForCombatCommendation])
+
+  // Friction Monitoring from Database
+  useEffect(() => {
+    const monitorFriction = async () => {
+      try {
+        const { data: frictionData } = await supabase
+          .from('friction_logs')
+          .select('friction_level')
+          .eq('user_id', userName)
+          .eq('concept_id', currentProblem?.conceptId || 'unknown')
+          .eq('status', 'active')
+          .single()
+
+        if (frictionData) {
+          setFrictionLevel(frictionData.friction_level)
+          
+          // Track friction in Socratic CoPilot
+          socraticCoPilot.trackFriction(currentProblem?.conceptId || 'unknown')
+          
+          // Implement threshold logic
+          if (frictionData.friction_level < 3) {
+            // Remain silent
+            setHintButtonGlow(false)
+            setShowSocraticDialogue(false)
+          } else if (frictionData.friction_level >= 3 && frictionData.friction_level <= 4) {
+            // Activate subtle glow effect on 'Hint' button
+            setHintButtonGlow(true)
+            setShowSocraticDialogue(false)
+          } else if (frictionData.friction_level >= 5) {
+            // Trigger full Socratic Intervention
+            const hint = socraticCoPilot.generateSocraticHint(
+              currentProblem?.question || '',
+              currentProblem?.conceptId || 'unknown',
+              frictionData.friction_level
+            )
+            
+            setSocraticQuestion(hint.hint)
+            setShowSocraticDialogue(true)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to monitor friction:', error)
+      }
+    }
+
+    // Monitor friction every 2 seconds
+    const interval = setInterval(monitorFriction, 2000)
+    
+    return () => clearInterval(interval)
+  }, [userName, currentProblem, socraticCoPilot])
 
   // AI Problem Forge Function
   const fetchForgeProblem = async (zone, difficulty) => {
