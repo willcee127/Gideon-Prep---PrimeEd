@@ -283,9 +283,9 @@ const CommanderDashboard = () => {
           style={{ '--stagger': 0.4 }}
         >
           <motion.h2
-            className="text-2xl font-bold text-red-400 mb-6 flex items-center"
+            className="text-2xl font-bold text-orange-400 mb-6 flex items-center"
           >
-            ⚠️ CRITICAL FRICTION POINTS
+            ⚠️ TACTICAL INTEL ALERTS
           </motion.h2>
           
           <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -299,7 +299,7 @@ const CommanderDashboard = () => {
                 >
                   ✓
                 </motion.div>
-                <div>No Critical Friction Detected</div>
+                <div>No Tactical Intel Deployed</div>
                 <div className="text-sm">All systems operating within normal parameters</div>
               </motion.div>
             </motion.div>
@@ -312,7 +312,7 @@ const CommanderDashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * index }}
                     className={`rounded-lg p-4 border ${
-                      alert.severity === 'critical' ? 'bg-red-900/30 border-red-500/50' : 'bg-orange-900/30 border-orange-500/50'
+                      alert.severity === 'critical' ? 'bg-orange-900/30 border-orange-500/50' : 'bg-orange-900/30 border-orange-500/50'
                     } boot-sequence`}
                     whileHover={{ scale: 1.02 }}
                   >
@@ -323,19 +323,19 @@ const CommanderDashboard = () => {
                       </div>
                       <div className="text-right">
                         <div className={`text-sm font-bold ${
-                          alert.severity === 'critical' ? 'text-red-400' : 'text-orange-400'
+                          alert.severity === 'critical' ? 'text-orange-400' : 'text-orange-400'
                         }`}>
                           {alert.probabilityDrop}
                         </div>
                         <div className={`text-xs ${
-                          alert.severity === 'critical' ? 'text-red-300' : 'text-orange-300'
+                          alert.severity === 'critical' ? 'text-orange-300' : 'text-orange-300'
                         }`}>
                           probability drop
                         </div>
                       </div>
                     </div>
                     <div className={`text-sm font-medium ${
-                      alert.severity === 'critical' ? 'text-red-300' : 'text-orange-300'
+                      alert.severity === 'critical' ? 'text-orange-300' : 'text-orange-300'
                     }`}>
                       {alert.status}
                     </div>

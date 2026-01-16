@@ -126,7 +126,7 @@ const TacticalIntelOverlay = () => {
             
             {/* Tactical Header */}
             <div className="flex items-center mb-4">
-              <span className="text-green-400 text-xs font-mono mr-2">⚡ GHOST PROTOCOL</span>
+              <span className="text-orange-400 text-xs font-mono mr-2">⚡ TACTICAL INTEL</span>
               <div className="flex-1 h-px bg-green-500/30" />
             </div>
             

@@ -187,7 +187,7 @@ const GideonLandingPageV2 = () => {
               </div>
             </motion.div>
 
-            {/* Ghost Protocol */}
+            {/* Tactical Intel */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -199,9 +199,9 @@ const GideonLandingPageV2 = () => {
                 🛡️
               </div>
               <div className="relative z-10">
-                <div className="text-blue-400 text-3xl mb-4">Ghost Protocol</div>
+                <div className="text-orange-400 text-3xl mb-4">Tactical Intel</div>
                 <p className="text-gray-300">
-                  Real-time commander monitoring for high-friction moments. When you're stuck, command intervenes with tactical guidance to keep you moving forward.
+                  Real-time strategic advantage monitoring for high-friction moments. When you're stuck, Tactical Intel deploys breakthrough guidance to help you conquer the sector.
                 </p>
               </div>
             </motion.div>

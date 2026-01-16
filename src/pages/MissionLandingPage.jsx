@@ -177,17 +177,17 @@ const MissionLandingPage = () => {
               </p>
             </motion.div>
 
-            {/* Ghost Protocol */}
+            {/* Tactical Intel */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               className="bg-gray-900 border border-cyan-500/30 rounded-lg p-8"
             >
-              <div className="text-cyan-400 text-4xl mb-4">👻</div>
-              <h3 className="text-xl font-bold text-white mb-4">Ghost Protocol</h3>
+              <div className="text-orange-400 text-4xl mb-4">🎯</div>
+              <h3 className="text-xl font-bold text-white mb-4">Tactical Intel</h3>
               <p className="text-gray-300">
-                Live Commander monitoring for high-friction moments. When you're stuck, Command intervenes with tactical guidance to keep you moving forward.
+                Strategic advantage monitoring for high-friction moments. When you're stuck, Tactical Intel deploys breakthrough guidance to help you conquer the sector.
               </p>
             </motion.div>
           </div>

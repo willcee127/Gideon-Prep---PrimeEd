@@ -14,18 +14,18 @@ class SocraticCoPilot {
     
     // Check for Tactical Intel trigger (2 failures)
     if (currentCount >= 2) {
-      this.triggerIntervention(conceptId)
+      this.deployTacticalIntel(conceptId)
     }
   }
 
   // Trigger Tactical Intel intervention
-  triggerIntervention(conceptId) {
+  deployTacticalIntel(conceptId) {
     this.interventionActive = true
     this.interventionHistory.push({
       conceptId,
       timestamp: new Date().toISOString(),
       type: 'TACTICAL_INTEL_DEPLOYED',
-      message: `High friction detected in ${conceptId}. Deploying Tactical Intel for breakthrough.`
+      message: `High friction detected in ${conceptId}. Deploying Tactical Intel to help you conquer this sector.`
     })
   }
 
@@ -42,7 +42,7 @@ class SocraticCoPilot {
     if (this.interventionActive) {
       const interventionIndex = Math.floor(Math.random() * baseMessages.length)
       const protectiveMessage = baseMessages[interventionIndex] || 
-        "Warrior, hold your position. You aren't failing; you've hit a high-friction zone that stops most. We are deploying intel to help you break through what previously held you back."
+        "Warrior, hold your position. You aren't failing; you've hit a high-friction zone. We are deploying Tactical Intel to help you conquer this sector."
 
     return {
       hint: protectiveMessage,
