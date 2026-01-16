@@ -5,10 +5,20 @@ import { SocraticCoPilot } from '../services/SocraticCoPilotService'
 import { CommissioningService } from '../services/CommissioningService'
 
 const WarriorOnboarding = ({ onComplete, isVisible }) => {
+  const [isClient, setIsClient] = useState(false)
   const [currentPanel, setCurrentPanel] = useState(0)
   const [spotlightPosition, setSpotlightPosition] = useState({ x: 0, y: 0 })
   const [commissioningService] = useState(new CommissioningService())
   const [socraticCoPilot] = useState(new SocraticCoPilot())
+
+  // Hydration guard - only render on client side
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
+    return null
+  }
 
   const panels = [
     {
@@ -34,6 +44,12 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
       subtitle: "Your Safety Net",
       content: "When you face friction, the Co-Pilot breaks walls into steps. Use it wisely - it's designed to guide, not give answers. True mastery comes from the struggle.",
       spotlight: { element: 'socratic-copilot', label: 'CO-PILOT' }
+    },
+    {
+      title: "TACTICAL COLOR CODES",
+      subtitle: "Mission Classification System",
+      content: "Forge Orange: Offensive Operations - Conquering new GED territory and learning fresh concepts. Neon Blue: Defensive Recon - Securing the perimeter by reviewing your 3 oldest mastered concepts to prevent memory decay.",
+      spotlight: { element: 'tactical-colors', label: 'COLOR CODES' }
     }
   ]
 
@@ -57,7 +73,8 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
     const positions = {
       'strike-readiness': { x: '50%', y: '10%' },
       'grit-multiplier': { x: '85%', y: '5%' },
-      'socratic-copilot': { x: '50%', y: '50%' }
+      'socratic-copilot': { x: '50%', y: '50%' },
+      'tactical-colors': { x: '50%', y: '85%' }
     }
 
     const currentSpotlight = panels[currentPanel]?.spotlight
@@ -216,6 +233,54 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
                 transition={{ duration: 0.5 }}
                 className="spotlight"
               />
+            )}
+
+            {/* Tactical Color Codes Visual Elements */}
+            {panels[currentPanel].title === "TACTICAL COLOR CODES" && (
+              <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-8">
+                {/* Forge Orange Node */}
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: 1,
+                    boxShadow: [
+                      '0 0 20px rgba(255, 140, 0, 0.5)',
+                      '0 0 40px rgba(255, 140, 0, 0.8)',
+                      '0 0 20px rgba(255, 140, 0, 0.5)'
+                    ]
+                  }}
+                  transition={{ 
+                    scale: { repeat: Infinity, duration: 2 },
+                    boxShadow: { repeat: Infinity, duration: 2 }
+                  }}
+                  className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center"
+                >
+                  <div className="w-6 h-6 rounded-full bg-orange-300"></div>
+                </motion.div>
+
+                {/* Neon Blue Button */}
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: 1,
+                    boxShadow: [
+                      '0 0 20px rgba(0, 191, 255, 0.7)',
+                      '0 0 40px rgba(0, 191, 255, 1)',
+                      '0 0 20px rgba(0, 191, 255, 0.7)'
+                    ]
+                  }}
+                  transition={{ 
+                    scale: { repeat: Infinity, duration: 2, delay: 0.5 },
+                    boxShadow: { repeat: Infinity, duration: 2, delay: 0.5 }
+                  }}
+                  className="px-4 py-2 rounded-lg bg-blue-500 text-black font-bold text-sm flex items-center justify-center"
+                  style={{ backgroundColor: '#00BFFF' }}
+                >
+                  🚀 RECON
+                </motion.div>
+              </div>
             )}
 
             {/* Onboarding Panel */}
