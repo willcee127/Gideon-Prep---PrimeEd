@@ -24,23 +24,23 @@ class LiveFireTest {
     return result
   }
 
-  // Test 1: Ghost Protocol Trigger on Fraction Failures
+  // Test 1: Tactical Intel Trigger on Fraction Failures
   async testGhostProtocolFractionFailure() {
-    console.log('\n🔥 TEST 1: Ghost Protocol - Fraction Failure Simulation')
+    console.log('\n🔥 TEST 1: Tactical Intel - Fraction Failure Simulation')
     
     try {
       // Simulate first failure
       this.socraticCoPilot.trackFriction('fraction_simplification')
       const firstFailure = this.socraticCoPilot.getFrictionData()
       
-      // Simulate second failure (should trigger Ghost Protocol)
+      // Simulate second failure (should trigger Tactical Intel)
       this.socraticCoPilot.trackFriction('fraction_simplification')
       const secondFailure = this.socraticCoPilot.getFrictionData()
       
-      // Check if Ghost Protocol was triggered
+      // Check if Tactical Intel was triggered
       const interventionHistory = this.socraticCoPilot.getInterventionHistory()
-      const ghostProtocolTriggered = interventionHistory.some(
-        event => event.type === 'GHOST_PROTOCOL_ACTIVATED'
+      const tacticalIntelTriggered = interventionHistory.some(
+        event => event.type === 'TACTICAL_INTEL_DEPLOYED'
       )
 
       // Generate Socratic hint with intervention
@@ -50,17 +50,17 @@ class LiveFireTest {
         2
       )
 
-      if (ghostProtocolTriggered && hint.requiresIntervention) {
+      if (tacticalIntelTriggered && hint.requiresIntervention) {
         return this.logTest(
-          'Ghost Protocol Fraction Failure',
+          'Tactical Intel Fraction Failure',
           '✅ PASS',
-          `Ghost Protocol triggered after 2 failures. Intervention active: ${hint.requiresIntervention}. Hint: "${hint.hint}"`
+          `Tactical Intel triggered after 2 failures. Intervention active: ${hint.requiresIntervention}. Hint: "${hint.hint}"`
         )
       } else {
         return this.logTest(
-          'Ghost Protocol Fraction Failure',
+          'Tactical Intel Fraction Failure',
           '❌ FAIL',
-          `Ghost Protocol not triggered. Friction count: ${secondFailure['fraction_simplification']}`
+          `Tactical Intel not triggered. Friction count: ${secondFailure['fraction_simplification']}`
         )
       }
     } catch (error) {
@@ -196,12 +196,12 @@ class LiveFireTest {
     }
   }
 
-  // Test 5: UI Integration - Ghost Protocol Alert Display
+  // Test 5: UI Integration - Tactical Intel Alert Display
   async testUIIntegrationGhostProtocolAlert() {
-    console.log('\n🖥️ TEST 5: UI Integration - Ghost Protocol Alert Display')
+    console.log('\n🖥️ TEST 5: UI Integration - Tactical Intel Alert Display')
     
     try {
-      // Simulate the UI state when Ghost Protocol is active
+      // Simulate the UI state when Tactical Intel is active
       const mockUIState = {
         interventionActive: true,
         currentConcept: 'fraction_simplification',
@@ -218,13 +218,13 @@ class LiveFireTest {
 
       if (wouldDisplayAlert) {
         return this.logTest(
-          'UI Integration Ghost Protocol Alert',
+          'UI Integration Tactical Intel Alert',
           '✅ PASS',
-          `UI would display Ghost Protocol alert: "${mockUIState.alertMessage}" with ${mockUIState.probabilityDrop} probability drop`
+          `UI would display Tactical Intel alert: "${mockUIState.alertMessage}" with ${mockUIState.probabilityDrop} probability drop`
         )
       } else {
         return this.logTest(
-          'UI Integration Ghost Protocol Alert',
+          'UI Integration Tactical Intel Alert',
           '❌ FAIL',
           'UI state would not trigger alert display'
         )

@@ -39,7 +39,7 @@ const CommanderDashboard = () => {
         if (!data.error) {
           setTotalCompletions(data.totalMedals || 0)
           
-          // Generate Ghost Protocol alerts based on friction data
+          // Generate Tactical Intel alerts based on friction data
           const alerts = []
           data.topFriction?.forEach(concept => {
             if (concept.count > 2) { // More than 2 failures
@@ -274,7 +274,7 @@ const CommanderDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Ghost Protocol Live Feed */}
+        {/* Tactical Intel Live Feed */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}

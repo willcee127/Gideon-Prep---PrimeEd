@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
-const GhostMessageOverlay = () => {
-  const [ghostMessage, setGhostMessage] = useState(null)
+const TacticalIntelOverlay = () => {
+  const [tacticalIntelMessage, setTacticalIntelMessage] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -13,14 +13,14 @@ const GhostMessageOverlay = () => {
 
     // Set up subscription to comms_uplink
     const subscription = supabase
-      .channel('ghost-protocol')
+      .channel('tactical-intel')
       .on('postgres_changes', { 
         event: 'INSERT', 
         table: 'comms_uplink' 
       }, (payload) => {
         // Check if message is for current user
         if (payload.new.target_call_sign === currentCallSign) {
-          setGhostMessage(payload.new)
+          setTacticalIntelMessage(payload.new)
           setIsVisible(true)
           
           // Play radio static chirp
@@ -29,7 +29,7 @@ const GhostMessageOverlay = () => {
           // Auto-hide after 5 seconds
           setTimeout(() => {
             setIsVisible(false)
-            setGhostMessage(null)
+            setTacticalIntelMessage(null)
           }, 5000)
         }
       })
@@ -49,7 +49,7 @@ const GhostMessageOverlay = () => {
         if (pendingReplies && pendingReplies.length > 0) {
           // Show the most recent reply
           const latestReply = pendingReplies[0]
-          setGhostMessage(latestReply)
+          setTacticalIntelMessage(latestReply)
           setIsVisible(true)
           
           // Play radio static chirp
@@ -58,7 +58,7 @@ const GhostMessageOverlay = () => {
           // Auto-hide after 7 seconds for replies (longer display)
           setTimeout(() => {
             setIsVisible(false)
-            setGhostMessage(null)
+            setTacticalIntelMessage(null)
           }, 7000)
           
           // Mark as delivered (optional - could add delivered_at field)

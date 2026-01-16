@@ -1,4 +1,4 @@
-// Socratic CoPilot Service with Ghost Protocol Integration
+// Socratic CoPilot Service with Tactical Intel Integration
 class SocraticCoPilot {
   constructor() {
     this.frictionCount = new Map() // Track failures per concept
@@ -7,25 +7,25 @@ class SocraticCoPilot {
     this.interventionHistory = []
   }
 
-  // Track concept failures to trigger Ghost Protocol
+  // Track concept failures to trigger Tactical Intel
   trackFriction(conceptId) {
     const currentCount = this.frictionCount.get(conceptId) || 0
     this.frictionCount.set(conceptId, currentCount + 1)
     
-    // Check for Ghost Protocol trigger (2 failures)
+    // Check for Tactical Intel trigger (2 failures)
     if (currentCount >= 2) {
       this.triggerIntervention(conceptId)
     }
   }
 
-  // Trigger Ghost Protocol intervention
+  // Trigger Tactical Intel intervention
   triggerIntervention(conceptId) {
     this.interventionActive = true
     this.interventionHistory.push({
       conceptId,
       timestamp: new Date().toISOString(),
       type: 'TACTICAL_INTEL_DEPLOYED',
-      message: `High friction detected in ${conceptId}. Deploying Tactical Intel for position hold.`
+      message: `High friction detected in ${conceptId}. Deploying Tactical Intel for breakthrough.`
     })
   }
 
@@ -58,7 +58,7 @@ class SocraticCoPilot {
       conceptId,
       timestamp: new Date().toISOString(),
       type: 'INTERVENTION_SUCCESS',
-      message: `Student demonstrated understanding in ${conceptId}. Ghost Protocol deactivated.`
+      message: `Student demonstrated understanding in ${conceptId}. Tactical Intel deactivated.`
     })
   }
 
