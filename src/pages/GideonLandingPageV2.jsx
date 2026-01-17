@@ -181,7 +181,7 @@ const GideonLandingPageV2 = () => {
                          style={{
                            boxShadow: '0 0 20px rgba(230, 230, 250, 0.3), inset 0 0 10px rgba(230, 230, 250, 0.2)'
                          }}>
-                      {['🌱', '⚡', '🏆'][index]}
+                      {typeof index === 'number' && ['🌱', '⚡', '🏆'][index] || '🌱'}
                     </div>
                   </motion.div>
                 </motion.div>
