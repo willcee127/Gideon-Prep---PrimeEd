@@ -200,9 +200,9 @@ const GideonLandingPageV2 = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="mb-8"
           >
-            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight" style={{ textShadow: '0 0 15px rgba(255, 191, 0, 0.5)' }}>
               STOP HIDING IN<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text">THE WINEPRESS</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text" style={{ textShadow: '0 0 20px rgba(255, 191, 0, 0.8)' }}>THE WINEPRESS</span>
             </h1>
             <motion.p
               initial={{ opacity: 0, y: 10 }}
