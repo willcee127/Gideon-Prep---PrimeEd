@@ -11,6 +11,7 @@ import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import RangeQual from './components/RangeQual'
+import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import { getNodeById } from './data/mathContent'
 
@@ -112,6 +113,12 @@ function App() {
         <Routes>
           {/* Landing Page Route */}
           <Route path="/landing" element={<GideonLandingPageV2 />} />
+          
+          {/* Onboarding Route */}
+          <Route path="/onboarding" element={<WarriorOnboarding />} />
+          
+          {/* Mission Route */}
+          <Route path="/mission" element={<MissionLandingPage />} />
           
           <Route path="/" element={
             !isInitiated ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { supabase } from '../supabase'
 
@@ -54,6 +54,9 @@ const GideonLandingPageV2 = () => {
     if (callSign.trim()) {
       localStorage.setItem('gideon_call_sign', callSign.trim())
       navigate('/mission')
+    } else {
+      // If no call sign, redirect to onboarding first
+      navigate('/onboarding')
     }
   }
 
@@ -329,14 +332,18 @@ const GideonLandingPageV2 = () => {
             transition={{ delay: 0.9, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowSignupForm(true)}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-orange-500/50 transform hover:scale-105"
+            <Link
+              to="/onboarding"
+              className="inline-block"
             >
-              🎯 JOIN ALPHA RECRUIT
-            </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-amber-400/50 transform hover:scale-105"
+              >
+                🎯 START YOUR TRANSFORMATION
+              </motion.button>
+            </Link>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -799,15 +806,10 @@ const GideonLandingPageV2 = () => {
           </div>
           
           <div className="text-center mt-8 text-gray-500 text-sm">
-            <div className="mb-2">
-              <span className="text-orange-400 font-bold">RECRUITMENT PHASE: ALPHA</span>
-              <span className="text-gray-400 mx-2">—</span>
-              <span className="text-orange-300">gideon-prep-prime.vercel.app</span>
+            <div className="text-amber-400 font-bold text-lg mb-2">
+              FIELD TESTING ACTIVE — START MISSION
             </div>
-            <div className="text-orange-400 font-bold text-lg mb-2">
-              JOIN THE ELITE — ENROLLMENT OPENING SOON
-            </div>
-            © 2026 Gideon Prep - Tactical Training Systems
+            &copy; 2026 Gideon Prep - Tactical Training Systems
           </div>
         </div>
       </footer>
