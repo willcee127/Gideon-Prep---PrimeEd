@@ -110,18 +110,17 @@ function App() {
   }
 
   return (
-    <div className="bg-amber-900 min-h-screen">
-      <Router>
-        <NeuroProvider>
-          <Routes>
-            {/* Landing Page Route */}
-            <Route path="/landing" element={<GideonLandingPageV2 />} />
-            
-            {/* Onboarding Route */}
-            <Route path="/onboarding" element={<WarriorOnboarding />} />
-            
-            {/* Mission Route */}
-            <Route path="/mission" element={<MissionLandingPage />} />
+    <Router>
+      <NeuroProvider>
+        <Routes>
+          {/* Landing Page Route */}
+          <Route path="/landing" element={<GideonLandingPageV2 />} />
+          
+          {/* Onboarding Route */}
+          <Route path="/onboarding" element={<WarriorOnboarding />} />
+          
+          {/* Mission Route */}
+          <Route path="/mission" element={<MissionLandingPage />} />
             
             <Route path="/" element={
             !isInitiated ? (
@@ -209,13 +208,14 @@ function App() {
           <Route path="/range-qual" element={<DiagnosticFlow />} />
           
           {/* Commander Dashboard Route */}
-          <Route path="/commander" element={<div className="min-h-screen bg-black text-white flex items-center justify-center">
-            <h1 className="text-4xl font-bold">Commander Dashboard - Coming Soon</h1>
-          </div>} />
+          <Route path="/commander" element={
+            <div className="min-h-screen bg-black text-white flex items-center justify-center">
+              <h1 className="text-4xl font-bold">Commander Dashboard - Coming Soon</h1>
+            </div>
+          } />
         </Routes>
       </NeuroProvider>
     </Router>
-  </div>
   )
 }
 
