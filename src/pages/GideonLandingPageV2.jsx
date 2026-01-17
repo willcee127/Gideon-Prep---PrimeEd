@@ -48,7 +48,9 @@ const GideonLandingPageV2 = () => {
     // Check if user is already logged in
     const savedCallSign = localStorage.getItem('gideon_call_sign')
     if (savedCallSign) {
-      setCallSign(savedCallSign)
+      // Ensure callSign is always a string, not an object
+      const callSignString = typeof savedCallSign === 'string' ? savedCallSign : String(savedCallSign)
+      setCallSign(callSignString)
     }
   }, [])
 
