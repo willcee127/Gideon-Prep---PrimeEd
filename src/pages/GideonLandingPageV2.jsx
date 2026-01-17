@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { supabase } from '../supabase'
 
+// Force redeploy - asset pathing fix
+
 const GideonLandingPageV2 = () => {
   const navigate = useNavigate()
   const [isClient, setIsClient] = useState(false)
