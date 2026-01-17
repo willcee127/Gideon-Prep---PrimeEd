@@ -64,9 +64,12 @@ const GideonLandingPageV2 = () => {
   }
 
   return (
-    <div style={{color: 'white', padding: '50px'}}>
-      <h1>GIDEON LIVE - VERSION 1.0.6</h1>
-      <p>If you see this, the engine is fixed.</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
+      <div style={{color: 'white', padding: '50px', textAlign: 'center'}}>
+        <h1>GIDEON LIVE - VERSION 1.0.7</h1>
+        <p>Engine rebuilt and object rendering fixed.</p>
+        <p>Root level object rendering resolved in App wrapper.</p>
+      </div>
     </div>
   )
 }

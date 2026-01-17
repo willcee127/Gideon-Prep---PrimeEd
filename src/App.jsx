@@ -10,7 +10,6 @@ import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
-import WarriorModule from './components/WarriorModule'
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
@@ -117,9 +116,6 @@ function App() {
           {/* Landing Page Route */}
           <Route path="/landing" element={<GideonLandingPageV2 />} />
           
-          {/* Onboarding Route */}
-          <Route path="/onboarding" element={<WarriorModule />} />
-          
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
           
@@ -207,7 +203,7 @@ function App() {
           {/* 404 Catch-All */}
           <Route path="*" element={
             <div style={{color: 'white', padding: '20px'}}>
-              404 - Route Not Found. Current Path: {typeof window !== 'undefined' && window.location.pathname || 'Unknown'}
+              404 - Route Not Found. Current Path: {String(typeof window !== 'undefined' && window.location.pathname || 'Unknown')}
             </div>
           } />
         </Routes>
