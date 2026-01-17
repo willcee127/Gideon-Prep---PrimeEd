@@ -10,7 +10,7 @@ import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
-import WarriorOnboarding from './components/WarriorOnboarding'
+import WarriorOnboarding from './components/WarriorModule'
 console.log('WarriorOnboarding imported successfully:', WarriorOnboarding)
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
