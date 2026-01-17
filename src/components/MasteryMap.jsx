@@ -18,10 +18,24 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
   // Hydration guard - only render on client side
   useEffect(() => {
     setIsClient(true)
+    console.log('MasteryMap: Client-side rendering activated')
   }, [])
 
   if (!isClient) {
-    return <div style={{ background: '#0a0a0a', height: '100vh' }} />
+    return (
+      <div style={{ 
+        background: '#0a0a0a', 
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#FFBF00',
+        fontSize: '20px',
+        fontFamily: 'monospace'
+      }}>
+        🗺️ Initializing Mastery Map...
+      </div>
+    )
   }
 
   // Load reclaimed nodes from database on mount

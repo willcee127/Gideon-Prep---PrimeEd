@@ -19,12 +19,13 @@ const GideonLandingPageV2 = () => {
   // Hydration guard - only render on client side
   useEffect(() => {
     setIsClient(true)
+    console.log('GideonLandingPageV2: Client-side rendering activated')
   }, [])
 
   if (!isClient) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
-        <div className="text-orange-400 text-xl">Initializing Command Center...</div>
+        <div className="text-orange-400 text-xl">🛡️ Initializing Command Center...</div>
       </div>
     )
   }
@@ -139,13 +140,28 @@ const GideonLandingPageV2 = () => {
         
         .glassmorphism {
           background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(20px);
+          backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
+          border-radius: 24px;
+        }
+        
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+        }
+        
+        .glass-card-hover {
+          background: rgba(255, 255, 255, 0.07);
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 24px;
+          transition: all 0.3s ease;
         }
         
         .peaceful-sanctuary {
-          background: linear-gradient(135deg, rgba(230, 230, 250, 0.1), rgba(216, 216, 232, 0.05));
+          background: radial-gradient(circle, rgba(230,230,250,0.1) 0%, rgba(10,10,10,1) 100%);
           backdrop-filter: blur(15px);
           border: 1px solid rgba(230, 230, 250, 0.2);
           border-radius: 24px;
@@ -526,11 +542,11 @@ const GideonLandingPageV2 = () => {
             className="text-center mb-16"
           >
             {/* The Problem */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 mb-12 border border-white/20">
-              <div className="text-6xl font-black text-gray-400 mb-4">73%</div>
-              <h2 className="text-3xl font-bold text-black mb-6">
+            <div className="glass-card p-12 mb-12">
+              <div className="text-6xl font-black text-white mb-4">73%</div>
+              <h2 className="text-3xl font-bold text-white mb-6">
                 of students who fail GED Math exam
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text">never retake it.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text">never retake it.</span>
               </h2>
             </div>
 
@@ -539,13 +555,13 @@ const GideonLandingPageV2 = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="bg-gradient-to-br from-blue-50 to-lavender-100 rounded-2xl p-12 border border-lavender-300/50"
+              className="glass-card-hover p-12"
             >
-              <h3 className="text-2xl font-bold text-black mb-4">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-lavender-500 to-blue-500 bg-clip-text">Adaptive Guidance</span>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-lavender-400 to-cyan-400 bg-clip-text">Adaptive Guidance</span>
               </h3>
-              <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
-                Warriors face challenges that grow with you. Our AI provides <span className="font-semibold">step-by-step guidance</span> instead of just giving answers. We ensure no warrior is left behind through real-time support and adaptive difficulty.
+              <p className="text-lg text-slate-200 max-w-2xl mx-auto leading-relaxed">
+                Warriors face challenges that grow with you. Our AI provides <span className="font-semibold text-cyan-300">step-by-step guidance</span> instead of just giving answers. We ensure no warrior is left behind through real-time support and adaptive difficulty.
               </p>
             </motion.div>
           </motion.div>
@@ -570,15 +586,15 @@ const GideonLandingPageV2 = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-gradient-to-br from-slate-800 to-slate-900 border border-yellow-500/30 rounded-2xl p-8 relative overflow-hidden group"
+              className="glass-card p-8 relative overflow-hidden group"
             >
               {/* Gold Weight Icon */}
               <div className="absolute -top-4 -right-4 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
                 ⚖️
               </div>
               <div className="relative z-10">
-                <div className="text-yellow-400 text-3xl mb-4">Adaptive Gravity</div>
-                <p className="text-gray-300">
+                <div className="text-amber-400 text-3xl mb-4">Adaptive Gravity</div>
+                <p className="text-slate-200">
                   Challenges that adapt to your skill level. If you're struggling, the system provides easier problems. If you're excelling, it increases the difficulty to keep you growing.
                 </p>
               </div>
@@ -589,35 +605,35 @@ const GideonLandingPageV2 = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-gradient-to-br from-slate-800 to-slate-900 border border-lavender-500/30 rounded-2xl p-8 relative overflow-hidden group"
+              className="glass-card p-8 relative overflow-hidden group"
             >
               {/* Lavender Pulse Icon */}
               <div className="absolute -top-4 -right-4 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
-                🧭
+                💜
               </div>
               <div className="relative z-10">
                 <div className="text-lavender-400 text-3xl mb-4">Socratic Co-Pilot</div>
-                <p className="text-gray-300">
-                  An AI that guides, never just gives answers. Breaks complex problems into manageable steps so you learn the method, not just memorize solutions.
+                <p className="text-slate-200">
+                  AI-powered guidance that asks questions instead of giving answers. Helps you discover solutions yourself, building true understanding and confidence.
                 </p>
               </div>
             </motion.div>
 
-            {/* Tactical Intel */}
+            {/* Blue Shield */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-gradient-to-br from-slate-800 to-slate-900 border border-blue-500/30 rounded-2xl p-8 relative overflow-hidden group"
+              className="glass-card p-8 relative overflow-hidden group"
             >
               {/* Blue Shield Icon */}
               <div className="absolute -top-4 -right-4 text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
                 🛡️
               </div>
               <div className="relative z-10">
-                <div className="text-orange-400 text-3xl mb-4">Tactical Intel</div>
-                <p className="text-gray-300">
-                  Real-time strategic advantage monitoring for high-friction moments. When you're stuck, Tactical Intel deploys breakthrough guidance to help you conquer the sector.
+                <div className="text-cyan-400 text-3xl mb-4">Combat Support</div>
+                <p className="text-slate-200">
+                  Real-time tactical support when you need it most. Step-by-step guidance, hints, and encouragement to keep you moving forward.
                 </p>
               </div>
             </motion.div>

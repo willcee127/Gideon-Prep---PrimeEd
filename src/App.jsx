@@ -11,6 +11,7 @@ import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import RangeQual from './components/RangeQual'
+import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import { getNodeById } from './data/mathContent'
 
 function App() {
@@ -109,6 +110,9 @@ function App() {
     <Router>
       <NeuroProvider>
         <Routes>
+          {/* Landing Page Route */}
+          <Route path="/landing" element={<GideonLandingPageV2 />} />
+          
           <Route path="/" element={
             !isInitiated ? (
               <div className="min-h-screen bg-black">
