@@ -11,6 +11,7 @@ import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import WarriorOnboarding from './components/WarriorOnboarding'
+console.log('WarriorOnboarding imported successfully:', WarriorOnboarding)
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
