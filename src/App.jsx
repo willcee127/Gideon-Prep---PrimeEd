@@ -113,6 +113,9 @@ function App() {
     <Router>
       <NeuroProvider>
         <Routes>
+          {/* Root Redirect to Landing */}
+          <Route path="/" element={<Navigate to="/landing" replace />} />
+          
           {/* Landing Page Route */}
           <Route path="/landing" element={<GideonLandingPageV2 />} />
           
@@ -121,16 +124,6 @@ function App() {
           
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
-            
-            <Route path="/" element={
-            !isInitiated ? (
-              <div className="min-h-screen bg-black">
-                <Initiation onComplete={handleInitiationComplete} />
-              </div>
-            ) : (
-              <Navigate to="/mastery-map" replace />
-            )
-          } />
           
           <Route path="/mastery-map" element={
             <div className="min-h-screen bg-black relative overflow-hidden">
@@ -211,6 +204,13 @@ function App() {
           <Route path="/commander" element={
             <div className="min-h-screen bg-black text-white flex items-center justify-center">
               <h1 className="text-4xl font-bold">Commander Dashboard - Coming Soon</h1>
+            </div>
+          } />
+          
+          {/* 404 Catch-All */}
+          <Route path="*" element={
+            <div style={{color: 'white', padding: '20px'}}>
+              404 - Route Not Found. Current Path: {window.location.pathname}
             </div>
           } />
         </Routes>
