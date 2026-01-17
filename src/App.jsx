@@ -108,19 +108,20 @@ function App() {
   }
 
   return (
-    <Router>
-      <NeuroProvider>
-        <Routes>
-          {/* Landing Page Route */}
-          <Route path="/landing" element={<GideonLandingPageV2 />} />
-          
-          {/* Onboarding Route */}
-          <Route path="/onboarding" element={<WarriorOnboarding />} />
-          
-          {/* Mission Route */}
-          <Route path="/mission" element={<MissionLandingPage />} />
-          
-          <Route path="/" element={
+    <div className="bg-amber-900 min-h-screen">
+      <Router>
+        <NeuroProvider>
+          <Routes>
+            {/* Landing Page Route */}
+            <Route path="/landing" element={<GideonLandingPageV2 />} />
+            
+            {/* Onboarding Route */}
+            <Route path="/onboarding" element={<WarriorOnboarding />} />
+            
+            {/* Mission Route */}
+            <Route path="/mission" element={<MissionLandingPage />} />
+            
+            <Route path="/" element={
             !isInitiated ? (
               <div className="min-h-screen bg-black">
                 <Initiation onComplete={handleInitiationComplete} />
@@ -212,6 +213,7 @@ function App() {
         </Routes>
       </NeuroProvider>
     </Router>
+  </div>
   )
 }
 
