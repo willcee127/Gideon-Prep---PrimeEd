@@ -55,7 +55,6 @@ function App() {
     // Save to localStorage for persistence
     localStorage.setItem('gideon_user_name', name)
     setUserName(name)
-    console.log('System ignition complete for:', name)
     setIsInitiated(true)
     
     // Show welcome kit for new users
@@ -105,7 +104,7 @@ function App() {
   }
 
   const handleTacticalTip = (data) => {
-    console.log('Tactical tip received:', data)
+    // Tactical tip received
   }
 
   return (
@@ -191,7 +190,6 @@ function App() {
                 correctAnswers={correctAnswers}
                 onDownloadComplete={() => {
                   // Victory celebration complete
-                  console.log('Certificate downloaded successfully')
                 }}
               />
             </div>
