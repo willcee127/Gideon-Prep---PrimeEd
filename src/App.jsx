@@ -10,8 +10,8 @@ import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
-import WarriorOnboarding from './components/WarriorModule'
-console.log('WarriorOnboarding imported successfully:', WarriorOnboarding)
+import WarriorModule from './components/WarriorModule'
+console.log('WarriorModule imported successfully:', WarriorModule)
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
@@ -120,7 +120,7 @@ function App() {
           <Route path="/landing" element={<GideonLandingPageV2 />} />
           
           {/* Onboarding Route */}
-          <Route path="/onboarding" element={<WarriorOnboarding />} />
+          <Route path="/onboarding" element={<WarriorModule />} />
           
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />

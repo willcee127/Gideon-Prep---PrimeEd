@@ -4,7 +4,7 @@ import { supabase } from '../supabase'
 import SocraticCoPilot from '../services/SocraticCoPilotService'
 import CommissioningService from '../services/CommissioningService'
 
-const WarriorOnboarding = ({ onComplete, isVisible }) => {
+const WarriorModule = ({ onComplete, isVisible }) => {
   const [isClient, setIsClient] = useState(false)
   const [currentPanel, setCurrentPanel] = useState(0)
   const [spotlightPosition, setSpotlightPosition] = useState({ x: 0, y: 0 })
@@ -365,4 +365,4 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
   )
 }
 
-export default WarriorOnboarding
+export default WarriorModule
