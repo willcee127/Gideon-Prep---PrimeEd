@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../supabase'
-import { SocraticCoPilot } from '../services/SocraticCoPilotService'
-import { CommissioningService } from '../services/CommissioningService'
+import SocraticCoPilot from '../services/SocraticCoPilotService'
+import CommissioningService from '../services/CommissioningService'
 
 const WarriorOnboarding = ({ onComplete, isVisible }) => {
   const [isClient, setIsClient] = useState(false)
