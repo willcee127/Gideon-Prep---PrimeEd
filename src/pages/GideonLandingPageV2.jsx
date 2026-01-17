@@ -65,74 +65,6 @@ const GideonLandingPageV2 = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
-      {/* CSS Custom Properties for 3-Phase Color System */}
-      <style jsx>{`
-        .verve-bg {
-          background: linear-gradient(135deg, var(--verve-glow), transparent);
-          box-shadow: 0 0 30px var(--verve-glow);
-        }
-        
-        .aura-bg {
-          background: linear-gradient(135deg, var(--aura-glow), transparent);
-          box-shadow: 0 0 30px var(--aura-glow);
-          border: 1px solid var(--aura-primary);
-        }
-        
-        .forge-bg {
-          background: linear-gradient(135deg, var(--forge-glow), transparent);
-          box-shadow: 0 0 30px var(--forge-glow);
-          border: 1px solid var(--forge-primary);
-        }
-        
-        .tech-grid {
-          background-image: 
-            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-          background-size: 20px 20px;
-        }
-        
-        .soft-glow {
-          box-shadow: 0 0 20px rgba(230, 230, 250, 0.2);
-          backdrop-filter: blur(10px);
-        }
-        
-        .warm-amber-glow {
-          box-shadow: 0 0 40px rgba(255, 191, 0, 0.3);
-          background: radial-gradient(circle, rgba(255, 191, 0, 0.1), transparent);
-        }
-        
-        .glassmorphism {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-        }
-        
-        .glass-card {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 24px;
-        }
-        
-        .glass-card-hover {
-          background: rgba(255, 255, 255, 0.07);
-          backdrop-filter: blur(15px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: 24px;
-          transition: all 0.3s ease;
-        }
-        
-        .peaceful-sanctuary {
-          background: radial-gradient(circle, rgba(230,230,250,0.1) 0%, rgba(10,10,10,1) 100%);
-          backdrop-filter: blur(15px);
-          border: 1px solid rgba(230, 230, 250, 0.2);
-          border-radius: 24px;
-          box-shadow: 
-            0 8px 32px rgba(230, 230, 250, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-      `}</style>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         {/* Background Glow */}
@@ -639,7 +571,7 @@ const GideonLandingPageV2 = () => {
               <span>💪 Support the Mission</span>
             </a>
             
-            {callSign && (
+            {typeof callSign === 'string' && callSign && (
               <button
                 onClick={() => navigate('/commander?access=will_prime')}
                 className="hover:text-yellow-400 transition-colors flex items-center gap-2"
