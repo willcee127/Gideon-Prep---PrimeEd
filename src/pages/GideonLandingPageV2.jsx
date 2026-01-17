@@ -98,9 +98,9 @@ const GideonLandingPageV2 = () => {
           --aura-secondary: #00E5E5;
           --aura-glow: rgba(0, 255, 255, 0.3);
           
-          --forge-primary: #FF8C00;
-          --forge-secondary: #FF7700;
-          --forge-glow: rgba(255, 140, 0, 0.3);
+          --forge-primary: #FFBF00;
+          --forge-secondary: #FFAA00;
+          --forge-glow: rgba(255, 191, 0, 0.3);
         }
         
         .verve-bg {
@@ -132,9 +132,26 @@ const GideonLandingPageV2 = () => {
           backdrop-filter: blur(10px);
         }
         
-        .orange-eyes {
-          box-shadow: 0 0 40px rgba(255, 140, 0, 0.4);
-          background: radial-gradient(circle, rgba(255, 140, 0, 0.1), transparent);
+        .warm-amber-glow {
+          box-shadow: 0 0 40px rgba(255, 191, 0, 0.3);
+          background: radial-gradient(circle, rgba(255, 191, 0, 0.1), transparent);
+        }
+        
+        .glassmorphism {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+        }
+        
+        .peaceful-sanctuary {
+          background: linear-gradient(135deg, rgba(230, 230, 250, 0.1), rgba(216, 216, 232, 0.05));
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(230, 230, 250, 0.2);
+          border-radius: 24px;
+          box-shadow: 
+            0 8px 32px rgba(230, 230, 250, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
       `}</style>
       {/* Hero Section */}
@@ -182,6 +199,62 @@ const GideonLandingPageV2 = () => {
               Transform to Conquer Your GED.<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-orange-400 bg-clip-text font-semibold">You're not bad at math. You just had a bad system.</span>
             </motion.p>
+          </motion.div>
+
+          {/* Guardian Assembly Visualization */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.9, duration: 1 }}
+            className="mb-8"
+          >
+            <div className="relative w-64 h-64 mx-auto">
+              {/* Central Guardian Core */}
+              <motion.div
+                animate={{ 
+                  rotate: 360,
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                  scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-400/20 to-orange-400/20 backdrop-blur-md border-2 border-amber-400/30 flex items-center justify-center"
+              >
+                <div className="text-6xl">🛡️</div>
+              </motion.div>
+              
+              {/* Orbiting Guardian Elements */}
+              {[0, 120, 240].map((angle, index) => (
+                <motion.div
+                  key={index}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear", delay: index * 5 }}
+                  className="absolute inset-0"
+                  style={{ transform: `rotate(${angle}deg)` }}
+                >
+                  <motion.div
+                    className="absolute top-8 left-1/2 transform -translate-x-1/2"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.7 }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-lavender-400/30 to-cyan-400/30 backdrop-blur-sm border border-lavender-400/50 flex items-center justify-center text-2xl">
+                      {['🌱', '⚡', '🏆'][index]}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ))}
+              
+              {/* Protective Aura */}
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.3, 0.1, 0.3]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-full border-2 border-amber-400/20"
+              />
+            </div>
           </motion.div>
 
           {/* CTA Buttons */}
@@ -232,7 +305,7 @@ const GideonLandingPageV2 = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="relative bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-orange-500 rounded-2xl shadow-2xl shadow-orange-500/50 p-8 max-w-md w-full mx-4"
+              className="relative glassmorphism border-2 border-amber-400/50 rounded-3xl shadow-2xl shadow-amber-400/30 p-8 max-w-md w-full mx-4"
             >
               {/* Header */}
               <div className="text-center mb-6">
@@ -255,12 +328,12 @@ const GideonLandingPageV2 = () => {
                     value={signupData.name}
                     onChange={(e) => setSignupData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Enter your name"
-                    className="w-full px-4 py-3 bg-slate-700 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-orange-300 text-sm font-bold mb-2">
+                  <label className="block text-amber-300 text-sm font-bold mb-2">
                     Email Address
                   </label>
                   <input
@@ -268,12 +341,12 @@ const GideonLandingPageV2 = () => {
                     value={signupData.email}
                     onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 bg-slate-700 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-orange-300 text-sm font-bold mb-2">
+                  <label className="block text-amber-300 text-sm font-bold mb-2">
                     Call Sign (Optional)
                   </label>
                   <input
@@ -281,7 +354,7 @@ const GideonLandingPageV2 = () => {
                     value={signupData.callsign}
                     onChange={(e) => setSignupData(prev => ({ ...prev, callsign: e.target.value }))}
                     placeholder="Choose your warrior callsign"
-                    className="w-full px-4 py-3 bg-slate-700 border border-orange-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
                   />
                 </div>
               </div>
@@ -299,14 +372,14 @@ const GideonLandingPageV2 = () => {
               <div className="flex justify-center space-x-3 mt-6">
                 <button
                   onClick={() => setShowSignupForm(false)}
-                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  className="px-4 py-2 glassmorphism border border-gray-400/30 hover:bg-gray-600/20 text-white rounded-2xl transition-all duration-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAlphaRecruit}
                   disabled={isSubmitting || !signupData.name || !signupData.email}
-                  className="px-4 py-2 bg-orange-500 hover:bg-orange-400 text-black rounded-lg font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black rounded-2xl font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-400/30"
                 >
                   {isSubmitting ? 'JOINING...' : 'JOIN WAITLIST'}
                 </button>
@@ -343,7 +416,7 @@ const GideonLandingPageV2 = () => {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="relative group"
             >
-              <div className="verve-bg soft-glow rounded-2xl p-8 h-full border border-lavender-500/30">
+              <div className="peaceful-sanctuary p-8 h-full">
                 <div className="text-center">
                   <div className="text-3xl font-black mb-4" style={{ color: 'var(--verve-primary)' }}>
                     PHASE 1
@@ -356,16 +429,17 @@ const GideonLandingPageV2 = () => {
                   </div>
                   <div className="text-gray-300 space-y-3">
                     <p>🌱 Restore mathematical confidence</p>
-                    <p>💊 Break calculation anxiety</p>
-                    <p>🛡️ Establish safe learning space</p>
+                    <p>🧘‍♀️ Release calculation anxiety</p>
+                    <p>🏛️ Create sanctuary of learning</p>
                     <p>✨ Awaken dormant potential</p>
                   </div>
                 </div>
-                {/* Soft glow effect */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                {/* Peaceful sanctuary effect */}
+                <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                      style={{
-                       background: 'radial-gradient(circle at center, rgba(230, 230, 250, 0.1), transparent)',
-                       backdropFilter: 'blur(20px)'
+                       background: 'radial-gradient(circle at center, rgba(230, 230, 250, 0.08), transparent)',
+                       backdropFilter: 'blur(25px)',
+                       boxShadow: 'inset 0 0 30px rgba(230, 230, 250, 0.05)'
                      }}>
                 </div>
               </div>
@@ -378,7 +452,7 @@ const GideonLandingPageV2 = () => {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="relative group"
             >
-              <div className="aura-bg tech-grid rounded-2xl p-8 h-full">
+              <div className="aura-bg tech-grid rounded-3xl p-8 h-full glassmorphism">
                 <div className="text-center">
                   <div className="text-3xl font-black mb-4" style={{ color: 'var(--aura-primary)' }}>
                     PHASE 2
@@ -396,9 +470,10 @@ const GideonLandingPageV2 = () => {
                     <p>🔥 Forge tactical precision</p>
                   </div>
                 </div>
-                {/* Tech grid overlay */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* Tech grid overlay with glassmorphism */}
+                <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                   <div className="w-full h-full tech-grid"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-3xl"></div>
                 </div>
               </div>
             </motion.div>
@@ -410,15 +485,15 @@ const GideonLandingPageV2 = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="relative group"
             >
-              <div className="forge-bg orange-eyes rounded-2xl p-8 h-full">
+              <div className="forge-bg warm-amber-glow rounded-3xl p-8 h-full glassmorphism">
                 <div className="text-center">
                   <div className="text-3xl font-black mb-4" style={{ color: 'var(--forge-primary)' }}>
                     PHASE 3
                   </div>
-                  <div className="text-xl font-bold mb-2 text-orange-300">
+                  <div className="text-xl font-bold mb-2 text-amber-300">
                     FORGE
                   </div>
-                  <div className="text-lg font-semibold mb-6 text-orange-200">
+                  <div className="text-lg font-semibold mb-6 text-amber-200">
                     Integration & Mastery
                   </div>
                   <div className="text-gray-300 space-y-3">
@@ -428,11 +503,11 @@ const GideonLandingPageV2 = () => {
                     <p>🎖️ Join the elite warriors</p>
                   </div>
                 </div>
-                {/* Orange eyes intensity */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                {/* Warm amber glow effect */}
+                <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                      style={{
-                       background: 'radial-gradient(circle at center, rgba(255, 140, 0, 0.2), transparent)',
-                       boxShadow: '0 0 60px rgba(255, 140, 0, 0.6)'
+                       background: 'radial-gradient(circle at center, rgba(255, 191, 0, 0.15), transparent)',
+                       boxShadow: '0 0 60px rgba(255, 191, 0, 0.4)'
                      }}>
                 </div>
               </div>
