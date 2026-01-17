@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global CSS Variables for 3-Phase Color System */
+:root {
+  --verve-primary: #E6E6FA;
+  --verve-secondary: #D8D8E8;
+  --verve-glow: rgba(230, 230, 250, 0.3);
+  
+  --aura-primary: #00FFFF;
+  --aura-secondary: #00E5E5;
+  --aura-glow: rgba(0, 255, 255, 0.3);
+  
+  --forge-primary: #FFBF00;
+  --forge-secondary: #FFAA00;
+  --forge-glow: rgba(255, 191, 0, 0.3);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

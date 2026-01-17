@@ -22,10 +22,22 @@ const GideonLandingPageV2 = () => {
     console.log('GideonLandingPageV2: Client-side rendering activated')
   }, [])
 
+  // Force render safety check - if isClient is false for more than 2 seconds, force it to true
+  useEffect(() => {
+    const forceRenderTimer = setTimeout(() => {
+      if (!isClient) {
+        console.log('GideonLandingPageV2: Force rendering activated after 2 seconds')
+        setIsClient(true)
+      }
+    }, 2000)
+
+    return () => clearTimeout(forceRenderTimer)
+  }, [isClient])
+
   if (!isClient) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
-        <div className="text-orange-400 text-xl">🛡️ Initializing Command Center...</div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-800 via-blue-800 to-slate-900 flex items-center justify-center">
+        <div className="text-amber-400 text-xl">🛡️ Initializing Command Center...</div>
       </div>
     )
   }
@@ -90,20 +102,6 @@ const GideonLandingPageV2 = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
       {/* CSS Custom Properties for 3-Phase Color System */}
       <style jsx>{`
-        :root {
-          --verve-primary: #E6E6FA;
-          --verve-secondary: #D8D8E8;
-          --verve-glow: rgba(230, 230, 250, 0.3);
-          
-          --aura-primary: #00FFFF;
-          --aura-secondary: #00E5E5;
-          --aura-glow: rgba(0, 255, 255, 0.3);
-          
-          --forge-primary: #FFBF00;
-          --forge-secondary: #FFAA00;
-          --forge-glow: rgba(255, 191, 0, 0.3);
-        }
-        
         .verve-bg {
           background: linear-gradient(135deg, var(--verve-glow), transparent);
           box-shadow: 0 0 30px var(--verve-glow);
@@ -229,15 +227,35 @@ const GideonLandingPageV2 = () => {
               <motion.div
                 animate={{ 
                   rotate: 360,
-                  scale: [1, 1.1, 1]
+                  scale: [1, 1.05, 1]
                 }}
                 transition={{ 
-                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                  rotate: { duration: 30, repeat: Infinity, ease: "linear" },
                   scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
                 }}
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-400/20 to-orange-400/20 backdrop-blur-md border-2 border-amber-400/30 flex items-center justify-center"
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-400/15 to-amber-500/20 backdrop-blur-md border-2 border-amber-400/40 flex items-center justify-center"
+                style={{
+                  boxShadow: '0 0 40px rgba(255, 191, 0, 0.2), inset 0 0 20px rgba(255, 191, 0, 0.1)'
+                }}
               >
-                <div className="text-6xl">🛡️</div>
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    textShadow: [
+                      '0 0 10px rgba(255, 191, 0, 0.5)',
+                      '0 0 20px rgba(255, 191, 0, 0.8)',
+                      '0 0 10px rgba(255, 191, 0, 0.5)'
+                    ]
+                  }}
+                  transition={{ 
+                    scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                    textShadow: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                  }}
+                  className="text-6xl"
+                  style={{ color: 'var(--forge-primary)' }}
+                >
+                  🛡️
+                </motion.div>
               </motion.div>
               
               {/* Orbiting Guardian Elements */}
@@ -245,16 +263,27 @@ const GideonLandingPageV2 = () => {
                 <motion.div
                   key={index}
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear", delay: index * 5 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: index * 6.67 }}
                   className="absolute inset-0"
                   style={{ transform: `rotate(${angle}deg)` }}
                 >
                   <motion.div
                     className="absolute top-8 left-1/2 transform -translate-x-1/2"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.7 }}
+                    animate={{ 
+                      scale: [1, 1.15, 1],
+                      opacity: [0.8, 1, 0.8]
+                    }}
+                    transition={{ 
+                      duration: 2.5, 
+                      repeat: Infinity, 
+                      delay: index * 0.8,
+                      ease: "easeInOut"
+                    }}
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-lavender-400/30 to-cyan-400/30 backdrop-blur-sm border border-lavender-400/50 flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-lavender-400/25 to-cyan-400/25 backdrop-blur-sm border border-lavender-400/60 flex items-center justify-center text-2xl"
+                         style={{
+                           boxShadow: '0 0 20px rgba(230, 230, 250, 0.3), inset 0 0 10px rgba(230, 230, 250, 0.2)'
+                         }}>
                       {['🌱', '⚡', '🏆'][index]}
                     </div>
                   </motion.div>
@@ -264,11 +293,31 @@ const GideonLandingPageV2 = () => {
               {/* Protective Aura */}
               <motion.div
                 animate={{ 
-                  scale: [1, 1.3, 1],
-                  opacity: [0.3, 0.1, 0.3]
+                  scale: [1, 1.4, 1],
+                  opacity: [0.2, 0.05, 0.2]
                 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 rounded-full border-2 border-amber-400/20"
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-full border-2 border-amber-400/15"
+                style={{
+                  boxShadow: 'inset 0 0 30px rgba(255, 191, 0, 0.1)'
+                }}
+              />
+              
+              {/* Hero Ring */}
+              <motion.div
+                animate={{ 
+                  rotate: -360,
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{ 
+                  rotate: { duration: 40, repeat: Infinity, ease: "linear" },
+                  scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute inset-0 rounded-full border border-amber-400/20"
+                style={{
+                  borderStyle: 'dashed',
+                  boxShadow: '0 0 15px rgba(255, 191, 0, 0.15)'
+                }}
               />
             </div>
           </motion.div>

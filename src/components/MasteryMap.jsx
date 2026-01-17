@@ -21,10 +21,22 @@ const MasteryMap = ({ onNodeSelect, selectedNode, completedNodes = [] }) => {
     console.log('MasteryMap: Client-side rendering activated')
   }, [])
 
+  // Force render safety check - if isClient is false for more than 2 seconds, force it to true
+  useEffect(() => {
+    const forceRenderTimer = setTimeout(() => {
+      if (!isClient) {
+        console.log('MasteryMap: Force rendering activated after 2 seconds')
+        setIsClient(true)
+      }
+    }, 2000)
+
+    return () => clearTimeout(forceRenderTimer)
+  }, [isClient])
+
   if (!isClient) {
     return (
       <div style={{ 
-        background: '#0a0a0a', 
+        background: '#1a1a1a', 
         height: '100vh',
         display: 'flex',
         alignItems: 'center',
