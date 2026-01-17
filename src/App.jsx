@@ -11,7 +11,6 @@ import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import WarriorModule from './components/WarriorModule'
-console.log('WarriorModule imported successfully:', WarriorModule)
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
@@ -210,7 +209,7 @@ function App() {
           {/* 404 Catch-All */}
           <Route path="*" element={
             <div style={{color: 'white', padding: '20px'}}>
-              404 - Route Not Found. Current Path: {window.location.pathname}
+              404 - Route Not Found. Current Path: {typeof window !== 'undefined' && window.location.pathname || 'Unknown'}
             </div>
           } />
         </Routes>
