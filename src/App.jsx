@@ -10,7 +10,7 @@ import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
-import RangeQual from './components/RangeQual'
+import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import { getNodeById } from './data/mathContent'
@@ -203,7 +203,7 @@ function App() {
             </div>
           } />
           
-          <Route path="/range-qual" element={<RangeQual />} />
+          <Route path="/range-qual" element={<DiagnosticFlow />} />
           
           {/* Commander Dashboard Route */}
           <Route path="/commander" element={<div className="min-h-screen bg-black text-white flex items-center justify-center">

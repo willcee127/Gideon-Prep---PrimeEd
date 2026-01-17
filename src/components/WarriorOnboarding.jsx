@@ -118,31 +118,14 @@ const WarriorOnboarding = ({ onComplete, isVisible }) => {
 
   const handleComplete = async () => {
     try {
-      // 1. Identify the Warrior
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error("No active session found.");
-
-      // 2. Insert into Profiles Table (The Success you saw in Supabase SQL)
-      const { error } = await supabase
-        .from('profiles')
-        .update({ 
-          username: userName, 
-          onboarding_completed: true,
-          current_sector: 'Sector 1' 
-        })
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      // 3. 🛡️ The Bridge Repair: Force a state refresh before navigating
-      // This prevents blank screen by ensuring the Provider has the data.
+      // 1. Mark onboarding as complete
       localStorage.setItem('warrior_onboarding_complete', 'true');
-      window.location.href = '/range-qual'; 
       
-    } catch (err) {
-      console.error("Tactical Error during Onboarding:", err.message);
-      // Optional: Add a toast or alert here so that the user knows why it failed
+      // 2. Route to diagnostic testing
+      window.location.href = '/range-qual';
+      
+    } catch (error) {
+      console.error('Error completing onboarding:', error);
     }
   };
 

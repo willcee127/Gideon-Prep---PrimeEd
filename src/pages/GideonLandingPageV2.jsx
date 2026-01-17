@@ -64,43 +64,6 @@ const GideonLandingPageV2 = () => {
     window.open('https://ko-fi.com/willcee127', '_blank')
   }
 
-  const handleAlphaRecruit = async () => {
-    setIsSubmitting(true)
-    setSignupMessage('')
-    
-    try {
-      const { data, error } = await supabase
-        .from('waitlist_warriors')
-        .insert([
-          {
-            name: signupData.name,
-            email: signupData.email,
-            callsign: signupData.callsign,
-            recruitment_phase: 'ALPHA',
-            status: 'PENDING',
-            created_at: new Date().toISOString()
-          }
-        ])
-
-      if (error) {
-        console.error('Signup error:', error)
-        setSignupMessage('⚠️ Recruitment system temporarily unavailable. Try again soon.')
-      } else {
-        setSignupMessage('✅ Welcome to the Alpha Recruit waitlist! Check your email for next steps.')
-        setSignupData({ name: '', email: '', callsign: '' })
-        setTimeout(() => {
-          setShowSignupForm(false)
-          setSignupMessage('')
-        }, 3000)
-      }
-    } catch (err) {
-      console.error('Network error:', err)
-      setSignupMessage('⚠️ Network error. Please check your connection and try again.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
       {/* CSS Custom Properties for 3-Phase Color System */}
@@ -341,7 +304,7 @@ const GideonLandingPageV2 = () => {
                 whileTap={{ scale: 0.95 }}
                 className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-amber-400/50 transform hover:scale-105"
               >
-                🎯 START YOUR TRANSFORMATION
+                🎯 START INITIAL RECRUITMENT & DIAGNOSTIC
               </motion.button>
             </Link>
 
@@ -356,110 +319,6 @@ const GideonLandingPageV2 = () => {
           </motion.div>
         </motion.div>
       </section>
-
-      {/* Alpha Recruit Signup Modal */}
-      <AnimatePresence>
-        {showSignupForm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-6"
-          >
-            {/* Backdrop */}
-            <div 
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-              onClick={() => setShowSignupForm(false)}
-            />
-            
-            {/* Modal Content */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="relative glassmorphism border-2 border-amber-400/50 rounded-3xl shadow-2xl shadow-amber-400/30 p-8 max-w-md w-full mx-4"
-            >
-              {/* Header */}
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-black text-orange-400 mb-2">
-                  ALPHA RECRUIT
-                </h2>
-                <p className="text-gray-400 text-sm">
-                  Join the waitlist for Gideon Prep Prime
-                </p>
-              </div>
-              
-              {/* Form */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-orange-300 text-sm font-bold mb-2">
-                    Warrior Name
-                  </label>
-                  <input
-                    type="text"
-                    value={signupData.name}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Enter your name"
-                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-amber-300 text-sm font-bold mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={signupData.email}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
-                    placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-amber-300 text-sm font-bold mb-2">
-                    Call Sign (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={signupData.callsign}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, callsign: e.target.value }))}
-                    placeholder="Choose your warrior callsign"
-                    className="w-full px-4 py-3 glassmorphism border border-amber-400/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
-                  />
-                </div>
-              </div>
-              
-              {/* Message */}
-              {signupMessage && (
-                <div className={`mt-4 p-3 rounded-lg text-sm text-center ${
-                  signupMessage.includes('✅') ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                }`}>
-                  {signupMessage}
-                </div>
-              )}
-              
-              {/* Actions */}
-              <div className="flex justify-center space-x-3 mt-6">
-                <button
-                  onClick={() => setShowSignupForm(false)}
-                  className="px-4 py-2 glassmorphism border border-gray-400/30 hover:bg-gray-600/20 text-white rounded-2xl transition-all duration-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAlphaRecruit}
-                  disabled={isSubmitting || !signupData.name || !signupData.email}
-                  className="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black rounded-2xl font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-400/30"
-                >
-                  {isSubmitting ? 'JOINING...' : 'JOIN WAITLIST'}
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Transformation Protocol Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
