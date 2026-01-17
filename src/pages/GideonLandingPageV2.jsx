@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { supabase } from '../supabase'
 
 // Force redeploy - asset pathing fix
 
@@ -46,12 +45,8 @@ const GideonLandingPageV2 = () => {
 
   useEffect(() => {
     // Check if user is already logged in
-    const savedCallSign = localStorage.getItem('gideon_call_sign')
-    if (savedCallSign) {
-      // Ensure callSign is always a string, not an object
-      const callSignString = typeof savedCallSign === 'string' ? savedCallSign : String(savedCallSign)
-      setCallSign(callSignString)
-    }
+    const val = localStorage.getItem('gideon_call_sign');
+    setCallSign(typeof val === 'string' ? val : '');
   }, [])
 
   const handleStartMission = () => {
