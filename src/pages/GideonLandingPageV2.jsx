@@ -15,20 +15,15 @@ const GideonLandingPageV2 = () => {
 
         {/* Main Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          {/* Alert Badge */}
-          <div className="absolute -top-8 -right-8 bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-orange-500/50">
-            🎯 GIDEON COMMAND CENTER
-          </div>
-
           {/* Main Headline */}
           <div className="mb-8">
             <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight" style={{ textShadow: '0 0 15px rgba(255, 191, 0, 0.5)' }}>
-              STOP HIDING IN<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text" style={{ textShadow: '0 0 20px rgba(255, 191, 0, 0.8)' }}>THE WINEPRESS</span>
+              Master Your GED.<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text" style={{ textShadow: '0 0 20px rgba(255, 191, 0, 0.8)' }}>Achieve Your Goals</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Transform to Conquer Your GED.<br />
-              Master mathematics through tactical precision and strategic mastery.
+              Build your mathematical confidence with personalized learning.<br />
+              Progress at your own pace with targeted support.
             </p>
           </div>
 
@@ -86,14 +81,14 @@ const GideonLandingPageV2 = () => {
               onClick={() => navigate('/onboarding')}
               className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-amber-400/50 transform hover:scale-105"
             >
-              🎯 START INITIAL RECRUITMENT & DIAGNOSTIC
+              🎯 START MISSION (FREE)
             </button>
 
             <button
               onClick={() => navigate('/mission')}
               className="border-2 border-cyan-400 hover:border-cyan-300 hover:bg-cyan-400/10 text-cyan-400 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg backdrop-blur-sm"
             >
-              🚀 EXISTING WARRIOR
+              🚀 CONTINUE LEARNING
             </button>
           </div>
         </div>
@@ -105,65 +100,65 @@ const GideonLandingPageV2 = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-orange-400 bg-clip-text">
-                TRANSFORMATION PROTOCOL
+                LEARNING PATHWAYS
               </span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Three phases to reclaim your mathematical sovereignty
+              Three stages to build your mathematical confidence
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* PHASE 1 - VERVE (Lavender) */}
+            {/* STAGE 1 - BUILD (Lavender) */}
             <div className="rounded-3xl p-8 h-full relative overflow-hidden group bg-gradient-to-br from-purple-900/20 to-purple-800/10 border border-purple-700/30">
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#c4b5fd' }}>
-                  PHASE 1
+                  STAGE 1
                 </div>
                 <div className="text-xl font-bold mb-2 text-lavender-300">
-                  VERVE
+                  BUILD
                 </div>
                 <p className="text-slate-200 mb-4">
-                  Foundational Mastery
+                  Foundational Skills
                 </p>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Build your mathematical foundation through systematic practice and precision training. Master the fundamentals that will carry you through advanced concepts.
+                  Master the core concepts and build your mathematical foundation through guided practice and clear explanations.
                 </p>
               </div>
             </div>
 
-            {/* PHASE 2 - AURA (Cyan) */}
+            {/* STAGE 2 - GROW (Cyan) */}
             <div className="rounded-3xl p-8 h-full bg-gradient-to-br from-cyan-900/20 to-cyan-800/10 border border-cyan-700/30">
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#67e8f9' }}>
-                  PHASE 2
+                  STAGE 2
                 </div>
                 <div className="text-xl font-bold mb-2 text-cyan-300">
-                  AURA
+                  GROW
                 </div>
                 <p className="text-slate-200 mb-4">
-                  Strategic Thinking
+                  Problem-Solving Skills
                 </p>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Develop tactical problem-solving skills and strategic approaches to complex mathematical challenges. Think like a mathematician.
+                  Develop your analytical thinking and learn effective strategies for solving complex mathematical problems.
                 </p>
               </div>
             </div>
 
-            {/* PHASE 3 - FORGE (Amber) */}
-            <div className="rounded-3xl p-8 h-full bg-gradient-to-br from-amber-900/20 to-amber-800/10 border border-amber-700/30">
+            {/* STAGE 3 - ACHIEVE (Amber) */}
+            <div className="rounded-3xl p-8 h-full bg-gradient-to-br from-slate-900/20 to-slate-800/10 border border-slate-700/30">
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#fbbf24' }}>
-                  PHASE 3
+                  STAGE 3
                 </div>
                 <div className="text-xl font-bold mb-2 text-amber-300">
-                  FORGE
+                  ACHIEVE
                 </div>
                 <p className="text-slate-200 mb-4">
-                  Advanced Application
+                  Test Success
                 </p>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Apply your mastery to real-world scenarios and advanced mathematical concepts. Forge your path to success.
+                  Apply your knowledge with confidence and excel in your GED examination through focused practice.
                 </p>
               </div>
             </div>
@@ -177,11 +172,11 @@ const GideonLandingPageV2 = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
-                TACTICAL ADVANTAGES
+                LEARNING SUPPORT
               </span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Cutting-edge tools and strategies for mathematical mastery
+              Personalized tools and guidance for your success
             </p>
           </div>
 
@@ -189,27 +184,27 @@ const GideonLandingPageV2 = () => {
             {/* Feature 1 */}
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
               <div className="text-4xl mb-4 text-purple-400">🎯</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Precision Targeting</h3>
+              <h3 className="text-xl font-bold mb-2 text-white">Targeted Learning</h3>
               <p className="text-gray-300">
-                Focus on exactly what you need to master with our adaptive learning system that targets your specific weaknesses.
+                Focus on exactly what you need to master with our adaptive learning system that identifies your specific areas for improvement.
               </p>
             </div>
 
             {/* Feature 2 */}
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
               <div className="text-4xl mb-4 text-cyan-400">⚡</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Lightning Progress</h3>
+              <h3 className="text-xl font-bold mb-2 text-white">Steady Progress</h3>
               <p className="text-gray-300">
-                Accelerated learning paths that help you achieve mastery in record time without sacrificing understanding.
+                Learn at your own pace with structured paths that build confidence and understanding step by step.
               </p>
             </div>
 
             {/* Feature 3 */}
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
-              <div className="text-4xl mb-4 text-amber-400">🛡️</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Guardian Support</h3>
+              <div className="text-4xl mb-4 text-amber-400">📚</div>
+              <h3 className="text-xl font-bold mb-2 text-white">Personal Guidance</h3>
               <p className="text-gray-300">
-                Real-time tactical support when you need it most. Step-by-step guidance, hints, and encouragement to keep you moving forward.
+                Get help exactly when you need it with targeted support that identifies where you're stuck and provides specific guidance to move forward.
               </p>
             </div>
           </div>
@@ -224,9 +219,9 @@ const GideonLandingPageV2 = () => {
               href="https://ko-fi.com/willcee127"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-yellow-400 transition-colors flex items-center gap-2"
+              className="border border-gray-400 hover:border-yellow-400 hover:text-yellow-400 transition-colors px-4 py-2 rounded-lg flex items-center gap-2"
             >
-              <span>💪 Support the Mission</span>
+              <span>💪 Support Learning</span>
             </a>
             
             <a
@@ -246,9 +241,9 @@ const GideonLandingPageV2 = () => {
           
           <div className="text-center mt-8 text-gray-500 text-sm">
             <div className="text-amber-400 font-bold text-lg mb-2">
-              FIELD TESTING ACTIVE — START MISSION
+              Start Your Learning Journey Today
             </div>
-            &copy; 2026 Gideon Prep - Tactical Training Systems
+            &copy; 2026 Gideon Prep - Educational Success Platform
           </div>
         </div>
       </footer>

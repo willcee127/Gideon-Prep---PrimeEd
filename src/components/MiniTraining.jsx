@@ -82,10 +82,10 @@ const MiniTraining = ({ onComplete, terminationLevel }) => {
         glow: 'shadow-cyan-500/20'
       },
       amber: {
-        bg: 'from-amber-600 to-amber-700',
+        bg: 'from-slate-800 to-slate-900',
         text: 'text-amber-400', 
-        border: 'border-amber-500/30',
-        glow: 'shadow-amber-500/20'
+        border: 'border-slate-700/30',
+        glow: 'shadow-amber-400/10'
       }
     }
     return colorMap[color] || colorMap.lavender
