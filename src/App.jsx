@@ -13,6 +13,7 @@ import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
+import RecruitmentPage from './pages/RecruitmentPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import { getNodeById } from './data/mathContent'
 
@@ -122,6 +123,9 @@ function App() {
           
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
+          
+          {/* Recruitment Route */}
+          <Route path="/recruitment" element={<RecruitmentPage />} />
           
           {/* Tactical Intel Dashboard Route */}
           <Route path="/tacticalintel" element={<TacticalIntelDashboard />} />

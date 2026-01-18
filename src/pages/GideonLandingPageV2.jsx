@@ -78,7 +78,7 @@ const GideonLandingPageV2 = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <button
-              onClick={() => navigate('/onboarding')}
+              onClick={() => navigate('/recruitment')}
               className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-amber-400/50 transform hover:scale-105"
             >
               🎯 START MISSION (FREE)
@@ -103,6 +103,9 @@ const GideonLandingPageV2 = () => {
                 LEARNING PATHWAYS
               </span>
             </h2>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+              Math is the #1 obstacle to the GED. We built a Recovery Engine to overcome it.
+            </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Three stages to build your mathematical confidence
             </p>

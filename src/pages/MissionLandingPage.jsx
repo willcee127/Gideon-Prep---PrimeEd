@@ -15,10 +15,7 @@ const MissionLandingPage = () => {
   }, [])
 
   const handleStartMission = () => {
-    if (callSign.trim()) {
-      localStorage.setItem('gideon_call_sign', callSign.trim())
-      navigate('/mission')
-    }
+    navigate('/recruitment')
   }
 
   const handleSupport = () => {
