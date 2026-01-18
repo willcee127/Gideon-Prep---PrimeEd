@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom'
 const GideonLandingPageV2 = () => {
   const navigate = useNavigate()
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
+    <div className="min-h-screen bg-slate-900 text-white font-mono overflow-x-hidden" style={{backgroundColor: '#0a0a0b'}}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         {/* Background Glow */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/10 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-lavender-500/10 via-blue-500/5 to-transparent animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-800/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-700/5 via-blue-800/2 to-transparent animate-pulse" />
         </div>
 
         {/* Main Content */}
@@ -94,8 +94,8 @@ const GideonLandingPageV2 = () => {
         </div>
       </section>
 
-      {/* Transformation Protocol Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Learning Pathways Section */}
+      <section className="py-20 px-4" style={{backgroundColor: '#0a0a0b'}}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">
@@ -110,7 +110,7 @@ const GideonLandingPageV2 = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* STAGE 1 - BUILD (Lavender) */}
-            <div className="rounded-3xl p-8 h-full relative overflow-hidden group bg-gradient-to-br from-purple-900/20 to-purple-800/10 border border-purple-700/30">
+            <div className="rounded-3xl p-8 h-full relative overflow-hidden group bg-slate-800/50 border border-slate-700/30">
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#c4b5fd' }}>
                   STAGE 1
@@ -122,13 +122,13 @@ const GideonLandingPageV2 = () => {
                   Foundational Skills
                 </p>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Master the core concepts and build your mathematical foundation through guided practice and clear explanations.
+                  Master core concepts and build your mathematical foundation through guided practice and clear explanations.
                 </p>
               </div>
             </div>
 
             {/* STAGE 2 - GROW (Cyan) */}
-            <div className="rounded-3xl p-8 h-full bg-gradient-to-br from-cyan-900/20 to-cyan-800/10 border border-cyan-700/30">
+            <div className="rounded-3xl p-8 h-full bg-slate-800/50 border border-slate-700/30">
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#67e8f9' }}>
                   STAGE 2
@@ -146,7 +146,7 @@ const GideonLandingPageV2 = () => {
             </div>
 
             {/* STAGE 3 - ACHIEVE (Amber) */}
-            <div className="rounded-3xl p-8 h-full bg-gradient-to-br from-slate-900/20 to-slate-800/10 border border-slate-700/30">
+            <div className="rounded-3xl p-8 h-full bg-slate-800/50 border border-slate-700/30" style={{border: '2px solid #f59e0b', boxShadow: '0 0 20px rgba(245, 158, 11, 0.1)'}}>
               <div className="text-center">
                 <div className="text-3xl font-black mb-4" style={{ color: '#fbbf24' }}>
                   STAGE 3
@@ -167,7 +167,7 @@ const GideonLandingPageV2 = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{backgroundColor: '#0a0a0b'}}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">
@@ -182,7 +182,7 @@ const GideonLandingPageV2 = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
+            <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
               <div className="text-4xl mb-4 text-purple-400">🎯</div>
               <h3 className="text-xl font-bold mb-2 text-white">Targeted Learning</h3>
               <p className="text-gray-300">
@@ -191,7 +191,7 @@ const GideonLandingPageV2 = () => {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
+            <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
               <div className="text-4xl mb-4 text-cyan-400">⚡</div>
               <h3 className="text-xl font-bold mb-2 text-white">Steady Progress</h3>
               <p className="text-gray-300">
@@ -200,7 +200,7 @@ const GideonLandingPageV2 = () => {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700">
+            <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
               <div className="text-4xl mb-4 text-amber-400">📚</div>
               <h3 className="text-xl font-bold mb-2 text-white">Personal Guidance</h3>
               <p className="text-gray-300">
@@ -212,7 +212,7 @@ const GideonLandingPageV2 = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-black to-slate-900 py-12 px-4 border-t border-slate-800">
+      <footer style={{backgroundColor: '#0a0a0b'}} className="py-12 px-4 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 text-gray-400">
             <a
@@ -240,7 +240,7 @@ const GideonLandingPageV2 = () => {
           </div>
           
           <div className="text-center mt-8 text-gray-500 text-sm">
-            <div className="text-amber-400 font-bold text-lg mb-2">
+            <div className="text-amber-400 font-bold text-lg mb-2" style={{color: '#f59e0b'}}>
               Start Your Learning Journey Today
             </div>
             &copy; 2026 Gideon Prep - Educational Success Platform

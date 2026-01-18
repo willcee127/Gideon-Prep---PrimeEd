@@ -26,7 +26,7 @@ const MissionLandingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-mono overflow-x-hidden">
+    <div className="min-h-screen text-white font-mono overflow-x-hidden" style={{backgroundColor: '#0a0a0b'}}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         {/* Background Grid */}
