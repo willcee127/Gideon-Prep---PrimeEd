@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 
-console.log("V1.0.14 - TACTICAL INTEL DASHBOARD");
+console.log("V1.0.15 - SOCRATIC CO-PILOT INTERFACE");
 console.log("App Mounting...")
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -2,16 +2,32 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import RangeQual from '../components/RangeQual'
 import MiniTraining from '../components/MiniTraining'
+import SocraticCoPilot from '../components/SocraticCoPilot'
 import { useNavigate } from 'react-router-dom'
 
 const DiagnosticFlow = () => {
   const [currentStep, setCurrentStep] = useState('diagnostic') // 'diagnostic' | 'training' | 'complete'
   const [terminationLevel, setTerminationLevel] = useState(null)
+  const [showCoPilot, setShowCoPilot] = useState(false)
+  const [activeProblem, setActiveProblem] = useState(null)
+  const [lastWrongAnswer, setLastWrongAnswer] = useState('')
   const navigate = useNavigate()
 
   const handleDiagnosticComplete = (level) => {
     setTerminationLevel(String(level))
-    setCurrentStep('training')
+    
+    // Check for high friction and trigger Co-Pilot
+    if (level && level < 60) {
+      setActiveProblem({
+        id: 'quadratic_equations',
+        concept: 'Quadratic Equations',
+        equation: 'x² + 5x + 6 = 0',
+        difficulty: level
+      })
+      setShowCoPilot(true)
+    } else {
+      setCurrentStep('training')
+    }
   }
 
   const handleTrainingComplete = () => {
@@ -22,8 +38,29 @@ const DiagnosticFlow = () => {
     }, 2000)
   }
 
+  const handleBreakthrough = () => {
+    setShowCoPilot(false)
+    setActiveProblem(null)
+    setCurrentStep('training')
+  }
+
+  const handleCoPilotClose = () => {
+    setShowCoPilot(false)
+  }
+
   if (currentStep === 'diagnostic') {
-    return <RangeQual onComplete={handleDiagnosticComplete} />
+    return (
+      <>
+        <RangeQual onComplete={handleDiagnosticComplete} />
+        <SocraticCoPilot 
+          isOpen={showCoPilot}
+          problemData={activeProblem}
+          studentMistake={lastWrongAnswer}
+          onBreakthrough={handleBreakthrough}
+          onClose={handleCoPilotClose}
+        />
+      </>
+    )
   }
 
   if (currentStep === 'training') {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import SocraticCoPilot from './SocraticCoPilot'
 
 const TacticalIntelDashboard = () => {
   const [combatPower, setCombatPower] = useState({
@@ -28,6 +29,8 @@ const TacticalIntelDashboard = () => {
   
   const [warriorRank, setWarriorRank] = useState('Specialist')
   const [sovereigntyProgress, setSovereigntyProgress] = useState(145)
+  const [showCoPilot, setShowCoPilot] = useState(false)
+  const [activeProblem, setActiveProblem] = useState(null)
 
   const totalReps = repsData.reduce((sum, day) => sum + day.reps, 0)
   const maxReps = Math.max(...repsData.map(d => d.reps))
@@ -39,6 +42,32 @@ const TacticalIntelDashboard = () => {
     else if (totalReps < 600) setWarriorRank('Elite Warrior')
     else setWarriorRank('Commander')
   }, [totalReps])
+
+  const handleDeployBreakthrough = () => {
+    const highFrictionProblem = frictionPoints.find(point => point.accuracy < 60)
+    if (highFrictionProblem) {
+      setActiveProblem({
+        id: highFrictionProblem.concept.toLowerCase().replace(' ', '_'),
+        concept: highFrictionProblem.concept,
+        equation: 'x² + 5x + 6 = 0',
+        difficulty: highFrictionProblem.accuracy
+      })
+      setShowCoPilot(true)
+    }
+  }
+
+  const handleBreakthrough = () => {
+    setShowCoPilot(false)
+    setActiveProblem(null)
+    // Mark the sector as resolved
+    setFrictionPoints(prev => 
+      prev.map(point => 
+        point.concept === 'Quadratic Equations' 
+          ? { ...point, accuracy: 85, priority: 'low' }
+          : point
+      )
+    )
+  }
 
   const MasteryRing = ({ progress, subject }) => {
     const radius = 40
@@ -133,7 +162,10 @@ const TacticalIntelDashboard = () => {
                 <div className="text-sm text-gray-400">
                   Deploy Socratic Co-Pilot?
                 </div>
-                <button className="w-full mt-4 bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 tactical-transition orange-glow-hover">
+                <button 
+                  onClick={handleDeployBreakthrough}
+                  className="w-full mt-4 bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 tactical-transition orange-glow-hover"
+                >
                   DEPLOY BREAKTHROUGH
                 </button>
               </div>
@@ -205,6 +237,15 @@ const TacticalIntelDashboard = () => {
           border-color: #f59e0b;
         }
       `}</style>
+
+      {/* Socratic Co-Pilot Overlay */}
+      <SocraticCoPilot 
+        isOpen={showCoPilot}
+        problemData={activeProblem}
+        studentMistake={''}
+        onBreakthrough={handleBreakthrough}
+        onClose={() => setShowCoPilot(false)}
+      />
     </div>
   )
 }
