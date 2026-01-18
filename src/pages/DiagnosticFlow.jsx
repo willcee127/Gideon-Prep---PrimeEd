@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import RangeQual from '../components/RangeQual'
 import MiniTraining from '../components/MiniTraining'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +10,7 @@ const DiagnosticFlow = () => {
   const navigate = useNavigate()
 
   const handleDiagnosticComplete = (level) => {
-    setTerminationLevel(level)
+    setTerminationLevel(String(level))
     setCurrentStep('training')
   }
 
@@ -26,7 +27,7 @@ const DiagnosticFlow = () => {
   }
 
   if (currentStep === 'training') {
-    return <MiniTraining onComplete={handleTrainingComplete} terminationLevel={terminationLevel} />
+    return <MiniTraining onComplete={handleTrainingComplete} terminationLevel={String(terminationLevel)} />
   }
 
   if (currentStep === 'complete') {
