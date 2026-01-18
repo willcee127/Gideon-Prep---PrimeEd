@@ -3,34 +3,28 @@ import { motion } from 'framer-motion'
 import SocraticCoPilot from './SocraticCoPilot'
 import MasteryGauge from './MasteryGauge'
 import HexagonalRadar from './HexagonalRadar'
+import useSessionSync from '../hooks/useSessionSync'
 
 const TacticalIntelDashboard = () => {
-  const [combatPower, setCombatPower] = useState({
-    math: 75,
-    rla: 82,
-    science: 68,
-    socialStudies: 71
+  // Use session sync hook for robust state persistence
+  const { sessionData, setSessionData } = useSessionSync({
+    combatPower: {
+      math: 75,
+      rla: 82,
+      science: 68,
+      socialStudies: 71
+    },
+    radarData: {
+      numberSense: 85,
+      algebra: 72,
+      geometry: 68,
+      dataAnalysis: 45,
+      fractions: 58,
+      appliedMath: 78
+    },
+    warriorRank: 'Specialist'
   })
-  
-  const [frictionPoints, setFrictionPoints] = useState([
-    { concept: 'Quadratic Equations', accuracy: 45, priority: 'high' },
-    { concept: 'Linear Functions', accuracy: 78, priority: 'medium' },
-    { concept: 'Polynomial Division', accuracy: 52, priority: 'high' },
-    { concept: 'Coordinate Geometry', accuracy: 85, priority: 'low' }
-  ])
-  
-  const [repsData, setRepsData] = useState([
-    { day: 'Mon', reps: 24 },
-    { day: 'Tue', reps: 18 },
-    { day: 'Wed', reps: 32 },
-    { day: 'Thu', reps: 28 },
-    { day: 'Fri', reps: 15 },
-    { day: 'Sat', reps: 41 },
-    { day: 'Sun', reps: 37 }
-  ])
-  
-  const [warriorRank, setWarriorRank] = useState('Specialist')
-  const [sovereigntyProgress, setSovereigntyProgress] = useState(145)
+
   const [showCoPilot, setShowCoPilot] = useState(false)
   const [activeProblem, setActiveProblem] = useState(null)
   const [hoveredAxis, setHoveredAxis] = useState(null)
@@ -50,10 +44,10 @@ const TacticalIntelDashboard = () => {
 
   // Calculate rank based on total reps
   useEffect(() => {
-    if (totalReps < 100) setWarriorRank('Recruit')
-    else if (totalReps < 300) setWarriorRank('Specialist')
-    else if (totalReps < 600) setWarriorRank('Elite Warrior')
-    else setWarriorRank('Commander')
+    if (totalReps < 100) setSessionData({ warriorRank: 'Recruit' })
+    else if (totalReps < 300) setSessionData({ warriorRank: 'Specialist' })
+    else if (totalReps < 600) setSessionData({ warriorRank: 'Elite Warrior' })
+    else setSessionData({ warriorRank: 'Commander' })
   }, [totalReps])
 
   const handleDeployBreakthrough = () => {
@@ -72,14 +66,21 @@ const TacticalIntelDashboard = () => {
   const handleBreakthrough = () => {
     setShowCoPilot(false)
     setActiveProblem(null)
-    // Mark the sector as resolved
-    setFrictionPoints(prev => 
-      prev.map(point => 
-        point.concept === 'Quadratic Equations' 
-          ? { ...point, accuracy: 85, priority: 'low' }
-          : point
-      )
+    // Mark the sector as resolved and update combat power
+    const updatedFrictionPoints = frictionPoints.map(point => 
+      point.concept === 'Quadratic Equations' 
+        ? { ...point, accuracy: 85, priority: 'low' }
+        : point
     )
+    
+    setFrictionPoints(updatedFrictionPoints)
+    setSessionData({
+      combatPower: {
+        ...sessionData.combatPower,
+        math: sessionData.combatPower.math + 10, // Improve math score
+        total: sessionData.combatPower.total + 10
+      }
+    })
   }
 
   const MasteryRing = ({ progress, subject }) => {

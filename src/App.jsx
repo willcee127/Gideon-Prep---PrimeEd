@@ -16,65 +16,70 @@ import MissionLandingPage from './pages/MissionLandingPage'
 import RecruitmentPage from './pages/RecruitmentPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import { getNodeById } from './data/mathContent'
+import { calculateCombatPower, validateSectorData } from './utils/combatPowerCalculator'
+import useSessionSync from './hooks/useSessionSync'
 
 function App() {
-  const [isInitiated, setIsInitiated] = useState(false)
-  const [userName, setUserName] = useState('')
+  // Use session sync hook for robust state persistence
+  const { sessionData, setSessionData } = useSessionSync({
+    combatPower: {
+      math: 75,
+      rla: 82,
+      science: 68,
+      socialStudies: 71
+    },
+    radarData: {
+      numberSense: 85,
+      algebra: 72,
+      geometry: 68,
+      dataAnalysis: 45,
+      fractions: 58,
+      appliedMath: 78
+    },
+    warriorRank: 'Specialist'
+  })
+
   const [selectedNode, setSelectedNode] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
-  const [completedNodes, setCompletedNodes] = useState([])
-  const [correctAnswers, setCorrectAnswers] = useState(0)
-  const [totalReps, setTotalReps] = useState(0)
   const [showWelcomeKit, setShowWelcomeKit] = useState(false)
   const [showTacticalIntel, setShowTacticalIntel] = useState(false)
   const [showGhostCalc, setShowGhostCalc] = useState(false)
   const [showCommandCalc, setShowCommandCalc] = useState(false)
 
+  // Hydration logic - check for existing Call Sign and route appropriately
   useEffect(() => {
-    // Check for existing user in localStorage
-    const savedName = localStorage.getItem('gideon_user_name')
-    if (savedName) {
-      setUserName(savedName)
-      setIsInitiated(true)
-      
-      // Check if first-time user
-      const isFirstTime = localStorage.getItem('isFirstTimeUser')
-      if (isFirstTime === null || isFirstTime === 'true') {
-        setShowWelcomeKit(true)
+    const savedCallSign = localStorage.getItem('gideon_call_sign')
+    if (savedCallSign) {
+      // User has Call Sign - skip recruitment, go to last active sector
+      const lastActiveSector = sessionData.lastActiveSector
+      if (lastActiveSector) {
+        // Route to appropriate sector based on last active phase
+        if (sessionData.combatPower.average >= 90) {
+          // Forge phase - go to mastery map
+          window.location.href = '/mastery-map'
+        } else if (sessionData.combatPower.average >= 75) {
+          // Aura phase - go to tactical intel
+          window.location.href = '/tacticalintel'
+        } else {
+          // Verve phase - go to mission
+          window.location.href = '/mission'
+        }
+      } else {
+        // No Call Sign - redirect to recruitment
+        window.location.href = '/recruitment'
       }
     }
-
-    // Load completed nodes
-    const savedCompleted = localStorage.getItem('completedNodes')
-    if (savedCompleted) {
-      setCompletedNodes(JSON.parse(savedCompleted))
-    }
-  }, [])
-
-  const handleInitiationComplete = (data) => {
-    const name = data.userName || data
-    // Save to localStorage for persistence
-    localStorage.setItem('gideon_user_name', name)
-    setUserName(name)
-    setIsInitiated(true)
-    
-    // Show welcome kit for new users
-    const isFirstTime = localStorage.getItem('isFirstTimeUser')
-    if (isFirstTime === null || isFirstTime === 'true') {
-      setShowWelcomeKit(true)
-    }
-  }
-
-  const handleWelcomeKitComplete = () => {
-    setShowWelcomeKit(false)
-    localStorage.setItem('isFirstTimeUser', 'false')
-  }
+  }, [sessionData.combatPower.average, sessionData.lastActiveSector])
 
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
     if (node) {
       setSelectedNode(node)
       setIsPanelOpen(true)
+      // Update session data with new sector activity
+      setSessionData({
+        lastActiveSector: node.title
+      })
     }
   }
 
@@ -84,8 +89,15 @@ function App() {
   }
 
   const handleProblemSuccess = () => {
-    setCorrectAnswers(prev => prev + 1)
-    setTotalReps(prev => prev + 1) // Increment total reps
+    // Update session data with completed node
+    setSessionData(prev => ({
+      ...prev,
+      combatPower: {
+        ...prev.combatPower,
+        // Increment score for completed node (simplified logic)
+        total: prev.combatPower.total + 25
+      }
+    }))
   }
 
   const handleShowIntel = () => {
