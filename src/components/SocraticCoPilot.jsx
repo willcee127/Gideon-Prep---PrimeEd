@@ -147,7 +147,13 @@ const SocraticCoPilot = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        style={{ backgroundColor: 'rgba(11, 14, 20, 0.9)' }}
+        style={{ 
+          backgroundColor: 'rgba(11, 14, 20, 0.9)',
+          backgroundImage: `
+            linear-gradient(rgba(177, 156, 217, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(177, 156, 217, 0.03) 1px, transparent 1px)
+          `
+        }}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -159,9 +165,16 @@ const SocraticCoPilot = ({
           {/* Header */}
           <div className="glass-panel border-b p-6 rounded-t-2xl">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold holographic-text">MISSION REPORT</h2>
-                <p className="text-sm data-text-secondary mt-1">Recovery Engine Analysis</p>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-verve rounded-full animate-pulse"></div>
+                <div>
+                  <h2 className="text-2xl font-bold holographic-text">TACTICAL COMMS</h2>
+                  <p className="text-sm data-text-secondary mt-1">Recovery Engine Analysis</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-xs data-text-secondary">CALL SIGN:</div>
+                <div className="text-sm font-mono text-verve">{callSign || 'WARRIOR'}</div>
               </div>
               <button
                 onClick={onClose}
@@ -174,18 +187,6 @@ const SocraticCoPilot = ({
 
           {/* Content */}
           <div className="p-6 space-y-6">
-            {/* Salutation */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-center"
-            >
-              <h3 className="text-xl font-bold text-aura holographic-text">
-                Tactical Guidance Active, {callSign || 'Warrior'}.
-              </h3>
-            </motion.div>
-
             {/* Whiteboard */}
             <div className="neon-card p-4 mb-6">
               <div className="text-center">
@@ -205,10 +206,10 @@ const SocraticCoPilot = ({
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex ${message.sender === 'student' ? 'justify-end' : 'justify-start'} mb-3`}
                 >
-                  <div className={`max-w-[80%] p-3 rounded-lg phase-btn ${
+                  <div className={`max-w-[80%] p-3 rounded-lg ${
                     message.sender === 'student' 
-                      ? 'aura-glow text-black' 
-                      : 'glass-panel text-white data-text'
+                      ? 'glass-panel text-black data-text' 
+                      : 'neon-card text-white data-text'
                   }`}>
                     {message.text}
                   </div>
@@ -225,7 +226,7 @@ const SocraticCoPilot = ({
                   <div className="neon-card p-3 phase-btn aura-glow text-black data-text">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
-                      Analyzing response...
+                      <span className="typewriter">DECODING RESPONSE<span className="animate-pulse">...</span></span>
                     </div>
                   </div>
                 </motion.div>
@@ -241,7 +242,7 @@ const SocraticCoPilot = ({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Type your response..."
+                  placeholder="Awaiting transmission..."
                   className={`flex-1 neon-input px-4 py-3 text-lg ${
                     inputSuccess 
                       ? 'border-green-400' 
@@ -257,7 +258,7 @@ const SocraticCoPilot = ({
                   disabled={isThinking || !inputValue.trim()}
                   className="phase-btn verve-glow text-black font-bold py-3 px-6 disabled:cursor-not-allowed"
                 >
-                  SEND
+                  TRANSMIT
                 </button>
               </div>
               
@@ -268,7 +269,7 @@ const SocraticCoPilot = ({
                   disabled={showHint || isThinking}
                   className="phase-btn glass-panel data-text-secondary hover:text-verve disabled:cursor-not-allowed px-4 py-2 text-sm"
                 >
-                  {showHint ? 'HINT DEPLOYED' : 'EXPLAIN LOGIC'}
+                  {showHint ? 'HINT DEPLOYED' : 'DEPLOY HINT'}
                 </button>
                 <button
                   onClick={handleAbort}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import SocraticCoPilot from './SocraticCoPilot'
+import MasteryGauge from './MasteryGauge'
+import HexagonalRadar from './HexagonalRadar'
 
 const TacticalIntelDashboard = () => {
   const [combatPower, setCombatPower] = useState({
@@ -31,6 +33,17 @@ const TacticalIntelDashboard = () => {
   const [sovereigntyProgress, setSovereigntyProgress] = useState(145)
   const [showCoPilot, setShowCoPilot] = useState(false)
   const [activeProblem, setActiveProblem] = useState(null)
+  const [hoveredAxis, setHoveredAxis] = useState(null)
+
+  // Radar data mapping
+  const radarData = {
+    numberSense: 85,
+    algebra: 72,
+    geometry: 68,
+    dataAnalysis: 45,
+    fractions: 58,
+    appliedMath: 78
+  }
 
   const totalReps = repsData.reduce((sum, day) => sum + day.reps, 0)
   const maxReps = Math.max(...repsData.map(d => d.reps))
@@ -140,10 +153,10 @@ const TacticalIntelDashboard = () => {
             <div className="neon-card p-6">
               <h2 className="text-xl font-bold mb-6 holographic-text">Mastery Heatmap</h2>
               <div className="grid grid-cols-4 gap-6">
-                <MasteryRing progress={combatPower.math} subject="Math" />
-                <MasteryRing progress={combatPower.rla} subject="RLA" />
-                <MasteryRing progress={combatPower.science} subject="Science" />
-                <MasteryRing progress={combatPower.socialStudies} subject="Social Studies" />
+                <MasteryGauge masteryPercentage={combatPower.math} label="Math" />
+                <MasteryGauge masteryPercentage={combatPower.rla} label="RLA" />
+                <MasteryGauge masteryPercentage={combatPower.science} label="Science" />
+                <MasteryGauge masteryPercentage={combatPower.socialStudies} label="Social Studies" />
               </div>
             </div>
           </div>
@@ -224,7 +237,35 @@ const TacticalIntelDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Range Qualification Radar */}
+        <div className="mt-8">
+          <div className="neon-card p-6">
+            <h2 className="text-xl font-bold mb-6 holographic-text">Range Qualification</h2>
+            <div className="flex justify-center">
+              <HexagonalRadar data={radarData} size={250} />
+            </div>
+          </div>
+        </div>
       </div>
+
+      /* Global Styles */
+      <style jsx>{`
+        @keyframes typewriter {
+          from { width: 0; }
+          to { width: 100%; }
+        }
+        
+        .typewriter {
+          overflow: hidden;
+          white-space: nowrap;
+          animation: typewriter 2s steps(20) infinite;
+        }
+        
+        .animate-pulse {
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6) infinite;
+        }
+      `}</style>
 
       {/* Socratic Co-Pilot Overlay */}
       <SocraticCoPilot 
