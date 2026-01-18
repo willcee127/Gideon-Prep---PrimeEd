@@ -8,6 +8,7 @@ import StatusBar from './components/StatusBar'
 import DailyObjective from './components/DailyObjective'
 import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
+import TacticalIntelDashboard from './components/TacticalIntelDashboard'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
 import DiagnosticFlow from './pages/DiagnosticFlow'
@@ -121,6 +122,9 @@ function App() {
           
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
+          
+          {/* Tactical Intel Dashboard Route */}
+          <Route path="/tacticalintel" element={<TacticalIntelDashboard />} />
           
           <Route path="/mastery-map" element={
             <div className="min-h-screen bg-black relative overflow-hidden">
