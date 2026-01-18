@@ -116,6 +116,9 @@ function App() {
           {/* Landing Page Route */}
           <Route path="/landing" element={<GideonLandingPageV2 />} />
           
+          {/* Onboarding Route */}
+          <Route path="/onboarding" element={<DiagnosticFlow />} />
+          
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
           

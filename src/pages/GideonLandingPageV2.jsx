@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const GideonLandingPageV2 = () => {
+  const navigate = useNavigate()
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white font-mono overflow-x-hidden">
       {/* Hero Section */}
@@ -80,19 +82,19 @@ const GideonLandingPageV2 = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <a
-              href="/mission"
+            <button
+              onClick={() => navigate('/onboarding')}
               className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl shadow-amber-400/50 transform hover:scale-105"
             >
               🎯 START INITIAL RECRUITMENT & DIAGNOSTIC
-            </a>
+            </button>
 
-            <a
-              href="/mission"
+            <button
+              onClick={() => navigate('/mission')}
               className="border-2 border-cyan-400 hover:border-cyan-300 hover:bg-cyan-400/10 text-cyan-400 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg backdrop-blur-sm"
             >
               🚀 EXISTING WARRIOR
-            </a>
+            </button>
           </div>
         </div>
       </section>
