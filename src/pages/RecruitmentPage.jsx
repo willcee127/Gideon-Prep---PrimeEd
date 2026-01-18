@@ -29,22 +29,9 @@ const RecruitmentPage = () => {
   }
 
   return (
-    <div className="min-h-screen text-white font-mono overflow-x-hidden" style={{backgroundColor: '#0a0a0b'}}>
+    <div className="min-h-screen text-white overflow-x-hidden" style={{backgroundColor: 'var(--bg-dark)'}}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
-        {/* Background Grid */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-black to-orange-900/20" />
-          <div className="grid grid-cols-12 gap-px h-full">
-            {[...Array(144)].map((_, i) => (
-              <div 
-                key={i} 
-                className="border border-cyan-500/10 opacity-30"
-              />
-            ))}
-          </div>
-        </div>
-
         {/* Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -52,33 +39,35 @@ const RecruitmentPage = () => {
           transition={{ duration: 0.8 }}
           className="relative z-10 w-full max-w-md"
         >
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-6xl mb-6"
-            >
-              🛡️
-            </motion.div>
-            
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-3xl font-bold mb-4 text-white"
-            >
-              INITIALIZE RECOVERY
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-gray-400 text-lg"
-            >
-              Your journey to overcome obstacles begins here
-            </motion.p>
+          <div className="glass-panel p-8 mb-8">
+            <div className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-6xl mb-6 holographic-text text-verve"
+              >
+                ⚡
+              </motion.div>
+              
+              <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="text-3xl font-bold mb-4 holographic-text"
+              >
+                INITIALIZE RECOVERY
+              </motion.h1>
+              
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="text-lg data-text-secondary"
+              >
+                Your journey to overcome obstacles begins here
+              </motion.p>
+            </div>
           </div>
 
           <motion.form
@@ -90,7 +79,7 @@ const RecruitmentPage = () => {
           >
             {/* Call Sign Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium data-text-secondary mb-2">
                 ASSIGN YOUR CALL SIGN
               </label>
               <input
@@ -98,17 +87,14 @@ const RecruitmentPage = () => {
                 value={callSign}
                 onChange={(e) => setCallSign(e.target.value)}
                 placeholder="Enter your name or callsign"
-                className="w-full bg-slate-800 text-white px-4 py-3 rounded-lg border-2 border-slate-600 focus:border-orange-500 focus:outline-none focus:shadow-lg focus:shadow-orange-500/20 transition-all duration-300 font-mono"
-                style={{
-                  boxShadow: callSign ? '0 0 10px rgba(245, 158, 11, 0.2)' : 'none'
-                }}
+                className="w-full neon-input px-4 py-3 text-lg"
                 disabled={isSubmitting}
               />
             </div>
 
             {/* Comms Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium data-text-secondary mb-2">
                 ESTABLISH COMMS
               </label>
               <input
@@ -116,10 +102,7 @@ const RecruitmentPage = () => {
                 value={comms}
                 onChange={(e) => setComms(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full bg-slate-800 text-white px-4 py-3 rounded-lg border-2 border-slate-600 focus:border-orange-500 focus:outline-none focus:shadow-lg focus:shadow-orange-500/20 transition-all duration-300 font-mono"
-                style={{
-                  boxShadow: comms ? '0 0 10px rgba(245, 158, 11, 0.2)' : 'none'
-                }}
+                className="w-full neon-input px-4 py-3 text-lg"
                 disabled={isSubmitting}
               />
             </div>
@@ -128,7 +111,7 @@ const RecruitmentPage = () => {
             <motion.button
               type="submit"
               disabled={isSubmitting || !callSign.trim() || !comms.trim()}
-              className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 disabled:from-slate-600 disabled:to-slate-700 text-black font-bold py-4 px-6 rounded-lg transition-all duration-300 disabled:cursor-not-allowed"
+              className="w-full phase-btn verve-glow text-black font-bold py-4 px-6 text-lg disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -138,7 +121,7 @@ const RecruitmentPage = () => {
                   INITIALIZING...
                 </span>
               ) : (
-                'CONFIRM IDENTITY'
+                <span className="font-bold">CONFIRM IDENTITY</span>
               )}
             </motion.button>
           </motion.form>
@@ -148,9 +131,9 @@ const RecruitmentPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.6 }}
-            className="mt-8 text-center text-gray-500 text-sm"
+            className="mt-8 text-center data-text-secondary text-sm glass-panel p-4"
           >
-            <p>Your identity creates your personalized recovery path</p>
+            <p className="data-text">Your identity creates your personalized recovery path</p>
             <p className="mt-2">No spam • Secure storage • Progress tracking</p>
           </motion.div>
         </motion.div>

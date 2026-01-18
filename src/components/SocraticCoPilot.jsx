@@ -143,119 +143,143 @@ const SocraticCoPilot = ({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, x: 300 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 300 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="fixed inset-y-0 right-0 w-96 bg-slate-900 border-l border-slate-700 shadow-2xl z-50 flex flex-col"
-        style={{ backgroundColor: '#0a0a0b' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: 'rgba(11, 14, 20, 0.9)' }}
       >
-        {/* Header */}
-        <div className="bg-slate-800 border-b border-slate-700 p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-            <h2 className="text-white font-mono text-sm font-bold">CO-PILOT: Tactical Guidance Active.</h2>
-          </div>
-          <button
-            onClick={handleAbort}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Whiteboard - Current Problem */}
-        <div className="bg-slate-800/50 border-b border-slate-700 p-4">
-          <div className="text-center">
-            <div className="text-xs text-gray-400 mb-2">CURRENT PROBLEM</div>
-            <div className="text-amber-400 font-mono text-lg font-bold">
-              {currentEquation}
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="w-full max-w-2xl neon-card"
+        >
+          {/* Header */}
+          <div className="glass-panel border-b p-6 rounded-t-2xl">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold holographic-text">MISSION REPORT</h2>
+                <p className="text-sm data-text-secondary mt-1">Recovery Engine Analysis</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="data-text-secondary hover:text-white transition-colors text-2xl"
+              >
+                ✕
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {messages.map((message) => (
+          {/* Content */}
+          <div className="p-6 space-y-6">
+            {/* Salutation */}
             <motion.div
-              key={message.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex ${message.sender === 'student' ? 'justify-end' : 'justify-start'}`}
+              transition={{ delay: 0.2 }}
+              className="text-center"
             >
-              <div className={`max-w-[80%] p-3 rounded-lg ${
-                message.sender === 'student' 
-                  ? 'bg-orange-500 text-black' 
-                  : 'bg-slate-700 text-white font-mono text-sm'
-              }`}>
-                {message.text}
-              </div>
+              <h3 className="text-xl font-bold text-aura holographic-text">
+                Tactical Guidance Active, {callSign || 'Warrior'}.
+              </h3>
             </motion.div>
-          ))}
-          
-          {/* Thinking Indicator */}
-          {isThinking && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-start"
-            >
-              <div className="bg-slate-700 text-white font-mono text-sm p-3 rounded-lg flex items-center gap-2">
-                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                Analyzing response...
-              </div>
-            </motion.div>
-          )}
-          
-          <div ref={messagesEndRef} />
-        </div>
 
-        {/* Input Area */}
-        <div className="border-t border-slate-700 p-4 space-y-3">
-          <div className="flex gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your response..."
-              className={`flex-1 bg-slate-800 text-white px-4 py-3 rounded-lg font-mono text-sm border-2 transition-all duration-300 outline-none ${
-                inputSuccess 
-                  ? 'border-green-500' 
-                  : 'border-orange-500 focus:border-orange-400 focus:shadow-lg focus:shadow-orange-500/20'
-              }`}
-              style={{
-                boxShadow: inputSuccess ? '0 0 10px rgba(34, 197, 94, 0.3)' : 'none'
-              }}
-              disabled={isThinking}
-            />
-            <button
-              onClick={handleSendMessage}
-              disabled={isThinking || !inputValue.trim()}
-              className="bg-orange-500 hover:bg-orange-400 disabled:bg-slate-600 disabled:cursor-not-allowed text-black font-bold px-6 py-3 rounded-lg transition-all duration-300"
-            >
-              SEND
-            </button>
+            {/* Whiteboard */}
+            <div className="neon-card p-4 mb-6">
+              <div className="text-center">
+                <div className="text-xs data-text-secondary mb-2">CURRENT PROBLEM</div>
+                <div className="text-forge font-mono text-lg font-bold">
+                  {currentEquation}
+                </div>
+              </div>
+            </div>
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 neon-card rounded-lg max-h-96">
+              {messages.map((message) => (
+                <motion.div
+                  key={message.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${message.sender === 'student' ? 'justify-end' : 'justify-start'} mb-3`}
+                >
+                  <div className={`max-w-[80%] p-3 rounded-lg phase-btn ${
+                    message.sender === 'student' 
+                      ? 'aura-glow text-black' 
+                      : 'glass-panel text-white data-text'
+                  }`}>
+                    {message.text}
+                  </div>
+                </motion.div>
+              ))}
+              
+              {/* Thinking Indicator */}
+              {isThinking && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-start"
+                >
+                  <div className="neon-card p-3 phase-btn aura-glow text-black data-text">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
+                      Analyzing response...
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+
+            {/* Input Area */}
+            <div className="neon-card p-4 space-y-3">
+              <div className="flex gap-2">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your response..."
+                  className={`flex-1 neon-input px-4 py-3 text-lg ${
+                    inputSuccess 
+                      ? 'border-green-400' 
+                      : 'border-verve focus:aura-glow'
+                  }`}
+                  style={{
+                    boxShadow: inputSuccess ? '0 0 10px rgba(34, 197, 94, 0.5)' : 'none'
+                  }}
+                  disabled={isThinking}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={isThinking || !inputValue.trim()}
+                  className="phase-btn verve-glow text-black font-bold py-3 px-6 disabled:cursor-not-allowed"
+                >
+                  SEND
+                </button>
+              </div>
+              
+              {/* Tactical Commands */}
+              <div className="flex gap-2">
+                <button
+                  onClick={handleHint}
+                  disabled={showHint || isThinking}
+                  className="phase-btn glass-panel data-text-secondary hover:text-verve disabled:cursor-not-allowed px-4 py-2 text-sm"
+                >
+                  {showHint ? 'HINT DEPLOYED' : 'EXPLAIN LOGIC'}
+                </button>
+                <button
+                  onClick={handleAbort}
+                  className="phase-btn glass-panel data-text-secondary hover:text-forge px-4 py-2 text-sm"
+                >
+                  ABORT MISSION
+                </button>
+              </div>
+            </div>
           </div>
-          
-          {/* Tactical Commands */}
-          <div className="flex gap-2">
-            <button
-              onClick={handleHint}
-              disabled={showHint || isThinking}
-              className="border border-gray-400 hover:border-orange-400 hover:text-orange-400 disabled:border-gray-600 disabled:text-gray-600 text-gray-400 px-4 py-2 rounded text-sm transition-all duration-300"
-            >
-              Explain Logic
-            </button>
-            <button
-              onClick={handleAbort}
-              className="border border-gray-400 hover:border-red-400 hover:text-red-400 text-gray-400 px-4 py-2 rounded text-sm transition-all duration-300"
-            >
-              Abort Mission
-            </button>
-          </div>
-        </div>
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   )

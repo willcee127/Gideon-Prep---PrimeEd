@@ -2,45 +2,259 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global CSS Variables for 3-Phase Color System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Global CSS Variables for Neon-Tech Aesthetic and Glassmorphism */
 :root {
-  --verve-primary: #E6E6FA;
-  --verve-secondary: #D8D8E8;
-  --verve-glow: rgba(230, 230, 250, 0.3);
-  
-  --aura-primary: #00FFFF;
-  --aura-secondary: #00E5E5;
-  --aura-glow: rgba(0, 255, 255, 0.3);
-  
-  --forge-primary: #FFBF00;
-  --forge-secondary: #FFAA00;
-  --forge-glow: rgba(255, 191, 0, 0.3);
+  /* Neon-Tech Color Palette */
+  --verve-glow: #B19CD9;
+  --aura-glow: #00D9FF;
+  --forge-glow: #FF8C00;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --bg-dark: #0B0E14;
+  --bg-grid: rgba(11, 14, 20, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(177, 156, 217, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(11, 14, 20, 0.9) 0%, rgba(11, 14, 20, 0.8) 100%);
+  background-attachment: fixed;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-#root {
-  display: block !important;
-  min-height: 100vh;
+/* Hex Grid Pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(177, 156, 217, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(177, 156, 217, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0, 0 0;
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* Brand Typography */
-.gideon-prep {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+/* Glassmorphism Base */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Neon Phase Buttons */
+.phase-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.verve-glow {
+  border-color: var(--verve-glow);
+  box-shadow: 
+    0 0 15px rgba(177, 156, 217, 0.4),
+    inset 0 0 20px rgba(177, 156, 217, 0.1);
+  text-shadow: 0 0 8px rgba(177, 156, 217, 0.8);
+}
+
+.verve-glow::before {
+  background: linear-gradient(135deg, rgba(177, 156, 217, 0.2), transparent);
+  opacity: 1;
+}
+
+.aura-glow {
+  border-color: var(--aura-glow);
+  box-shadow: 
+    0 0 15px rgba(0, 217, 255, 0.4),
+    inset 0 0 20px rgba(0, 217, 255, 0.1);
+  text-shadow: 0 0 8px rgba(0, 217, 255, 0.8);
+}
+
+.aura-glow::before {
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), transparent);
+  opacity: 1;
+}
+
+.forge-glow {
+  border-color: var(--forge-glow);
+  box-shadow: 
+    0 0 15px rgba(255, 140, 0, 0.4),
+    inset 0 0 20px rgba(255, 140, 0, 0.1);
+  text-shadow: 0 0 8px rgba(255, 140, 0, 0.8);
+}
+
+.forge-glow::before {
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), transparent);
+  opacity: 1;
+}
+
+/* Holographic Text */
+.holographic-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* Data-Rich Typography */
+.data-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.data-text-secondary {
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 400;
-  color: #ffffff;
+  color: var(--text-secondary);
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Neon Input Fields */
+.neon-input {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease-in-out;
+}
+
+.neon-input:focus {
+  border-color: var(--aura-glow);
+  box-shadow: 
+    0 0 15px rgba(0, 217, 255, 0.3),
+    inset 0 0 20px rgba(0, 217, 255, 0.1);
+  outline: none;
+}
+
+/* Neon Cards */
+.neon-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.neon-card:hover {
+  border-color: var(--glass-border);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Utility Classes */
+.text-verve { color: var(--verve-glow); }
+.text-aura { color: var(--aura-glow); }
+.text-forge { color: var(--forge-glow); }
+
+.bg-verve { background-color: var(--verve-glow); }
+.bg-aura { background-color: var(--aura-glow); }
+.bg-forge { background-color: var(--forge-glow); }
+
+/* Existing styles with neon updates */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Force visibility */
+#root {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Ensure app container is visible */
+#root > * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Remove any potential hiding styles */
+* {
+  visibility: visible !important;
+}
+
+.hidden {
+  visibility: hidden !important;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .prime-ed {
