@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
 import Initiation from './components/Initiation'
 import MasteryMap from './components/MasteryMap'
@@ -24,6 +24,40 @@ import { calculateCombatPower, validateSectorData } from './utils/combatPowerCal
 import useSessionSync from './hooks/useSessionSync'
 import { supabase } from './lib/supabase'
 import './styles/responsive.css'
+
+// Forge Protected Route Component
+const ForgeProtectedRoute = ({ children }) => {
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
+    if (!stage2Complete) {
+      navigate('/verve') // Redirect to Verve if not qualified
+    }
+  }, [navigate])
+  
+  const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
+  
+  if (!stage2Complete) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
+        <div className="text-center space-y-6">
+          <h1 className="text-4xl font-bold text-red-400 mb-4">🔒 ACCESS DENIED</h1>
+          <p className="text-xl text-gray-300 mb-4">Forge Stage Locked</p>
+          <p className="text-gray-400 mb-6">You must complete Stage 2 (Aura) to access Stage 3 (Forge)</p>
+          <button
+            onClick={() => navigate('/verve')}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-all"
+          >
+            Return to Verve
+          </button>
+        </div>
+      </div>
+    )
+  }
+  
+  return children
+}
 
 function App() {
   // Use session sync hook for robust state persistence
@@ -125,6 +159,31 @@ function App() {
     }
   }, [sessionData?.combatPower?.average, forgeModeActive])
 
+  // Check for diagnostic fallback node on mount
+  useEffect(() => {
+    const fallbackNode = localStorage.getItem('gideon_selected_node')
+    if (fallbackNode) {
+      const node = getNodeById(fallbackNode)
+      if (node) {
+        setSelectedNode(node)
+        setIsPanelOpen(true)
+        // Clear the fallback after using it
+        localStorage.removeItem('gideon_selected_node')
+      }
+    }
+  }, [])
+
+  // Forge access protection - Stage 3 requires Stage 2 Complete
+  const navigate = useNavigate();
+  const checkForgeAccess = () => {
+    const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
+    if (!stage2Complete) {
+      navigate('/verve') // Redirect to Verve if not qualified
+      return false
+    }
+    return true
+  }
+
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
     if (node) {
@@ -200,6 +259,9 @@ function App() {
           
           {/* Onboarding Route */}
           <Route path="/onboarding" element={<DiagnosticFlow />} />
+          
+          {/* Verve Route - Stage 1 */}
+          <Route path="/verve" element={<DiagnosticFlow />} />
           
           {/* Mission Route */}
           <Route path="/mission" element={<MissionLandingPage />} />
@@ -291,6 +353,11 @@ function App() {
           } />
           
           <Route path="/range-qual" element={<DiagnosticFlow />} />
+          
+          {/* Forge Route - Stage 3 (Protected) */}
+          <Route path="/forge" element={
+            <ForgeProtectedRoute />
+          } />
           
           {/* Settings Route */}
           <Route path="/settings" element={<Settings />} />

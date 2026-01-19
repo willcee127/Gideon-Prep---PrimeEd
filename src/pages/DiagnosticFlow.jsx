@@ -32,9 +32,13 @@ const DiagnosticFlow = () => {
 
   const handleTrainingComplete = () => {
     setCurrentStep('complete')
-    // Route to mission after a short delay
+    
+    // Set Stage 2 Complete flag for unlocking Forge
+    localStorage.setItem('gideon_stage_2_complete', 'true')
+    
+    // Route to Verve (Stage 1) after a short delay
     setTimeout(() => {
-      navigate('/mission')
+      navigate('/verve')
     }, 2000)
   }
 

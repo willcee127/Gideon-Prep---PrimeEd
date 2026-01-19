@@ -55,9 +55,18 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
   const [socraticQuestion, setSocraticQuestion] = useState('')
   const [hintButtonGlow, setHintButtonGlow] = useState(false)
 
-  // Get node content from the library
-  const nodeContent = getNodeById(nodeId)
+  // Get node content from library
+  const safeNodeId = nodeId || 'ged-001' // Safety catch: default to first math module
+  const nodeContent = getNodeById(safeNodeId)
   const problems = nodeContent?.problems || []
+  
+  // Debug logging
+  console.log("ProblemEngine Debug:")
+  console.log("- nodeId:", nodeId)
+  console.log("- safeNodeId:", safeNodeId)
+  console.log("- nodeContent:", nodeContent)
+  console.log("- problems available:", problems.length)
+  console.log("- currentProblem:", currentProblem)
 
   // Mission Coach Integration
   const getMissionCoachCoaching = useCallback(async (problem) => {
@@ -1079,7 +1088,20 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
 
   return (
     <div className="w-full h-full bg-gray-800 rounded-lg p-6 relative">
-      {/* Mode Selector */}
+      {/* Loading State */}
+      {!currentProblem && (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <p className="text-gray-400 text-sm">Loading problem...</p>
+          </div>
+        </div>
+      )}
+      
+      {/* Problem Content */}
+      {currentProblem && (
+        <>
+          {/* Mode Selector */}
       <div className="flex justify-center mb-6 space-x-2">
         {['concrete', 'pictorial', 'abstract'].map((mode) => (
           <button
@@ -1464,6 +1486,8 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
           </motion.div>
         )}
       </AnimatePresence>
+        </>
+      )}
     </div>
   )
 }

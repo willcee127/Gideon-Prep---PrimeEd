@@ -11,6 +11,8 @@ const RangeQual = ({ onComplete, callSign }) => {
   const [feedback, setFeedback] = useState('')
   const [isComplete, setIsComplete] = useState(false)
   const [terminationLevel, setTerminationLevel] = useState(1)
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [totalQuestions, setTotalQuestions] = useState(0)
 
   // Problem generators for each level
   const problemGenerators = {
@@ -83,9 +85,12 @@ const RangeQual = ({ onComplete, callSign }) => {
   const handleSubmit = () => {
     if (!currentProblem || !userAnswer.trim()) return
 
+    const checkAnswer = () => {
+    setTotalQuestions(prev => prev + 1)
     const isCorrect = parseInt(userAnswer) === currentProblem.answer
     
     if (isCorrect) {
+      setCorrectAnswers(prev => prev + 1)
       setFeedback('✅ CORRECT - ADVANCING')
       setConsecutiveIncorrect(0)
       
@@ -101,21 +106,29 @@ const RangeQual = ({ onComplete, callSign }) => {
       const newConsecutive = consecutiveIncorrect + 1
       setConsecutiveIncorrect(newConsecutive)
       
-      if (newConsecutive >= 2) {
-        setFeedback('❌ SCAN TERMINATED - MAX REACHED')
-        setTimeout(() => completeRangeQual(), 1500)
-      } else {
-        setFeedback('❌ INCORRECT - STAYING AT LEVEL')
-        setTimeout(() => {
-          generateNewProblem()
-        }, 1500)
-      }
+      // User MUST reach Level 10 - no early exits
+      setFeedback('❌ INCORRECT - CONTINUE TRAINING')
+      setTimeout(() => {
+        generateNewProblem()
+      }, 1500)
     }
   }
 
   const completeRangeQual = async () => {
     setIsComplete(true)
     setTerminationLevel(currentLevel)
+    
+    // Calculate accuracy at Level 10
+    const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0
+    const aiSupportLevel = accuracy >= 80 ? 1 : 5 // 1 = Low Support, 5 = High Recovery
+    
+    // Store AI calibration data
+    localStorage.setItem('gideon_ai_support_level', String(aiSupportLevel))
+    
+    // Set fallback nodeId for users who complete diagnostic
+    localStorage.setItem('gideon_fallback_node', 'ged-001')
+    
+    console.log(`AI Calibration: Accuracy ${accuracy}%, Support Level ${aiSupportLevel}`)
     
     // Save to Supabase using new syncService
     if (callSign) {
