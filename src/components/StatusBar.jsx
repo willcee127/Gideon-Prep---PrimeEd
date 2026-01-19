@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { useNeuro } from '../context/NeuroProvider'
 import { supabase } from '../supabase'
 
 const StatusBar = ({ userName, completedNodes, correctAnswers, isWelcomeKitActive, onShowIntel }) => {
   const { stressLevel, isStressed } = useNeuro()
+  const navigate = useNavigate()
   const [totalReclaimed, setTotalReclaimed] = useState(0)
   const [currentStreak, setCurrentStreak] = useState(0)
   const [nextTerritory, setNextTerritory] = useState('Foundation')
@@ -146,6 +148,15 @@ const StatusBar = ({ userName, completedNodes, correctAnswers, isWelcomeKitActiv
         >
           <span className="text-sm">🛠️</span>
           <span>INTEL</span>
+        </button>
+
+        {/* Settings Button */}
+        <button
+          onClick={() => navigate('/settings')}
+          className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-semibold transition transform hover:scale-105 active:scale-95 flex items-center space-x-1"
+        >
+          <span className="text-sm">⚙️</span>
+          <span>SETTINGS</span>
         </button>
 
         {/* User Name */}

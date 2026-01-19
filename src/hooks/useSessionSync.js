@@ -5,47 +5,69 @@ const useSessionSync = (initialState = {}) => {
   const [sessionData, setSessionData] = useState(() => {
     try {
       const stored = localStorage.getItem('gideon_session_data')
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        return {
-          ...initialState,
-          ...parsed,
-          completedNodes: parsed.completedNodes || [],
-          // Ensure all required fields exist
-          combatPower: {
-            ...initialState.combatPower,
-            ...parsed.combatPower
-          },
-          radarData: {
-            ...initialState.radarData,
-            ...parsed.radarData
-          },
-          warriorRank: parsed.warriorRank || 'Recruit',
-          lastActiveSector: parsed.lastActiveSector || null,
-          // New deployment fields
-          deployment_step: parsed.deployment_step || 0,
-          registration_complete: parsed.registration_complete || false,
-          is_mission_ready: parsed.is_mission_ready || false
-        }
+      const callSign = localStorage.getItem('gideon_call_sign')
+      
+      const parsed = stored ? JSON.parse(stored) : {}
+      return {
+        ...initialState,
+        ...parsed,
+        completedNodes: parsed.completedNodes || [],
+        // Ensure all required fields exist
+        combatPower: {
+          ...initialState.combatPower,
+          ...parsed.combatPower
+        },
+        radarData: {
+          ...initialState.radarData,
+          ...parsed.radarData
+        },
+        warriorRank: parsed.warriorRank || 'Recruit',
+        lastActiveSector: parsed.lastActiveSector || null,
+        // New deployment fields
+        deployment_step: parsed.deployment_step || 0,
+        registration_complete: parsed.registration_complete || false,
+        is_mission_ready: parsed.is_mission_ready || false,
+        // Add userName with fallback priority: localStorage > 'Scholar'
+        userName: callSign || 'Scholar'
       }
-    } catch (error) {
-      console.error('Failed to parse session data:', error)
+    } catch (e) {
+      console.error('Failed to parse session data:', e)
       return {
         ...initialState,
         completedNodes: [],
         deployment_step: 0,
         registration_complete: false,
-        is_mission_ready: false
+        is_mission_ready: false,
+        userName: localStorage.getItem('gideon_call_sign') || 'Scholar'
       }
     }
-    return {
-      ...initialState,
-      completedNodes: [],
-      deployment_step: 0,
-      registration_complete: false,
-      is_mission_ready: false
-    }
   })
+
+  // Fetch user profile from Supabase when component mounts
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const callSign = localStorage.getItem('gideon_call_sign')
+      if (callSign) {
+        try {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('full_name, call_sign, username')
+            .eq('call_sign', callSign)
+            .single()
+          
+          if (profile) {
+            const userName = profile.full_name || profile.username || profile.call_sign || 'Scholar'
+            setSessionData(prev => ({ ...prev, userName }))
+            console.log('User profile loaded:', userName)
+          }
+        } catch (error) {
+          console.warn('Failed to fetch user profile:', error)
+        }
+      }
+    }
+
+    fetchUserProfile()
+  }, []) // Run once on mount
 
   // Auto-sync to Supabase when combat power reaches 145+
   useEffect(() => {

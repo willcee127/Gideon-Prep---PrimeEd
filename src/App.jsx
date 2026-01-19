@@ -8,6 +8,7 @@ import StatusBar from './components/StatusBar'
 import DailyObjective from './components/DailyObjective'
 import WelcomeKit from './components/WelcomeKit'
 import TacticalIntel from './components/TacticalIntel'
+import Settings from './components/Settings'
 import TacticalIntelDashboard from './components/TacticalIntelDashboard'
 import CommandCalc from './components/CommandCalc/CommandCalc'
 import VictoryReport from './components/VictoryReport'
@@ -45,6 +46,7 @@ function App() {
 
   // Defensive destructuring for completedNodes to prevent ReferenceError
   const completedNodes = sessionData?.completedNodes || [];
+  const userName = sessionData?.userName || 'Scholar';
 
   const [selectedNode, setSelectedNode] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
@@ -247,6 +249,9 @@ function App() {
           } />
           
           <Route path="/range-qual" element={<DiagnosticFlow />} />
+          
+          {/* Settings Route */}
+          <Route path="/settings" element={<Settings />} />
           
           {/* Commander Dashboard Route */}
           <Route path="/commander" element={
