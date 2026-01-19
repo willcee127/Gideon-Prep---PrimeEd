@@ -48,7 +48,7 @@ const ExamEngine = ({ nodeId, onComplete, userName }) => {
       
       return () => clearInterval(interval)
     }
-  }, [examState, stressLevel])
+  }, [examState])
 
   const startExam = () => {
     setExamState('active')
