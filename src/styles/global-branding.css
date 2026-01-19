@@ -1,0 +1,127 @@
+/* Global Branding Variables */
+:root {
+  /* Brand Colors */
+  --verve-lavender: #E6E6FA;
+  --aura-electric-blue: #7DF9FF;
+  --forge-orange: #FF8C00;
+  
+  /* Light Variants */
+  --verve-lavender-light: #D8D8F8;
+  --aura-electric-blue-light: #5BC0F8;
+  --forge-orange-light: #E67E00;
+  
+  /* Accent Colors */
+  --verve-ghost-white: #F0F0FF;
+  --aura-light-blue: #B3E5FC;
+  --forge-orange-accent: #FFA500;
+  
+  /* Glow Effects */
+  --verve-glow: rgba(230, 230, 250, 0.5);
+  --aura-glow: rgba(125, 249, 255, 0.5);
+  --forge-glow: rgba(255, 140, 0, 0.5);
+  
+  /* Typography */
+  --font-heading: 'Orbitron', monospace;
+  --font-body: 'Inter', sans-serif;
+  --font-hud: 'Orbitron', monospace;
+}
+
+/* Global Font Overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.hud-label,
+.status-label,
+.stage-label,
+.operator-label,
+.power-label,
+.level-label,
+.aura-hud-text {
+  font-family: var(--font-hud) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mission-description,
+.problem-text,
+.content-body,
+.readable-text,
+.math-problem,
+.calculation-text {
+  font-family: var(--font-body) !important;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.math-problem,
+.calculation-text {
+  font-weight: 600;
+  font-size: 1.1em;
+  line-height: 1.8;
+}
+
+.tactical-display,
+.combat-display,
+.status-display {
+  font-family: var(--font-hud) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Brand Color Classes */
+.verve-bg {
+  background-color: var(--verve-lavender) !important;
+}
+
+.verve-border {
+  border-color: var(--verve-lavender) !important;
+}
+
+.verve-text {
+  color: var(--verve-lavender) !important;
+}
+
+.aura-bg {
+  background-color: var(--aura-electric-blue) !important;
+}
+
+.aura-border {
+  border-color: var(--aura-electric-blue) !important;
+}
+
+.aura-text {
+  color: var(--aura-electric-blue) !important;
+}
+
+.forge-bg {
+  background-color: var(--forge-orange) !important;
+}
+
+.forge-border {
+  border-color: var(--forge-orange) !important;
+}
+
+.forge-text {
+  color: var(--forge-orange) !important;
+}
+
+/* Loading States */
+.lavender-pulse {
+  background-color: var(--verve-lavender);
+  box-shadow: 0 0 10px var(--verve-glow);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

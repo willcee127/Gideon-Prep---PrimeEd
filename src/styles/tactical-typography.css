@@ -1,0 +1,92 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap');
+
+/* Tactical Typography System */
+:root {
+  --font-heading: 'Orbitron', monospace;
+  --font-body: 'Inter', sans-serif;
+  --font-hud: 'Orbitron', monospace;
+}
+
+/* Global Typography Overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* HUD Labels and Status Elements */
+.hud-label,
+.status-label,
+.stage-label,
+.operator-label,
+.power-label,
+.level-label,
+.aura-hud-text {
+  font-family: var(--font-hud) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Body Content and Mission Descriptions */
+.mission-description,
+.problem-text,
+.content-body,
+.readable-text {
+  font-family: var(--font-body) !important;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Enhanced Readability for Math Problems */
+.math-problem,
+.calculation-text {
+  font-family: var(--font-body) !important;
+  font-weight: 600;
+  font-size: 1.1em;
+  line-height: 1.8;
+}
+
+/* Tactical UI Elements */
+.tactical-display,
+.combat-display,
+.status-display {
+  font-family: var(--font-hud) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Certificate and Achievement Typography */
+.certificate-title,
+.achievement-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.certificate-body,
+.achievement-description {
+  font-family: var(--font-body) !important;
+  font-weight: 400;
+}
+
+/* Responsive Typography Adjustments */
+@media (max-width: 768px) {
+  .hud-label,
+  .status-label,
+  .stage-label,
+  .operator-label,
+  .power-label,
+  .level-label {
+    letter-spacing: 0.05em;
+  }
+  
+  .tactical-display,
+  .combat-display,
+  .status-display {
+    letter-spacing: 0.08em;
+  }
+}

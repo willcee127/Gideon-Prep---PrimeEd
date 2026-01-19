@@ -19,12 +19,19 @@ import GideonLandingPageV2 from './pages/GideonLandingPageV2'
 import RedAlertSimulation from './components/RedAlertSimulation'
 import MissionDebrief from './components/MissionDebrief'
 import VictorySequence from './components/VictorySequence'
+import StatusReport from './components/StatusReport'
+import CapstoneCertificate from './components/CapstoneCertificate'
+import ReadinessReport from './components/ReadinessReport'
+import { StatusReportErrorBoundary, CapstoneCertificateErrorBoundary } from './components/ErrorBoundaries'
 import { getNodeById } from './data/mathContent'
 import { calculateCombatPower, validateSectorData } from './utils/combatPowerCalculator'
 import useSessionSync from './hooks/useSessionSync'
 import { supabase } from './lib/supabase'
 import './styles/responsive.css'
 import './styles/aura-hud.css'
+import './styles/tactical-typography.css'
+import './styles/global-branding.css'
+import assetPreloader from './utils/assetPreloader'
 
 // Forge Protected Route Component
 const ForgeProtectedRoute = ({ children }) => {
@@ -80,127 +87,139 @@ function App() {
     warriorRank: 'Specialist'
   })
 
-  // Defensive destructuring for completedNodes to prevent ReferenceError
-  const completedNodes = sessionData?.completedNodes || [];
-  const userName = sessionData?.userName || 'Scholar';
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-
-  // Adaptive AI Auto-Leveler State
-  const [streak, setStreak] = useState(0);
+  // State declarations - consolidated at top
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [streak, setStreak] = useState(0)
   const [aiSupportLevel, setAiSupportLevel] = useState(() => {
-    return parseInt(localStorage.getItem('gideon_ai_support_level') || '3');
-  });
-
-  // Dynamic Aura HUD System
-  const getAuraStyles = () => {
-    const level = aiSupportLevel;
-    
-    switch(level) {
-      case 5: // Verve - Heavy-duty Purple HUD
-        return {
-          primaryColor: '#9333ea', // Purple-600
-          secondaryColor: '#7c3aed', // Purple-700
-          accentColor: '#a855f7', // Purple-500
-          borderColor: '#9333ea',
-          glowColor: 'rgba(147, 51, 234, 0.5)',
-          hudIntensity: 'high',
-          theme: 'verve'
-        };
-      case 3: // Aura - Balanced Emerald Green HUD
-        return {
-          primaryColor: '#10b981', // Emerald-500
-          secondaryColor: '#059669', // Emerald-600
-          accentColor: '#34d399', // Emerald-400
-          borderColor: '#10b981',
-          glowColor: 'rgba(16, 185, 129, 0.5)',
-          hudIntensity: 'medium',
-          theme: 'aura'
-        };
-      case 1: // Forge - Minimalist Electric Cyan HUD
-        return {
-          primaryColor: '#06b6d4', // Cyan-500
-          secondaryColor: '#0891b2', // Cyan-600
-          accentColor: '#22d3ee', // Cyan-400
-          borderColor: '#06b6d4',
-          glowColor: 'rgba(6, 182, 212, 0.3)',
-          hudIntensity: 'minimal',
-          theme: 'forge'
-        };
-      default: // Default to Aura
-        return {
-          primaryColor: '#10b981',
-          secondaryColor: '#059669',
-          accentColor: '#34d399',
-          borderColor: '#10b981',
-          glowColor: 'rgba(16, 185, 129, 0.5)',
-          hudIntensity: 'medium',
-          theme: 'aura'
-        };
-    }
-  };
-
-  const auraStyles = getAuraStyles();
-
-  // Apply dynamic HUD styles globally
-  useEffect(() => {
-    const root = document.documentElement;
-    
-    // Update CSS custom properties for dynamic theming
-    root.style.setProperty('--aura-primary', auraStyles.primaryColor);
-    root.style.setProperty('--aura-secondary', auraStyles.secondaryColor);
-    root.style.setProperty('--aura-accent', auraStyles.accentColor);
-    root.style.setProperty('--aura-border', auraStyles.borderColor);
-    root.style.setProperty('--aura-glow', auraStyles.glowColor);
-    root.style.setProperty('--aura-intensity', auraStyles.hudIntensity);
-    
-    // Add theme class to body for CSS targeting
-    document.body.className = document.body.className.replace(/aura-\w+/g, '');
-    document.body.classList.add(`aura-${auraStyles.theme}`);
-    
-    console.log(`Dynamic HUD Applied: ${auraStyles.theme.toUpperCase()} (Level ${aiSupportLevel})`);
-    
-  }, [aiSupportLevel, auraStyles]);
-
-  // Session tracking timer
-  const startTime = useRef(Date.now());
-
-  const logStudySession = async (subject) => {
-    const endTime = Date.now();
-    const minutes = Math.round((endTime - startTime.current) / 60000);
-    
-    if (minutes < 1) return; // Don't log sessions shorter than a minute
-    
-    try {
-      const userId = localStorage.getItem('gideon_user_id') || sessionData?.user_id || 'anonymous';
-      
-      await supabase.from('study_sessions').insert({
-        profile_id: userId,
-        duration_minutes: minutes,
-        subject_area: subject,
-        created_at: new Date().toISOString()
-      });
-      
-      console.log(`Study session logged: ${minutes} minutes in ${subject}`);
-    } catch (error) {
-      console.error('Failed to log study session:', error);
-    }
-    
-    startTime.current = Date.now(); // Reset timer for the next subject
-  };
-
+    return parseInt(localStorage.getItem('gideon_ai_support_level') || '3')
+  })
   const [selectedNode, setSelectedNode] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [showWelcomeKit, setShowWelcomeKit] = useState(false)
   const [showTacticalIntel, setShowTacticalIntel] = useState(false)
   const [showGhostCalc, setShowGhostCalc] = useState(false)
   const [showCommandCalc, setShowCommandCalc] = useState(false)
-  
-  // Global mission state for Red Alert Simulation
+  const [showCapstoneCertificate, setShowCapstoneCertificate] = useState(false)
+  const [showReadinessReport, setShowReadinessReport] = useState(false)
   const [isMissionActive, setIsMissionActive] = useState(false)
   const [missionTimer, setMissionTimer] = useState(180)
   const [successProbability, setSuccessProbability] = useState(100)
   const [forgeModeActive, setForgeModeActive] = useState(false)
   const [victorySequenceActive, setVictorySequenceActive] = useState(false)
+
+  // Identity State for Status Report
+  const [identityData, setIdentityData] = useState(() => {
+    return {
+      fullName: localStorage.getItem('gideon_full_name') || '',
+      callSign: localStorage.getItem('gideon_call_sign') || '',
+      email: localStorage.getItem('gideon_email') || ''
+    }
+  })
+
+  // Session tracking timer
+  const startTime = useRef(Date.now())
+
+  // Dynamic Aura HUD System
+  const getAuraStyles = () => {
+    const level = aiSupportLevel
+    
+    switch(level) {
+      case 5: // Verve - Lavender HUD
+        return {
+          primaryColor: 'var(--verve-lavender)',
+          secondaryColor: 'var(--verve-lavender-light)',
+          accentColor: 'var(--verve-ghost-white)',
+          borderColor: 'var(--verve-lavender)',
+          glowColor: 'var(--verve-glow)',
+          hudIntensity: 'high',
+          theme: 'verve'
+        }
+      case 3: // Aura - Electric Blue HUD
+        return {
+          primaryColor: 'var(--aura-electric-blue)',
+          secondaryColor: 'var(--aura-electric-blue-light)',
+          accentColor: 'var(--aura-light-blue)',
+          borderColor: 'var(--aura-electric-blue)',
+          glowColor: 'var(--aura-glow)',
+          hudIntensity: 'medium',
+          theme: 'aura'
+        }
+      case 1: // Forge - Forge Orange HUD
+        return {
+          primaryColor: 'var(--forge-orange)',
+          secondaryColor: 'var(--forge-orange-light)',
+          accentColor: 'var(--forge-orange-accent)',
+          borderColor: 'var(--forge-orange)',
+          glowColor: 'var(--forge-glow)',
+          hudIntensity: 'minimal',
+          theme: 'forge'
+        }
+      default: // Default to Aura
+        return {
+          primaryColor: 'var(--aura-electric-blue)',
+          secondaryColor: 'var(--aura-electric-blue-light)',
+          accentColor: 'var(--aura-light-blue)',
+          borderColor: 'var(--aura-electric-blue)',
+          glowColor: 'var(--aura-glow)',
+          hudIntensity: 'medium',
+          theme: 'aura'
+        }
+    }
+  }
+
+  const auraStyles = getAuraStyles()
+
+  // Apply dynamic HUD styles globally
+  useEffect(() => {
+    const root = document.documentElement
+    
+    // Update CSS custom properties for dynamic theming
+    root.style.setProperty('--aura-primary', auraStyles.primaryColor)
+    root.style.setProperty('--aura-secondary', auraStyles.secondaryColor)
+    root.style.setProperty('--aura-accent', auraStyles.accentColor)
+    root.style.setProperty('--aura-border', auraStyles.borderColor)
+    root.style.setProperty('--aura-glow', auraStyles.glowColor)
+    root.style.setProperty('--aura-intensity', auraStyles.hudIntensity)
+    
+    // Add theme class to body for CSS targeting
+    document.body.className = document.body.className.replace(/aura-\w+/g, '')
+    document.body.classList.add(`aura-${auraStyles.theme}`)
+    
+    console.log(`Dynamic HUD Applied: ${auraStyles.theme.toUpperCase()} (Level ${aiSupportLevel})`)
+    
+  }, [aiSupportLevel, auraStyles])
+
+  // Update identity data when localStorage changes
+  useEffect(() => {
+    const updateIdentityFromStorage = () => {
+      setIdentityData({
+        fullName: localStorage.getItem('gideon_full_name') || '',
+        callSign: localStorage.getItem('gideon_call_sign') || '',
+        email: localStorage.getItem('gideon_email') || ''
+      })
+    }
+
+    // Initial load
+    updateIdentityFromStorage()
+
+    // Listen for storage changes (for cross-tab sync)
+    const handleStorageChange = (e) => {
+      if (e.key?.startsWith('gideon_')) {
+        updateIdentityFromStorage()
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
+
+  // Asset preloading initialization
+  useEffect(() => {
+    assetPreloader.initialize()
+  }, [])
 
   // Hydration logic - check for existing Call Sign and route appropriately
   useEffect(() => {
@@ -251,7 +270,7 @@ function App() {
   }, [])
 
   // Forge access protection - Stage 3 requires Stage 2 Complete
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const checkForgeAccess = () => {
     const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
     if (!stage2Complete) {
@@ -261,6 +280,7 @@ function App() {
     return true
   }
 
+  // Event handlers
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
     if (node) {
@@ -320,8 +340,49 @@ function App() {
     setShowCommandCalc(false)
   }
 
+  const handleShowCapstoneCertificate = () => {
+    setShowCapstoneCertificate(true)
+  }
+
+  const handleCloseCapstoneCertificate = () => {
+    setShowCapstoneCertificate(false)
+  }
+
+  const handleShowReadinessReport = () => {
+    setShowReadinessReport(true)
+  }
+
+  const handleCloseReadinessReport = () => {
+    setShowReadinessReport(false)
+  }
+
   const handleTacticalTip = (data) => {
     // Tactical tip received
+  }
+
+  // Study session logging
+  const logStudySession = async (subject) => {
+    const endTime = Date.now()
+    const minutes = Math.round((endTime - startTime.current) / 60000)
+    
+    if (minutes < 1) return // Don't log sessions shorter than a minute
+    
+    try {
+      const userId = localStorage.getItem('gideon_user_id') || sessionData?.user_id || 'anonymous'
+      
+      await supabase.from('study_sessions').insert({
+        profile_id: userId,
+        duration_minutes: minutes,
+        subject_area: subject,
+        created_at: new Date().toISOString()
+      })
+      
+      console.log(`Study session logged: ${minutes} minutes in ${subject}`)
+    } catch (error) {
+      console.error('Failed to log study session:', error)
+    }
+    
+    startTime.current = Date.now() // Reset timer for the next subject
   }
 
   // Adaptive AI Auto-Leveler Functions
@@ -368,8 +429,8 @@ function App() {
             current_streak: 0,
             updated_at: new Date().toISOString()
           })
-          .eq('call_sign', callSign)
-        
+          .eq('id', userId) // Use profile_id instead of call_sign
+      
         console.log(`AI Support Level reduced to ${newSupportLevel} - Student becoming more independent`)
         
         // Show UI feedback
@@ -381,9 +442,16 @@ function App() {
   }
 
   const showLevelUpNotification = (newLevel) => {
+    // Get notification color based on new level
+    const getNotificationColor = (level) => {
+      if (level >= 5) return 'bg-purple-600' // Lavender for Verve
+      if (level >= 3) return 'bg-blue-500' // Electric Blue for Aura
+      return 'bg-orange-600' // Forge Orange for Forge
+    }
+
     // Create notification element
     const notification = document.createElement('div')
-    notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-pulse'
+    notification.className = `fixed top-4 right-4 ${getNotificationColor(newLevel)} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-pulse`
     notification.innerHTML = `
       <div class="flex items-center space-x-2">
         <span class="text-xl">🎯</span>
@@ -413,136 +481,97 @@ function App() {
     updateStreak(false) // Reset streak on incorrect answer
   }
 
+  // Defensive destructuring for completedNodes to prevent ReferenceError
+  const completedNodes = sessionData?.completedNodes || []
+  const userName = sessionData?.userName || 'Scholar'
+
   return (
     <Router>
       <NeuroProvider>
-        <Routes>
-          {/* Root Redirect to Landing */}
-          <Route path="/" element={<Navigate to="/landing" replace />} />
+        <div className="min-h-screen bg-black text-white">
+          {/* Status Report - Always Visible */}
+          <StatusReportErrorBoundary callSign={identityData.callSign} aiSupportLevel={aiSupportLevel}>
+            <StatusReport 
+              userName={userName}
+              fullName={identityData.fullName}
+              callSign={identityData.callSign}
+              streak={streak}
+              aiSupportLevel={aiSupportLevel}
+            />
+          </StatusReportErrorBoundary>
+
+          {/* Capstone Certificate Modal */}
+          <CapstoneCertificateErrorBoundary onClose={handleCloseCapstoneCertificate}>
+            <CapstoneCertificate 
+              isVisible={showCapstoneCertificate}
+              onClose={handleCloseCapstoneCertificate}
+            />
+          </CapstoneCertificateErrorBoundary>
+
+          {/* Readiness Report Modal */}
+          <ReadinessReport 
+            isVisible={showReadinessReport}
+            onClose={handleCloseReadinessReport}
+            profileId={localStorage.getItem('gideon_user_id')}
+          />
+
+          {/* Main Routes */}
+          <Routes>
+            <Route path="/" element={<Navigate to="/recruitment" replace />} />
+            <Route path="/recruitment" element={<RecruitmentPage />} />
+            <Route path="/initiation" element={<Initiation onComplete={(data) => {
+              // Handle initiation completion
+              console.log('Initiation completed:', data)
+            }} />} />
+            <Route path="/verve" element={<MissionLandingPage />} />
+            <Route path="/mission" element={<MissionLandingPage />} />
+            <Route path="/tacticalintel" element={<TacticalIntelDashboard />} />
+            <Route path="/forge" element={
+              <ForgeProtectedRoute>
+                <MasteryMap />
+              </ForgeProtectedRoute>
+            } />
+            <Route path="/mastery-map" element={
+              <ForgeProtectedRoute>
+                <MasteryMap />
+              </ForgeProtectedRoute>
+            } />
+            <Route path="/diagnostic" element={<DiagnosticFlow />} />
+            <Route path="/exam" element={<ExamEngine />} />
+          </Routes>
+
+          {/* Slide-in Panel */}
+          <SlideInPanel
+            isOpen={isPanelOpen}
+            onClose={handlePanelClose}
+            selectedNode={selectedNode}
+            onProblemSuccess={handleProblemSuccessWithStreak}
+            onProblemMiss={handleProblemMiss}
+            onShowIntel={handleShowIntel}
+            onShowCommandCalc={handleShowCommandCalc}
+          />
+
+          {/* Other Modals */}
+          {showWelcomeKit && <WelcomeKit onClose={() => setShowWelcomeKit(false)} />}
+          {showTacticalIntel && <TacticalIntel onClose={handleCloseIntel} />}
+          {showCommandCalc && <CommandCalc onClose={handleCloseCommandCalc} />}
           
-          {/* Landing Page Route */}
-          <Route path="/landing" element={<GideonLandingPageV2 />} />
-          
-          {/* Onboarding Route */}
-          <Route path="/onboarding" element={<DiagnosticFlow />} />
-          
-          {/* Verve Route - Stage 1 */}
-          <Route path="/verve" element={<DiagnosticFlow />} />
-          
-          {/* Mission Route */}
-          <Route path="/mission" element={<MissionLandingPage />} />
-          
-          {/* Recruitment Route */}
-          <Route path="/recruitment" element={<RecruitmentPage />} />
-          
-          {/* Tactical Intel Dashboard Route */}
-          <Route path="/tacticalintel" element={
-            <RedAlertSimulation 
-              isMissionActive={isMissionActive}
-              missionTimer={missionTimer}
+          {/* Red Alert Simulation */}
+          {isMissionActive && (
+            <RedAlertSimulation
+              timer={missionTimer}
               successProbability={successProbability}
-            >
-              <TacticalIntelDashboard />
-            </RedAlertSimulation>
-          } />
-          
-          <Route path="/mastery-map" element={
-            <div className="min-h-screen bg-black relative overflow-hidden">
-              {/* Background Layer - MasteryMap */}
-              <div className="absolute inset-0">
-                <MasteryMap 
-                  onNodeSelect={handleNodeSelect}
-                  selectedNode={selectedNode}
-                  completedNodes={completedNodes}
-                />
-              </div>
+              onComplete={() => setIsMissionActive(false)}
+            />
+          )}
 
-              {/* Daily Objective - Shows when no node is selected */}
-              {!isPanelOpen && !showWelcomeKit && (
-                <DailyObjective 
-                  userName={userName}
-                  completedNodes={completedNodes}
-                  onNodeSelect={handleNodeSelect}
-                />
-              )}
-
-              {/* Slide-In Studio Panel */}
-              <SlideInPanel 
-                isOpen={isPanelOpen}
-                onClose={handlePanelClose}
-                selectedNode={selectedNode}
-                userName={userName}
-                completedNodes={completedNodes}
-                onProblemSuccess={handleProblemSuccessWithStreak}
-                onProblemMiss={handleProblemMiss}
-                onShowCommandCalc={handleShowCommandCalc}
-              />
-
-              {/* Permanent Status Dock */}
-              <StatusBar 
-                userName={userName}
-                completedNodes={completedNodes}
-                correctAnswers={correctAnswers}
-                isWelcomeKitActive={showWelcomeKit}
-                onShowIntel={handleShowIntel}
-              />
-
-              {/* Warrior Welcome Kit */}
-              {showWelcomeKit && (
-                <WelcomeKit onComplete={handleWelcomeKitComplete} />
-              )}
-
-              {/* Tactical Intel Overlay */}
-              <TacticalIntel 
-                isOpen={showTacticalIntel}
-                onClose={handleCloseIntel}
-                currentStronghold={selectedNode?.title}
-              />
-
-              {/* Command Calculator Overlay */}
-              <CommandCalc 
-                isOpen={showCommandCalc}
-                onClose={handleCloseCommandCalc}
-                currentStronghold={selectedNode}
-                onTacticalTip={handleTacticalTip}
-              />
-
-              {/* Victory Report Overlay */}
-              <VictoryReport 
-                userName={userName}
-                completedNodes={completedNodes}
-                correctAnswers={correctAnswers}
-                onDownloadComplete={() => {
-                  // Victory celebration complete
-                }}
-              />
-            </div>
-          } />
-          
-          <Route path="/range-qual" element={<DiagnosticFlow />} />
-          
-          {/* Forge Route - Stage 3 (Protected) */}
-          <Route path="/forge" element={
-            <ForgeProtectedRoute />
-          } />
-          
-          {/* Settings Route */}
-          <Route path="/settings" element={<Settings />} />
-          
-          {/* Commander Dashboard Route */}
-          <Route path="/commander" element={
-            <div className="min-h-screen bg-black text-white flex items-center justify-center">
-              <h1 className="text-4xl font-bold">Commander Dashboard - Coming Soon</h1>
-            </div>
-          } />
-          
-          {/* 404 Catch-All */}
-          <Route path="*" element={
-            <div style={{color: 'white', padding: '20px'}}>
-              404 - Route Not Found. Current Path: {String(typeof window !== 'undefined' && window.location.pathname || 'Unknown')}
-            </div>
-          } />
-        </Routes>
+          {/* Victory Sequence */}
+          {victorySequenceActive && (
+            <VictorySequence
+              onComplete={() => setVictorySequenceActive(false)}
+            />
+          )}
+        </div>
       </NeuroProvider>
     </Router>
   )

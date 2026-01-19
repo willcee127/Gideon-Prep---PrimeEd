@@ -145,32 +145,9 @@ const ExamEngine = ({ nodeId, onComplete, userName }) => {
           }
         ])
       
-      // If passed, unlock Prime Certified badge
-      if (results.passed) {
-        await unlockPrimeCertified(userId)
-      }
-      
       console.log('Exam results logged successfully')
     } catch (error) {
       console.error('Failed to log exam results:', error)
-    }
-  }
-
-  const unlockPrimeCertified = async (userId) => {
-    try {
-      await supabase
-        .from('user_achievements')
-        .insert([
-          {
-            user_id: userId,
-            achievement_type: 'prime_certified',
-            earned_at: new Date().toISOString()
-          }
-        ])
-      
-      console.log('Prime Certified badge unlocked!')
-    } catch (error) {
-      console.error('Failed to unlock Prime Certified badge:', error)
     }
   }
 

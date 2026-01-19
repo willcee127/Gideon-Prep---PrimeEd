@@ -20,10 +20,48 @@ const Initiation = ({ onComplete }) => {
     setIsLoading(true)
     
     try {
-      // Save to Supabase profiles table
+      // First check if email already exists
+      const { data: existingProfile, error: checkError } = await supabase
+        .from('profiles')
+        .select('id, full_name, call_sign, email, ai_support_level, current_streak, created_at, updated_at')
+        .eq('email', email.trim())
+        .single()
+      
+      if (checkError && checkError.code !== 'PGRST116') { // Not "No rows found"
+        throw checkError
+      }
+      
+      // If email exists, welcome back and complete initiation
+      if (existingProfile) {
+        console.log('Welcome back detected for email:', email.trim())
+        
+        // Update localStorage with existing profile data
+        localStorage.setItem('gideon_user_id', existingProfile.id)
+        localStorage.setItem('gideon_call_sign', existingProfile.call_sign)
+        localStorage.setItem('gideon_full_name', existingProfile.full_name || fullName.trim())
+        localStorage.setItem('gideon_email', existingProfile.email)
+        localStorage.setItem('gideon_ai_support_level', String(existingProfile.ai_support_level || 3))
+        
+        // Show welcome back toast
+        showWelcomeBackToast(existingProfile.call_sign, existingProfile.ai_support_level)
+        
+        // Complete initiation with existing profile
+        onComplete({
+          fullName: existingProfile.full_name || fullName.trim(),
+          callSign: existingProfile.call_sign,
+          email: existingProfile.email,
+          profileId: existingProfile.id,
+          isReturningUser: true
+        })
+        
+        setIsLoading(false)
+        return
+      }
+      
+      // New user - proceed with profile creation
       const { data, error } = await supabase
         .from('profiles')
-        .upsert({
+        .insert({
           full_name: fullName.trim(),
           call_sign: callSign.trim(),
           email: email.trim(),
@@ -35,30 +73,130 @@ const Initiation = ({ onComplete }) => {
         .select()
         .single()
       
-      if (error) throw error
+      if (error) {
+        // Handle unique constraint violations
+        if (error.code === '23505') { // Unique violation
+          if (error.message.includes('profiles_email_key')) {
+            setIsLoading(false)
+            alert('This email is already registered. Please use a different email or try logging in.')
+            return
+          }
+          if (error.message.includes('profiles_call_sign_key')) {
+            setIsLoading(false)
+            alert('This call sign is already taken. Please choose a different call sign.')
+            return
+          }
+        }
+        throw error
+      }
+      
+      if (!data) throw new Error('Failed to create profile')
       
       // Store the profile ID for future tracking
       localStorage.setItem('gideon_user_id', data.id)
       localStorage.setItem('gideon_call_sign', callSign.trim())
       localStorage.setItem('gideon_full_name', fullName.trim())
       localStorage.setItem('gideon_email', email.trim())
+      localStorage.setItem('gideon_ai_support_level', '3')
       
-      console.log('Identity saved to profiles table:', data)
+      console.log('New profile created:', data)
       
-      // Complete initiation with profile data
+      // Complete initiation with new profile data
       onComplete({
         fullName: fullName.trim(),
         callSign: callSign.trim(),
         email: email.trim(),
-        profileId: data.id
+        profileId: data.id,
+        isReturningUser: false
       })
       
     } catch (error) {
       console.error('Failed to save identity:', error)
-      alert('Failed to save your identity. Please try again.')
-    } finally {
       setIsLoading(false)
+      alert('Failed to save your identity. Please try again.')
     }
+  }
+
+  // Welcome back toast notification
+  const showWelcomeBackToast = (callSign, aiSupportLevel) => {
+    // Get toast color based on current level
+    const getToastColor = (level) => {
+      if (level >= 5) return 'bg-purple-600 border-purple-400' // Lavender for Verve
+      if (level >= 3) return 'bg-blue-500 border-blue-400' // Electric Blue for Aura
+      return 'bg-orange-600 border-orange-400' // Forge Orange for Forge
+    }
+
+    // Create toast element
+    const toast = document.createElement('div')
+    toast.className = `fixed top-20 right-4 ${getToastColor(aiSupportLevel)} text-white px-6 py-4 rounded-lg shadow-2xl z-50 transform transition-all duration-500 ease-out`
+    toast.style.cssText = `
+      min-width: 320px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 2px solid;
+      animation: slideInRight 0.5s ease-out;
+    `
+    
+    toast.innerHTML = `
+      <div class="flex items-start space-x-3">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <span class="text-lg">👋</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-sm uppercase tracking-wider" style="font-family: 'Orbitron', monospace; letter-spacing: 0.1em;">
+            WELCOME BACK, ${callSign.toUpperCase()}
+          </div>
+          <div class="text-xs mt-1 opacity-90" style="font-family: 'Inter', sans-serif;">
+            MISSION STATUS: ACTIVE
+          </div>
+        </div>
+        <div class="flex-shrink-0">
+          <button onclick="this.parentElement.parentElement.remove()" class="text-white/80 hover:text-white transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `
+    
+    // Add CSS animation
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `
+    document.head.appendChild(style)
+    
+    document.body.appendChild(toast)
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.style.animation = 'slideInRight 0.5s ease-out reverse'
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast)
+          }
+        }, 500)
+      }
+    }, 5000)
+    
+    // Remove style element after animation
+    setTimeout(() => {
+      if (style.parentNode) {
+        style.parentNode.removeChild(style)
+      }
+    }, 6000)
   }
 
   return (
