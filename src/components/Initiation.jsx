@@ -111,9 +111,22 @@ const Initiation = ({ onComplete }) => {
       })
       
     } catch (error) {
-      console.error('Failed to save identity:', error)
+      console.error('Failed to save identity:', {
+        message: error.message,
+        details: error.details,
+        code: error.code,
+        hint: error.hint
+      })
       setIsLoading(false)
-      alert('Failed to save your identity. Please try again.')
+      
+      // Provide specific error messages
+      if (error.message?.includes('column') || error.message?.includes('not found')) {
+        alert('Database schema error: Column not found. Please contact support.')
+      } else if (error.message?.includes('permission') || error.code === '42501') {
+        alert('Permission denied. Please check your account access.')
+      } else {
+        alert(`Failed to save your identity: ${error.message || 'Unknown error'}. Please try again.`)
+      }
     }
   }
 
