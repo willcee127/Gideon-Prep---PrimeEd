@@ -547,7 +547,6 @@ function App() {
   return (
     <NeuroProvider>
       <div className="min-h-screen bg-black text-white">
-        {/* Initial Loading Guardrail - Show while checking auth and profile */}
         {isInitialLoading ? (
           <div className="min-h-screen bg-black text-white flex items-center justify-center">
             <div className="text-center space-y-6">
@@ -565,16 +564,16 @@ function App() {
             </div>
           </div>
         ) : (
-          {/* Status Report - Always Visible */}
-          <StatusReportErrorBoundary callSign={identityData.callSign} aiSupportLevel={aiSupportLevel}>
-            <StatusReport 
-              userName={userName}
-              fullName={identityData.fullName}
-              callSign={identityData.callSign}
-              streak={streak}
-              aiSupportLevel={aiSupportLevel}
-            />
-          </StatusReportErrorBoundary>
+          <>
+            <StatusReportErrorBoundary callSign={identityData.callSign} aiSupportLevel={aiSupportLevel}>
+              <StatusReport 
+                userName={userName}
+                fullName={identityData.fullName}
+                callSign={identityData.callSign}
+                streak={streak}
+                aiSupportLevel={aiSupportLevel}
+              />
+            </StatusReportErrorBoundary>
 
           {/* Capstone Certificate Modal */}
           <CapstoneCertificateErrorBoundary onClose={handleCloseCapstoneCertificate}>
@@ -650,6 +649,7 @@ function App() {
               onComplete={() => setVictorySequenceActive(false)}
             />
           )}
+          </>
         )}
       </div>
     </NeuroProvider>
