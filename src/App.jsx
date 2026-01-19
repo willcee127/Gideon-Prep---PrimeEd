@@ -15,9 +15,13 @@ import DiagnosticFlow from './pages/DiagnosticFlow'
 import MissionLandingPage from './pages/MissionLandingPage'
 import RecruitmentPage from './pages/RecruitmentPage'
 import GideonLandingPageV2 from './pages/GideonLandingPageV2'
+import RedAlertSimulation from './components/RedAlertSimulation'
+import MissionDebrief from './components/MissionDebrief'
+import VictorySequence from './components/VictorySequence'
 import { getNodeById } from './data/mathContent'
 import { calculateCombatPower, validateSectorData } from './utils/combatPowerCalculator'
 import useSessionSync from './hooks/useSessionSync'
+import './styles/responsive.css'
 
 function App() {
   // Use session sync hook for robust state persistence
@@ -45,6 +49,13 @@ function App() {
   const [showTacticalIntel, setShowTacticalIntel] = useState(false)
   const [showGhostCalc, setShowGhostCalc] = useState(false)
   const [showCommandCalc, setShowCommandCalc] = useState(false)
+  
+  // Global mission state for Red Alert Simulation
+  const [isMissionActive, setIsMissionActive] = useState(false)
+  const [missionTimer, setMissionTimer] = useState(180)
+  const [successProbability, setSuccessProbability] = useState(100)
+  const [forgeModeActive, setForgeModeActive] = useState(false)
+  const [victorySequenceActive, setVictorySequenceActive] = useState(false)
 
   // Hydration logic - check for existing Call Sign and route appropriately
   useEffect(() => {
@@ -70,6 +81,15 @@ function App() {
       }
     }
   }, [sessionData.combatPower.average, sessionData.lastActiveSector])
+
+  // Forge Command Victory Logic
+  useEffect(() => {
+    // Trigger Forge Mode when average score crosses 174
+    if (sessionData.combatPower.average >= 174 && !forgeModeActive) {
+      setForgeModeActive(true)
+      console.log('FORGE COMMAND ACTIVATED')
+    }
+  }, [sessionData.combatPower.average, forgeModeActive])
 
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
@@ -140,7 +160,15 @@ function App() {
           <Route path="/recruitment" element={<RecruitmentPage />} />
           
           {/* Tactical Intel Dashboard Route */}
-          <Route path="/tacticalintel" element={<TacticalIntelDashboard />} />
+          <Route path="/tacticalintel" element={
+            <RedAlertSimulation 
+              isMissionActive={isMissionActive}
+              missionTimer={missionTimer}
+              successProbability={successProbability}
+            >
+              <TacticalIntelDashboard />
+            </RedAlertSimulation>
+          } />
           
           <Route path="/mastery-map" element={
             <div className="min-h-screen bg-black relative overflow-hidden">

@@ -1,0 +1,231 @@
+/* Bridge Gap Visual Animations - Physical Analogies */
+
+/* Seesaw Animation */
+@keyframes seesawBalance {
+  0% { 
+    transform: rotate(-15deg);
+    transform-origin: center bottom;
+  }
+  25% { 
+    transform: rotate(5deg);
+    transform-origin: center bottom;
+  }
+  50% { 
+    transform: rotate(-10deg);
+    transform-origin: center bottom;
+  }
+  75% { 
+    transform: rotate(3deg);
+    transform-origin: center bottom;
+  }
+  100% { 
+    transform: rotate(0deg);
+    transform-origin: center bottom;
+  }
+}
+
+.seesaw-animation {
+  animation: seesawBalance 3s ease-in-out infinite;
+}
+
+/* Hill Animation */
+@keyframes hillClimb {
+  0% { 
+    transform: translateY(0) scale(1);
+  }
+  50% { 
+    transform: translateY(-10px) scale(1.05);
+  }
+  100% { 
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hill-animation {
+  animation: hillClimb 2s ease-in-out infinite;
+}
+
+/* Cookies Animation */
+@keyframes cookieShare {
+  0% { 
+    transform: scale(1) rotate(0deg);
+  }
+  25% { 
+    transform: scale(0.9) rotate(90deg);
+  }
+  50% { 
+    transform: scale(0.8) rotate(180deg);
+  }
+  75% { 
+    transform: scale(0.9) rotate(270deg);
+  }
+  100% { 
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.cookies-animation {
+  animation: cookieShare 4s ease-in-out infinite;
+}
+
+/* Map Animation */
+@keyframes mapReveal {
+  0% { 
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: scale(1.1) rotate(5deg);
+    opacity: 0.8;
+  }
+  100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.map-animation {
+  animation: mapReveal 3s ease-in-out infinite;
+}
+
+/* Blocks Animation */
+@keyframes blockStack {
+  0% { 
+    transform: translateY(0) scale(1);
+  }
+  25% { 
+    transform: translateY(-5px) scale(1.02);
+  }
+  50% { 
+    transform: translateY(-10px) scale(1.05);
+  }
+  75% { 
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% { 
+    transform: translateY(0) scale(1);
+  }
+}
+
+.blocks-animation {
+  animation: blockStack 2.5s ease-in-out infinite;
+}
+
+/* Visual Indicators */
+.visual-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.visual-indicator.seesaw {
+  background: linear-gradient(45deg, #8B4513 0%, #D2691E 100%);
+  box-shadow: 0 2px 4px rgba(139, 69, 19, 0.3);
+}
+
+.visual-indicator.hill {
+  background: linear-gradient(135deg, #228B22 0%, #16A085 100%);
+  box-shadow: 0 2px 4px rgba(34, 139, 34, 0.3);
+}
+
+.visual-indicator.cookies {
+  background: linear-gradient(90deg, #D2691E 0%, #F4A460 100%);
+  box-shadow: 0 2px 4px rgba(210, 105, 30, 0.3);
+}
+
+.visual-indicator.map {
+  background: linear-gradient(180deg, #1E40AF 0%, #61DAFB 100%);
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.3);
+}
+
+.visual-indicator.blocks {
+  background: linear-gradient(270deg, #F4A460 0%, #FF6B6B 100%);
+  box-shadow: 0 2px 4px rgba(244, 164, 96, 0.3);
+}
+
+/* Chat Bubble Visual Integration */
+.bridge-gap-message {
+  position: relative;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(177, 156, 217, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  margin-bottom: 8px;
+}
+
+.bridge-gap-message::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.bridge-gap-message.seesaw::before {
+  background: linear-gradient(45deg, #8B4513 0%, #D2691E 100%);
+  animation: seesawBalance 3s ease-in-out infinite;
+}
+
+.bridge-gap-message.hill::before {
+  background: linear-gradient(135deg, #228B22 0%, #16A085 100%);
+  animation: hillClimb 2s ease-in-out infinite;
+}
+
+.bridge-gap-message.cookies::before {
+  background: linear-gradient(90deg, #D2691E 0%, #F4A460 100%);
+  animation: cookieShare 4s ease-in-out infinite;
+}
+
+.bridge-gap-message.map::before {
+  background: linear-gradient(180deg, #1E40AF 0%, #61DAFB 100%);
+  animation: mapReveal 3s ease-in-out infinite;
+}
+
+.bridge-gap-message.blocks::before {
+  background: linear-gradient(270deg, #F4A460 0%, #FF6B6B 100%);
+  animation: blockStack 2.5s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .visual-indicator {
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
+  }
+  
+  .bridge-gap-message {
+    padding: 10px 12px;
+  }
+  
+  .bridge-gap-message::before {
+    top: -6px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Performance Optimization */
+.visual-indicator,
+.bridge-gap-message::before {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .visual-indicator,
+  .bridge-gap-message::before {
+    animation: none !important;
+  }
+}

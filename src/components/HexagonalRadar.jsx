@@ -13,98 +13,30 @@ const HexagonalRadar = ({ data, size = 300 }) => {
     })
   }
 
-  // Map data to radar axes
   const axes = [
-    { key: 'numberSense', label: 'Number Sense', angle: 90 },
-    { key: 'algebra', label: 'Algebra', angle: 30 },
-    { key: 'geometry', label: 'Geometry', angle: -30 },
-    { key: 'dataAnalysis', label: 'Data Analysis', angle: -90 },
-    { key: 'fractions', label: 'Fractions', angle: -150 },
-    { key: 'appliedMath', label: 'Applied Math', angle: 150 }
+    'numberSense', 'algebra', 'geometry', 'dataAnalysis', 'fractions', 'appliedMath'
   ]
 
-  // Calculate hexagon points
-  const hexPoints = calculateHexPoints(size / 2, size / 2, size * 0.35)
-
-  // Create web lines from center to each vertex
-  const webLines = hexPoints.map((point, index) => {
-    const axis = axes[index]
-    const value = data[axis.key] || 0
-    const normalizedValue = Math.min(value / 100, 1) // Normalize to 0-1
-
-    return (
-      <g key={axis.key}>
-        {/* Web line */}
-        <line
-          x1={size / 2}
-          y1={size / 2}
-          x2={point.x}
-          y2={point.y}
-          stroke="rgba(255, 255, 255, 0.1)"
-          strokeWidth="1"
-        />
-        
-        {/* Data point */}
-        <circle
-          cx={point.x}
-          cy={point.y}
-          r={4 + normalizedValue * 6} // Dynamic radius based on value
-          fill="#00D9FF"
-          fillOpacity="0.3"
-          stroke="#00D9FF"
-          strokeWidth="2"
-          style={{
-            filter: 'drop-shadow(0 0 10px rgba(0, 217, 255, 0.8))'
-          }}
-        />
-        
-        {/* Axis label */}
-        <text
-          x={point.x + (point.x > size / 2 ? 20 : -20)}
-          y={point.y}
-          textAnchor={point.x > size / 2 ? 'start' : 'end'}
-          className="text-xs fill-current"
-          style={{
-            fill: '#00D9FF',
-            fontSize: '10px',
-            fontFamily: 'JetBrains Mono, monospace',
-            filter: 'drop-shadow(0 0 5px rgba(0, 217, 255, 0.8))'
-          }}
-        >
-          {axis.label}
-        </text>
-        
-        {/* Value label */}
-        <text
-          x={point.x + (point.x > size / 2 ? 35 : -35)}
-          y={point.y}
-          textAnchor={point.x > size / 2 ? 'start' : 'end'}
-          className="text-xs font-bold fill-current"
-          style={{
-            fill: '#00D9FF',
-            fontSize: '12px',
-            fontFamily: 'JetBrains Mono, monospace',
-            filter: 'drop-shadow(0 0 5px rgba(0, 217, 255, 0.8))'
-          }}
-        >
-          {Math.round(value)}%
-        </text>
-      </g>
-    )
-  })
+  // Calculate radar values with dynamic scaling
+  const maxValue = Math.max(...Object.values(data))
+  const minValue = Math.min(...Object.values(data))
+  const range = maxValue - minValue
 
   return (
-    <div className="relative inline-block">
-      <svg 
-        width={size} 
-        height={size} 
-        className="transform -rotate-90"
-        style={{
-          background: 'rgba(11, 14, 20, 0.3)',
-          backdropFilter: 'blur(12px)',
-          borderRadius: '16px'
-        }}
-      >
+    <div className="radar-container">
+      <div className="hexagonal-radar" style={{ 
+        width: '100%', 
+        maxWidth: '400px',
+        height: 'auto',
+        viewBox: `0 0 ${400} ${400}`,
+        transform: 'scale(1)',
+        transformOrigin: 'center'
+      }}>
+        <svg
+          width="100%"
+          height="100%"
+          viewBox={`0 0 ${400} ${400}`}
+          style={{ filter: 'drop-shadow(0 0 10px rgba(177, 156, 217, 0.3))' }}
         {/* Hexagon outline */}
         <polygon
           points={hexPoints.map(p => `${p.x},${p.y}`).join(' ')}

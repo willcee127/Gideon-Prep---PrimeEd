@@ -1,0 +1,20 @@
+/* Sovereignty Deployment - Responsive Optimization */
+
+/* Mobile-First Adaptive Glassmorphism */
+@media (max-width: 767px) {
+  /* Reduce GPU cycles on mobile */
+  .glass-panel {
+    backdrop-filter: blur(6px) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+  
+  .neon-card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(177, 156, 217, 0.3) !important;
+  }
+  
+  /* Tactical Layout Shifts */
+  .radar-container {
+    padding: 1rem;
+  }
+}

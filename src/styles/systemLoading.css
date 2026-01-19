@@ -1,0 +1,340 @@
+/* System Loading - Verve Lavender Theme */
+
+/* Scanning Lines Animation */
+.scanning-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scanning-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #B19CD9 50%, transparent 100%);
+  box-shadow: 0 0 10px rgba(177, 156, 217, 0.8);
+  will-change: transform, opacity;
+}
+
+.scanning-line-1 {
+  top: 20%;
+  left: -100%;
+  width: 100%;
+  animation: scanningSweep 3s linear infinite;
+}
+
+.scanning-line-2 {
+  top: 40%;
+  left: -100%;
+  width: 100%;
+  animation: scanningSweep 3s linear infinite 0.5s;
+}
+
+.scanning-line-3 {
+  top: 60%;
+  left: -100%;
+  width: 100%;
+  animation: scanningSweep 3s linear infinite 1s;
+}
+
+.scanning-line-4 {
+  top: 80%;
+  left: -100%;
+  width: 100%;
+  animation: scanningSweep 3s linear infinite 1.5s;
+}
+
+@keyframes scanningSweep {
+  0% { 
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Loading Content */
+.loading-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-header {
+  margin-bottom: 2rem;
+}
+
+.loading-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.2rem;
+  color: #B19CD9;
+  text-shadow: 0 0 10px rgba(177, 156, 217, 0.8);
+  letter-spacing: 0.1em;
+}
+
+.glitch-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #B19CD9;
+  text-shadow: 
+    0 0 10px rgba(177, 156, 217, 0.8),
+    2px 2px 0px rgba(177, 156, 217, 0.6),
+    -2px -2px 0px rgba(177, 156, 217, 0.4);
+  animation: glitch 2s infinite;
+}
+
+@keyframes glitch {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px rgba(177, 156, 217, 0.8),
+      2px 2px 0px rgba(177, 156, 217, 0.6),
+      -2px -2px 0px rgba(177, 156, 217, 0.4);
+  }
+  25% { 
+    text-shadow: 
+      0 0 10px rgba(177, 156, 217, 0.8),
+      2px 2px 2px rgba(177, 156, 217, 0.6),
+      -2px -2px 0px rgba(177, 156, 217, 0.4);
+  }
+  50% { 
+    text-shadow: 
+      0 0 10px rgba(177, 156, 217, 0.8),
+      -2px -2px 2px rgba(177, 156, 217, 0.6),
+      2px 2px 0px rgba(177, 156, 217, 0.4);
+  }
+  75% { 
+    text-shadow: 
+      0 0 10px rgba(177, 156, 217, 0.8),
+      2px 2px 0px rgba(177, 156, 217, 0.6),
+      -2px -2px 0px rgba(177, 156, 217, 0.4);
+  }
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  will-change: transform;
+}
+
+.progress-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  color: #B19CD9;
+  margin-top: 0.5rem;
+  text-shadow: 0 0 5px rgba(177, 156, 217, 0.8);
+}
+
+/* Phase Indicator */
+.phase-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.phase-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #B19CD9;
+  position: relative;
+}
+
+.phase-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #B19CD9;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+.phase-dot.scanning::before {
+  background: #FFD700;
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+.phase-dot.analyzing::before {
+  background: #00D9FF;
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+.phase-dot.calibrating::before {
+  background: #FF8C00;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+.phase-dot.ready::before {
+  background: #00FF00;
+  animation: pulseDot 0.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.8;
+  }
+}
+
+.phase-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  color: #B19CD9;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Status Messages */
+.status-messages {
+  position: relative;
+  height: 60px;
+  margin: 2rem 0;
+}
+
+.status-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  color: #B19CD9;
+  text-shadow: 0 0 8px rgba(177, 156, 217, 0.8);
+  letter-spacing: 0.05em;
+  will-change: transform, opacity;
+}
+
+.status-message.ready {
+  color: #00FF00;
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+  animation: readyPulse 1s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Loading Animation */
+.loading-animation {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.loading-ring {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(177, 156, 217, 0.3);
+  border-radius: 50%;
+  position: relative;
+  animation: ringSpin 2s linear infinite;
+}
+
+.loading-ring::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  width: 60px;
+  height: 60px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  border-top-color: #B19CD9;
+  animation: ringSpin 2s linear infinite reverse;
+}
+
+.loading-ring-inner {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(177, 156, 217, 0.3);
+  border-radius: 50%;
+  border-top-color: transparent;
+}
+
+@keyframes ringSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .loading-content {
+    padding: 1rem;
+  }
+  
+  .loading-title {
+    margin-bottom: 1rem;
+  }
+  
+  .progress-container {
+    max-width: 300px;
+  }
+  
+  .loading-ring {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .status-message {
+    font-size: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanning-line,
+  .loading-ring,
+  .phase-dot::before,
+  .status-message {
+    animation: none !important;
+  }
+}
