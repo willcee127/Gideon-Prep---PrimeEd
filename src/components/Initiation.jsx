@@ -1,13 +1,64 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { supabase } from '../lib/supabase'
 
 const Initiation = ({ onComplete }) => {
   const [step, setStep] = useState(1)
-  const [name, setName] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [callSign, setCallSign] = useState('')
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleNext = () => {
     if (step === 1) setStep(2)
-    else if (name.trim()) onComplete(name) // This triggers the move to the Map
+    else if (step === 2) setStep(3)
+  }
+
+  const handleIdentitySubmit = async () => {
+    if (!fullName.trim() || !callSign.trim() || !email.trim()) return
+    
+    setIsLoading(true)
+    
+    try {
+      // Save to Supabase profiles table
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert({
+          full_name: fullName.trim(),
+          call_sign: callSign.trim(),
+          email: email.trim(),
+          ai_support_level: 3, // Default to Aura level
+          current_streak: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single()
+      
+      if (error) throw error
+      
+      // Store the profile ID for future tracking
+      localStorage.setItem('gideon_user_id', data.id)
+      localStorage.setItem('gideon_call_sign', callSign.trim())
+      localStorage.setItem('gideon_full_name', fullName.trim())
+      localStorage.setItem('gideon_email', email.trim())
+      
+      console.log('Identity saved to profiles table:', data)
+      
+      // Complete initiation with profile data
+      onComplete({
+        fullName: fullName.trim(),
+        callSign: callSign.trim(),
+        email: email.trim(),
+        profileId: data.id
+      })
+      
+    } catch (error) {
+      console.error('Failed to save identity:', error)
+      alert('Failed to save your identity. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -83,25 +134,85 @@ const Initiation = ({ onComplete }) => {
               BEGIN MY GROWTH
             </button>
           </>
-        ) : (
+        ) : step === 2 ? (
           <>
-            <h2 className="text-4xl font-bold italic mb-4">HOW SHOULD WE CELEBRATE YOUR WINS?</h2>
+            <h2 className="text-4xl font-bold italic mb-4">IDENTITY RECOVERY</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              Enter the name you want to see on your Mastery Map.
+              Let's secure your command identity for progress tracking.
             </p>
-            <input 
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="ENTER YOUR NAME..."
-              className="w-full bg-transparent border-b-2 border-purple-500 p-4 text-3xl text-center focus:outline-none placeholder:text-gray-700 font-mono"
-            />
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-purple-400 text-sm font-mono uppercase tracking-widest mb-2">
+                  Full Name
+                </label>
+                <input 
+                  autoFocus
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Enter your full name..."
+                  className="w-full bg-transparent border-b-2 border-purple-500 p-4 text-xl focus:outline-none placeholder:text-gray-700 font-mono"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-purple-400 text-sm font-mono uppercase tracking-widest mb-2">
+                  Call Sign (Display Name)
+                </label>
+                <input 
+                  value={callSign}
+                  onChange={(e) => setCallSign(e.target.value)}
+                  placeholder="Enter your call sign..."
+                  className="w-full bg-transparent border-b-2 border-purple-500 p-4 text-xl focus:outline-none placeholder:text-gray-700 font-mono"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-purple-400 text-sm font-mono uppercase tracking-widest mb-2">
+                  Email
+                </label>
+                <input 
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email..."
+                  className="w-full bg-transparent border-b-2 border-purple-500 p-4 text-xl focus:outline-none placeholder:text-gray-700 font-mono"
+                />
+              </div>
+            </div>
+            
             <button 
               onClick={handleNext}
-              disabled={!name.trim()}
+              disabled={!fullName.trim() || !callSign.trim() || !email.trim()}
+              className="px-12 py-4 bg-purple-600 text-white rounded-full font-bold tracking-widest hover:scale-110 transition-all disabled:opacity-30"
+            >
+              CONTINUE
+            </button>
+          </>
+        ) : (
+          <>
+            <h2 className="text-4xl font-bold italic mb-4">CONFIRM IDENTITY</h2>
+            <div className="bg-black/60 p-6 rounded-2xl border border-purple-500/30 space-y-4">
+              <div className="text-left">
+                <p className="text-purple-400 text-sm font-mono uppercase tracking-widest">Full Name</p>
+                <p className="text-white text-xl font-mono">{fullName}</p>
+              </div>
+              <div className="text-left">
+                <p className="text-purple-400 text-sm font-mono uppercase tracking-widest">Call Sign</p>
+                <p className="text-white text-xl font-mono">{callSign}</p>
+              </div>
+              <div className="text-left">
+                <p className="text-purple-400 text-sm font-mono uppercase tracking-widest">Email</p>
+                <p className="text-white text-xl font-mono">{email}</p>
+              </div>
+            </div>
+            
+            <button 
+              onClick={handleIdentitySubmit}
+              disabled={isLoading}
               className="px-12 py-4 bg-white text-black rounded-full font-black tracking-widest hover:scale-110 transition-all disabled:opacity-30"
             >
-              START MY JOURNEY
+              {isLoading ? 'SAVING...' : 'CONFIRM IDENTITY'}
             </button>
           </>
         )}

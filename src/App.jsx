@@ -24,6 +24,7 @@ import { calculateCombatPower, validateSectorData } from './utils/combatPowerCal
 import useSessionSync from './hooks/useSessionSync'
 import { supabase } from './lib/supabase'
 import './styles/responsive.css'
+import './styles/aura-hud.css'
 
 // Forge Protected Route Component
 const ForgeProtectedRoute = ({ children }) => {
@@ -89,6 +90,76 @@ function App() {
   const [aiSupportLevel, setAiSupportLevel] = useState(() => {
     return parseInt(localStorage.getItem('gideon_ai_support_level') || '3');
   });
+
+  // Dynamic Aura HUD System
+  const getAuraStyles = () => {
+    const level = aiSupportLevel;
+    
+    switch(level) {
+      case 5: // Verve - Heavy-duty Purple HUD
+        return {
+          primaryColor: '#9333ea', // Purple-600
+          secondaryColor: '#7c3aed', // Purple-700
+          accentColor: '#a855f7', // Purple-500
+          borderColor: '#9333ea',
+          glowColor: 'rgba(147, 51, 234, 0.5)',
+          hudIntensity: 'high',
+          theme: 'verve'
+        };
+      case 3: // Aura - Balanced Emerald Green HUD
+        return {
+          primaryColor: '#10b981', // Emerald-500
+          secondaryColor: '#059669', // Emerald-600
+          accentColor: '#34d399', // Emerald-400
+          borderColor: '#10b981',
+          glowColor: 'rgba(16, 185, 129, 0.5)',
+          hudIntensity: 'medium',
+          theme: 'aura'
+        };
+      case 1: // Forge - Minimalist Electric Cyan HUD
+        return {
+          primaryColor: '#06b6d4', // Cyan-500
+          secondaryColor: '#0891b2', // Cyan-600
+          accentColor: '#22d3ee', // Cyan-400
+          borderColor: '#06b6d4',
+          glowColor: 'rgba(6, 182, 212, 0.3)',
+          hudIntensity: 'minimal',
+          theme: 'forge'
+        };
+      default: // Default to Aura
+        return {
+          primaryColor: '#10b981',
+          secondaryColor: '#059669',
+          accentColor: '#34d399',
+          borderColor: '#10b981',
+          glowColor: 'rgba(16, 185, 129, 0.5)',
+          hudIntensity: 'medium',
+          theme: 'aura'
+        };
+    }
+  };
+
+  const auraStyles = getAuraStyles();
+
+  // Apply dynamic HUD styles globally
+  useEffect(() => {
+    const root = document.documentElement;
+    
+    // Update CSS custom properties for dynamic theming
+    root.style.setProperty('--aura-primary', auraStyles.primaryColor);
+    root.style.setProperty('--aura-secondary', auraStyles.secondaryColor);
+    root.style.setProperty('--aura-accent', auraStyles.accentColor);
+    root.style.setProperty('--aura-border', auraStyles.borderColor);
+    root.style.setProperty('--aura-glow', auraStyles.glowColor);
+    root.style.setProperty('--aura-intensity', auraStyles.hudIntensity);
+    
+    // Add theme class to body for CSS targeting
+    document.body.className = document.body.className.replace(/aura-\w+/g, '');
+    document.body.classList.add(`aura-${auraStyles.theme}`);
+    
+    console.log(`Dynamic HUD Applied: ${auraStyles.theme.toUpperCase()} (Level ${aiSupportLevel})`);
+    
+  }, [aiSupportLevel, auraStyles]);
 
   // Session tracking timer
   const startTime = useRef(Date.now());

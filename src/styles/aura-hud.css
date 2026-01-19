@@ -1,0 +1,206 @@
+/* Dynamic Aura HUD System - CSS Variables and Theme Styles */
+
+:root {
+  /* Default Aura (Level 3) - Emerald Green */
+  --aura-primary: #10b981;
+  --aura-secondary: #059669;
+  --aura-accent: #34d399;
+  --aura-border: #10b981;
+  --aura-glow: rgba(16, 185, 129, 0.5);
+  --aura-intensity: medium;
+}
+
+/* Verve Theme (Level 5) - Heavy-duty Purple HUD */
+body.aura-verve {
+  --aura-primary: #9333ea;
+  --aura-secondary: #7c3aed;
+  --aura-accent: #a855f7;
+  --aura-border: #9333ea;
+  --aura-glow: rgba(147, 51, 234, 0.5);
+  --aura-intensity: high;
+}
+
+/* Aura Theme (Level 3) - Balanced Emerald Green HUD */
+body.aura-aura {
+  --aura-primary: #10b981;
+  --aura-secondary: #059669;
+  --aura-accent: #34d399;
+  --aura-border: #10b981;
+  --aura-glow: rgba(16, 185, 129, 0.5);
+  --aura-intensity: medium;
+}
+
+/* Forge Theme (Level 1) - Minimalist Electric Cyan HUD */
+body.aura-forge {
+  --aura-primary: #06b6d4;
+  --aura-secondary: #0891b2;
+  --aura-accent: #22d3ee;
+  --aura-border: #06b6d4;
+  --aura-glow: rgba(6, 182, 212, 0.3);
+  --aura-intensity: minimal;
+}
+
+/* HUD Intensity Classes */
+.aura-high {
+  /* Heavy-duty visual effects for Verve */
+  filter: drop-shadow(0 0 20px var(--aura-glow));
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.aura-medium {
+  /* Balanced effects for Aura */
+  filter: drop-shadow(0 0 10px var(--aura-glow));
+  animation: subtle-glow 3s ease-in-out infinite;
+}
+
+.aura-minimal {
+  /* Minimal effects for Forge */
+  filter: drop-shadow(0 0 5px var(--aura-glow));
+  animation: faint-glow 4s ease-in-out infinite;
+}
+
+/* Glow Animations */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px var(--aura-glow), inset 0 0 10px var(--aura-glow);
+  }
+  50% { 
+    box-shadow: 0 0 40px var(--aura-glow), inset 0 0 20px var(--aura-glow);
+  }
+}
+
+@keyframes subtle-glow {
+  0%, 100% { 
+    box-shadow: 0 0 10px var(--aura-glow);
+  }
+  50% { 
+    box-shadow: 0 0 20px var(--aura-glow);
+  }
+}
+
+@keyframes faint-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--aura-glow);
+  }
+  50% { 
+    box-shadow: 0 0 10px var(--aura-glow);
+  }
+}
+
+/* Dynamic Border Colors */
+.aura-border {
+  border-color: var(--aura-border) !important;
+}
+
+.aura-border-accent {
+  border-color: var(--aura-accent) !important;
+}
+
+/* Dynamic Background Colors */
+.aura-bg-primary {
+  background-color: var(--aura-primary) !important;
+}
+
+.aura-bg-secondary {
+  background-color: var(--aura-secondary) !important;
+}
+
+.aura-bg-accent {
+  background-color: var(--aura-accent) !important;
+}
+
+/* Dynamic Text Colors */
+.aura-text-primary {
+  color: var(--aura-primary) !important;
+}
+
+.aura-text-secondary {
+  color: var(--aura-secondary) !important;
+}
+
+.aura-text-accent {
+  color: var(--aura-accent) !important;
+}
+
+/* HUD Component Styles */
+.aura-hud-panel {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.9) 0%, 
+    rgba(var(--aura-primary), 0.1) 50%, 
+    rgba(0, 0, 0, 0.9) 100%);
+  border: 2px solid var(--aura-border);
+  box-shadow: 0 0 30px var(--aura-glow);
+}
+
+.aura-hud-button {
+  background: var(--aura-primary);
+  border: 1px solid var(--aura-border);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.aura-hud-button:hover {
+  background: var(--aura-secondary);
+  box-shadow: 0 0 20px var(--aura-glow);
+  transform: translateY(-2px);
+}
+
+.aura-hud-input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--aura-border);
+  color: white;
+}
+
+.aura-hud-input:focus {
+  border-color: var(--aura-accent);
+  box-shadow: 0 0 15px var(--aura-glow);
+}
+
+/* Progress Indicators */
+.aura-progress-bar {
+  background: linear-gradient(90deg, var(--aura-primary), var(--aura-accent));
+  box-shadow: 0 0 10px var(--aura-glow);
+}
+
+.aura-status-indicator {
+  width: 12px;
+  height: 12px;
+  background: var(--aura-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--aura-glow);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Theme-specific Overrides */
+body.aura-verve .aura-hud-panel {
+  background: linear-gradient(135deg, 
+    rgba(147, 51, 234, 0.2) 0%, 
+    rgba(0, 0, 0, 0.9) 50%, 
+    rgba(147, 51, 234, 0.2) 100%);
+  border-width: 3px;
+}
+
+body.aura-forge .aura-hud-panel {
+  background: linear-gradient(135deg, 
+    rgba(6, 182, 212, 0.05) 0%, 
+    rgba(0, 0, 0, 0.95) 50%, 
+    rgba(6, 182, 212, 0.05) 100%);
+  border-width: 1px;
+}
+
+/* Responsive HUD Adjustments */
+@media (max-width: 768px) {
+  .aura-hud-panel {
+    border-width: 1px;
+    box-shadow: 0 0 15px var(--aura-glow);
+  }
+  
+  body.aura-verve .aura-hud-panel {
+    border-width: 2px;
+  }
+}
+
+/* Smooth Transitions */
+* {
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}

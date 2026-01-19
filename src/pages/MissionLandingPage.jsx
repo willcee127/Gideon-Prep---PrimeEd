@@ -12,10 +12,35 @@ const MissionLandingPage = () => {
     if (savedCallSign) {
       setCallSign(savedCallSign)
     }
+    
+    // Initialize session data if missing
+    const aiSupportLevel = localStorage.getItem('gideon_ai_support_level')
+    if (!aiSupportLevel) {
+      localStorage.setItem('gideon_ai_support_level', '3') // Default to Aura
+    }
+    
+    const userId = localStorage.getItem('gideon_user_id')
+    if (!userId) {
+      localStorage.setItem('gideon_user_id', 'temp-' + Date.now())
+    }
+    
+    console.log('Session data initialized:', {
+      callSign: savedCallSign,
+      aiSupportLevel: aiSupportLevel || '3',
+      userId: userId || 'temp-' + Date.now()
+    })
   }, [])
 
   const handleStartMission = () => {
-    navigate('/recruitment')
+    // If user already has call sign, go directly to onboarding
+    if (callSign) {
+      console.log('User has call sign, navigating to onboarding:', callSign)
+      navigate('/onboarding')
+    } else {
+      // New user, go to recruitment first
+      console.log('New user, navigating to recruitment')
+      navigate('/recruitment')
+    }
   }
 
   const handleSupport = () => {
