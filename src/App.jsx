@@ -28,6 +28,7 @@ import { getNodeById } from './data/mathContent'
 import { calculateCombatPower, validateSectorData } from './utils/combatPowerCalculator'
 import useSessionSync from './hooks/useSessionSync'
 import { supabase } from './lib/supabase'
+import AuraProfile from './pages/AuraProfile'
 import './styles/responsive.css'
 import './styles/aura-hud.css'
 import './styles/tactical-typography.css'
@@ -654,6 +655,11 @@ function App() {
             <Route path="/tacticalintel" element={
               <ProtectedRoute>
                 <TacticalIntelDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/aura" element={
+              <ProtectedRoute>
+                <AuraProfile />
               </ProtectedRoute>
             } />
             <Route path="/forge" element={

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 // Dynamic Stage Icons
@@ -84,19 +85,17 @@ const StageIcon = ({ level, isPulsing = false }) => {
 }
 
 const StatusReport = ({ 
-  userName, 
-  fullName, 
   callSign, 
-  streak, 
+  fullName, 
   aiSupportLevel, 
-  maxStreak = 5 
+  streak 
 }) => {
+  const navigate = useNavigate()
   const [showMissionLogs, setShowMissionLogs] = useState(false)
   const [missionHistory, setMissionHistory] = useState([])
-  const [isLoadingMissions, setIsLoadingMissions] = useState(false)
+  const [isProfileVerified, setIsProfileVerified] = useState(false)
   const [previousStreak, setPreviousStreak] = useState(streak)
   const [isLevelUpPulsing, setIsLevelUpPulsing] = useState(false)
-  const [isProfileVerified, setIsProfileVerified] = useState(false)
 
   // Get stage name based on AI support level
   const getStageName = (level) => {
@@ -219,6 +218,11 @@ const StatusReport = ({
   const handleMissionLogsClick = () => {
     setShowMissionLogs(true)
     fetchMissionHistory()
+  }
+
+  // Open Aura Status
+  const handleAuraStatusClick = () => {
+    navigate('/aura')
   }
 
   // Detect streak changes for animations
@@ -368,7 +372,7 @@ const StatusReport = ({
           </div>
 
           {/* Mission History Button */}
-          <div>
+          <div className="flex space-x-2">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -377,6 +381,15 @@ const StatusReport = ({
             >
               <span>📋</span>
               <span>Mission Logs</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleAuraStatusClick}
+              className="w-full py-2 px-4 aura-hud-button rounded-lg text-xs font-mono uppercase tracking-widest flex items-center justify-center space-x-2"
+            >
+              <span>⚡</span>
+              <span>Aura Status</span>
             </motion.button>
           </div>
 
