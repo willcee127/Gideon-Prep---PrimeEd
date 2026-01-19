@@ -15,7 +15,7 @@ class StatusReportErrorBoundary extends React.Component {
     this.setState({ error, errorInfo })
     
     // Log error to monitoring service (in production)
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env.MODE === 'production') {
       // TODO: Send to error monitoring service
       console.warn('Error logged to monitoring service')
     }
@@ -58,7 +58,7 @@ class CapstoneCertificateErrorBoundary extends React.Component {
     this.setState({ error, errorInfo })
     
     // Log error to monitoring service (in production)
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env.MODE === 'production') {
       // TODO: Send to error monitoring service
       console.warn('Certificate error logged to monitoring service')
     }
