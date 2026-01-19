@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
 import Initiation from './components/Initiation'
 import MasteryMap from './components/MasteryMap'
@@ -37,13 +37,14 @@ import assetPreloader from './utils/assetPreloader'
 // Forge Protected Route Component
 const ForgeProtectedRoute = ({ children }) => {
   const navigate = useNavigate()
+  const location = useLocation()
   
   useEffect(() => {
     const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
-    if (!stage2Complete) {
-      navigate('/verve') // Redirect to Verve if not qualified
+    if (!stage2Complete && location.pathname !== '/verve') {
+      navigate('/verve') // Redirect to Verve if not qualified and not already there
     }
-  }, [navigate])
+  }, [navigate, location])
   
   const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
   
@@ -69,6 +70,9 @@ const ForgeProtectedRoute = ({ children }) => {
 }
 
 function App() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  
   // Use session sync hook for robust state persistence
   const { sessionData, setSessionData } = useSessionSync({
     combatPower: {
@@ -232,20 +236,28 @@ function App() {
         // Route to appropriate sector based on last active phase
         if (sessionData.combatPower.average >= 90) {
           // Forge phase - go to mastery map
-          window.location.href = '/mastery-map'
+          if (location.pathname !== '/mastery-map') {
+            navigate('/mastery-map')
+          }
         } else if (sessionData.combatPower.average >= 75) {
           // Aura phase - go to tactical intel
-          window.location.href = '/tacticalintel'
+          if (location.pathname !== '/tacticalintel') {
+            navigate('/tacticalintel')
+          }
         } else {
           // Verve phase - go to mission
-          window.location.href = '/mission'
+          if (location.pathname !== '/mission') {
+            navigate('/mission')
+          }
         }
       } else {
         // No Call Sign - redirect to recruitment
-        window.location.href = '/recruitment'
+        if (location.pathname !== '/recruitment') {
+          navigate('/recruitment')
+        }
       }
     }
-  }, [sessionData.combatPower.average, sessionData.lastActiveSector])
+  }, [sessionData.combatPower.average, sessionData.lastActiveSector, navigate, location.pathname])
 
   // Forge Command Victory Logic
   useEffect(() => {
@@ -254,7 +266,7 @@ function App() {
       setForgeModeActive(true)
       console.log('FORGE COMMAND ACTIVATED')
     }
-  }, [sessionData?.combatPower?.average, forgeModeActive])
+  }, [sessionData?.combatPower?.average])
 
   // Check for diagnostic fallback node on mount
   useEffect(() => {
@@ -271,7 +283,6 @@ function App() {
   }, [])
 
   // Forge access protection - Stage 3 requires Stage 2 Complete
-  const navigate = useNavigate()
   const checkForgeAccess = () => {
     const stage2Complete = localStorage.getItem('gideon_stage_2_complete') === 'true'
     if (!stage2Complete) {
