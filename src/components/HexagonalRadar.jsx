@@ -37,8 +37,9 @@ const HexagonalRadar = ({ data, size = 300 }) => {
           height="100%"
           viewBox={`0 0 ${400} ${400}`}
           style={{ filter: 'drop-shadow(0 0 10px rgba(177, 156, 217, 0.3))' }}
-        {/* Hexagon outline */}
-        <polygon
+        >
+          {/* Hexagon outline */}
+          <polygon
           points={hexPoints.map(p => `${p.x},${p.y}`).join(' ')}
           fill="none"
           stroke="rgba(255, 255, 255, 0.2)"
@@ -78,6 +79,7 @@ const HexagonalRadar = ({ data, size = 300 }) => {
           RANGE QUAL
         </text>
       </svg>
+    </div>
     </div>
   )
 }

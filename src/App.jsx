@@ -43,6 +43,9 @@ function App() {
     warriorRank: 'Specialist'
   })
 
+  // Defensive destructuring for completedNodes to prevent ReferenceError
+  const completedNodes = sessionData?.completedNodes || [];
+
   const [selectedNode, setSelectedNode] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [showWelcomeKit, setShowWelcomeKit] = useState(false)
@@ -85,11 +88,11 @@ function App() {
   // Forge Command Victory Logic
   useEffect(() => {
     // Trigger Forge Mode when average score crosses 174
-    if (sessionData.combatPower.average >= 174 && !forgeModeActive) {
+    if (sessionData?.combatPower?.average >= 174 && !forgeModeActive) {
       setForgeModeActive(true)
       console.log('FORGE COMMAND ACTIVATED')
     }
-  }, [sessionData.combatPower.average, forgeModeActive])
+  }, [sessionData?.combatPower?.average, forgeModeActive])
 
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
@@ -97,9 +100,10 @@ function App() {
       setSelectedNode(node)
       setIsPanelOpen(true)
       // Update session data with new sector activity
-      setSessionData({
+      setSessionData(prev => ({
+        ...prev,
         lastActiveSector: node.title
-      })
+      }))
     }
   }
 
