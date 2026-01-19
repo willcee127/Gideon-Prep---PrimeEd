@@ -69,6 +69,49 @@ const ForgeProtectedRoute = ({ children }) => {
   return children
 }
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const [session, setSession] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (!session) {
+          navigate('/recruitment')
+          return
+        }
+        
+        setSession(session)
+      } catch (error) {
+        console.error('Auth check error:', error)
+        navigate('/recruitment')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    checkAuth()
+  }, [navigate])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center space-y-6">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+          <h2 className="text-2xl font-bold text-purple-400">Verifying Operator Status...</h2>
+          <p className="text-gray-400">Securing your command access</p>
+        </div>
+      </div>
+    )
+  }
+
+  return children
+}
+
 function App() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -593,17 +636,26 @@ function App() {
           {/* Main Routes */}
           <Routes>
             <Route path="/" element={<Navigate to="/recruitment" replace />} />
-            <Route path="/recruitment" element={<Initiation onComplete={(data) => {
-              // Handle initiation completion
-              console.log('Initiation completed:', data)
-            }} />} />
+            <Route path="/recruitment" element={<RecruitmentPage />} />
             <Route path="/initiation" element={<Initiation onComplete={(data) => {
               // Handle initiation completion
               console.log('Initiation completed:', data)
             }} />} />
-            <Route path="/verve" element={<MissionLandingPage />} />
-            <Route path="/mission" element={<MissionLandingPage />} />
-            <Route path="/tacticalintel" element={<TacticalIntelDashboard />} />
+            <Route path="/verve" element={
+              <ProtectedRoute>
+                <MissionLandingPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/mission" element={
+              <ProtectedRoute>
+                <MissionLandingPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/tacticalintel" element={
+              <ProtectedRoute>
+                <TacticalIntelDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/forge" element={
               <ForgeProtectedRoute>
                 <MasteryMap />

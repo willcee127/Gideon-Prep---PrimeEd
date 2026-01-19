@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 const RecruitmentPage = () => {
   const [callSign, setCallSign] = useState('')
   const [comms, setComms] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
+
+  // Prevent ghost form flash - redirect if already logged in
+  useEffect(() => {
+    const checkAuthAndRedirect = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          navigate('/verve')
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
+      }
+    }
+    
+    checkAuthAndRedirect()
+  }, [navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
