@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import SocraticSafetyValve from './SocraticSafetyValve'
-import './styles/bridgeGapAnimations.css'
 
 const SocraticCoPilot = ({ 
   isOpen, 

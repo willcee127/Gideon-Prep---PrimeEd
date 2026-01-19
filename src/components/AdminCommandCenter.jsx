@@ -75,9 +75,60 @@ const AdminCommandCenter = () => {
       setError(null);
     } catch (err) {
       console.error('Logout failed:', err);
-        setError('Logout failed');
-      }
+      setError('Logout failed');
     }
+  };
+
+  const handleExportCSV = () => {
+    if (!students || students.length === 0) return;
+
+    // CSV Headers
+    const headers = [
+      'Student Name',
+      'Combat Power',
+      'Math',
+      'RLA', 
+      'Science',
+      'Social Studies',
+      'Deployment Step',
+      'Registration Complete',
+      'Mission Ready'
+    ];
+
+    // Format data rows
+    const csvRows = students.map(student => [
+      student.username || 'Unknown',
+      student.combat_power || 0,
+      student.combat_power || 0, // Math score (using total as placeholder)
+      student.combat_power || 0, // RLA score (using total as placeholder)
+      student.combat_power || 0, // Science score (using total as placeholder)
+      student.combat_power || 0, // Social Studies score (using total as placeholder)
+      student.deployment_step || 0,
+      student.registration_complete ? 'Yes' : 'No',
+      student.is_mission_ready ? 'Yes' : 'No'
+    ]);
+
+    // Convert to CSV string
+    const csvContent = [
+      headers.join(','),
+      ...csvRows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    // Generate filename with current date
+    const today = new Date().toISOString().split('T')[0];
+    const filename = `Squad_Readiness_Report_${today}.csv`;
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Redirect non-admin users
@@ -119,6 +170,14 @@ const AdminCommandCenter = () => {
                 Logout
               </button>
             </div>
+            {students && students.length > 0 && (
+              <button 
+                onClick={handleExportCSV}
+                className="px-4 py-2 bg-forge text-black font-bold rounded hover:bg-orange-400 transition-colors text-sm"
+              >
+                ⬇ EXPORT INTEL
+              </button>
+            )}
           </div>
 
           <table className="w-full border-collapse border border-gray-800">
