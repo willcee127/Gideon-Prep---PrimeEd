@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
 import Initiation from './components/Initiation'
@@ -22,6 +22,7 @@ import VictorySequence from './components/VictorySequence'
 import { getNodeById } from './data/mathContent'
 import { calculateCombatPower, validateSectorData } from './utils/combatPowerCalculator'
 import useSessionSync from './hooks/useSessionSync'
+import { supabase } from './lib/supabase'
 import './styles/responsive.css'
 
 function App() {
@@ -47,6 +48,34 @@ function App() {
   // Defensive destructuring for completedNodes to prevent ReferenceError
   const completedNodes = sessionData?.completedNodes || [];
   const userName = sessionData?.userName || 'Scholar';
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+
+  // Session tracking timer
+  const startTime = useRef(Date.now());
+
+  const logStudySession = async (subject) => {
+    const endTime = Date.now();
+    const minutes = Math.round((endTime - startTime.current) / 60000);
+    
+    if (minutes < 1) return; // Don't log sessions shorter than a minute
+    
+    try {
+      const userId = localStorage.getItem('gideon_user_id') || sessionData?.user_id || 'anonymous';
+      
+      await supabase.from('study_sessions').insert({
+        profile_id: userId,
+        duration_minutes: minutes,
+        subject_area: subject,
+        created_at: new Date().toISOString()
+      });
+      
+      console.log(`Study session logged: ${minutes} minutes in ${subject}`);
+    } catch (error) {
+      console.error('Failed to log study session:', error);
+    }
+    
+    startTime.current = Date.now(); // Reset timer for the next subject
+  };
 
   const [selectedNode, setSelectedNode] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
@@ -99,6 +128,12 @@ function App() {
   const handleNodeSelect = (nodeId) => {
     const node = getNodeById(nodeId)
     if (node) {
+      // Log the previous session before switching
+      if (selectedNode) {
+        const previousSubject = selectedNode.title || 'General Practice'
+        logStudySession(previousSubject)
+      }
+      
       setSelectedNode(node)
       setIsPanelOpen(true)
       // Update session data with new sector activity
@@ -124,6 +159,13 @@ function App() {
         total: prev.combatPower.total + 25
       }
     }))
+    
+    // Also increment correctAnswers for progress tracking
+    setCorrectAnswers(prev => prev + 1)
+    
+    // Log study session for the current subject
+    const currentSubject = selectedNode?.title || 'General Practice'
+    logStudySession(currentSubject)
   }
 
   const handleShowIntel = () => {

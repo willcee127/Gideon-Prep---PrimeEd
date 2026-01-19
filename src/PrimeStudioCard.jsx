@@ -173,7 +173,7 @@ const PrimeStudioCard = ({ userName }) => {
 
   // Update energy level based on correct answers
   useEffect(() => {
-    const newEnergyLevel = Math.min(100, Math.floor(correctAnswers / 3) * 10)
+    const newEnergyLevel = Math.min(100, Math.floor((correctAnswers || 0) / 3) * 10)
     setEnergyLevel(newEnergyLevel)
   }, [correctAnswers])
 

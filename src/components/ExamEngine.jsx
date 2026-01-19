@@ -83,7 +83,7 @@ const ExamEngine = ({ nodeId, onComplete, userName }) => {
       a && a.answer === problems[i].answer
     ).length
     
-    const accuracy = (correctAnswers / problems.length) * 100
+    const accuracy = problems.length > 0 ? (correctAnswers / problems.length) * 100 : 0
     
     // Calculate stability (inverse of average stress)
     const avgStress = stressSamples.length > 0 

@@ -85,7 +85,7 @@ const ProblemEngine = ({ nodeId, onProblemComplete, onSuccess, userName }) => {
         streak: streak,
         commandCalcUsage: auraUsageCount,
         problemsSolved: correctAnswers,
-        accuracyRate: Math.round((correctAnswers / (correctAnswers + failureCount)) * 100),
+        accuracyRate: Math.round((correctAnswers || 0) / ((correctAnswers || 0) + (failureCount || 0)) * 100) || 0,
         recentSkills: currentProblem?.tacticalTip ? [currentProblem.tacticalTip] : []
       }
       
