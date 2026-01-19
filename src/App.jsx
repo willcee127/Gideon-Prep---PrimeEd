@@ -111,6 +111,7 @@ function App() {
   const [successProbability, setSuccessProbability] = useState(100)
   const [forgeModeActive, setForgeModeActive] = useState(false)
   const [victorySequenceActive, setVictorySequenceActive] = useState(false)
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
 
   // Identity State for Status Report
   const [identityData, setIdentityData] = useState(() => {
@@ -226,38 +227,82 @@ function App() {
     assetPreloader.initialize()
   }, [])
 
-  // Hydration logic - check for existing Call Sign and route appropriately
+  // Auth hydration logic - check session and fetch profile
   useEffect(() => {
-    const savedCallSign = localStorage.getItem('gideon_call_sign')
-    if (savedCallSign) {
-      // User has Call Sign - skip recruitment, go to last active sector
-      const lastActiveSector = sessionData.lastActiveSector
-      if (lastActiveSector) {
-        // Route to appropriate sector based on last active phase
-        if (sessionData.combatPower.average >= 90) {
-          // Forge phase - go to mastery map
-          if (location.pathname !== '/mastery-map') {
-            navigate('/mastery-map')
+    const checkAuthAndProfile = async () => {
+      try {
+        // Check current auth session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError) {
+          console.error('Session check error:', sessionError)
+          setIsAuthLoading(false)
+          return
+        }
+        
+        if (session?.user) {
+          // User is authenticated - fetch their profile
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+          
+          if (profileError) {
+            console.error('Profile fetch error:', profileError)
+            setIsAuthLoading(false)
+            return
           }
-        } else if (sessionData.combatPower.average >= 75) {
-          // Aura phase - go to tactical intel
-          if (location.pathname !== '/tacticalintel') {
-            navigate('/tacticalintel')
+          
+          if (profile) {
+            // Profile exists - update localStorage and navigate
+            localStorage.setItem('gideon_user_id', profile.id)
+            localStorage.setItem('gideon_call_sign', profile.call_sign)
+            localStorage.setItem('gideon_full_name', profile.full_name)
+            localStorage.setItem('gideon_email', profile.email)
+            localStorage.setItem('gideon_ai_support_level', String(profile.ai_support_level || 3))
+            
+            setIdentityData({
+              fullName: profile.full_name,
+              callSign: profile.call_sign,
+              email: profile.email
+            })
+            
+            // Navigate to appropriate page based on combat power
+            if (sessionData.combatPower.average >= 90) {
+              if (location.pathname !== '/mastery-map') {
+                navigate('/mastery-map')
+              }
+            } else if (sessionData.combatPower.average >= 75) {
+              if (location.pathname !== '/tacticalintel') {
+                navigate('/tacticalintel')
+              }
+            } else {
+              if (location.pathname !== '/mission') {
+                navigate('/mission')
+              }
+            }
+          } else {
+            // No profile found - user needs to complete initiation
+            if (location.pathname !== '/recruitment') {
+              navigate('/recruitment')
+            }
           }
         } else {
-          // Verve phase - go to mission
-          if (location.pathname !== '/mission') {
-            navigate('/mission')
+          // No session - go to recruitment
+          if (location.pathname !== '/recruitment') {
+            navigate('/recruitment')
           }
         }
-      } else {
-        // No Call Sign - redirect to recruitment
-        if (location.pathname !== '/recruitment') {
-          navigate('/recruitment')
-        }
+      } catch (error) {
+        console.error('Auth hydration error:', error)
+      } finally {
+        setIsAuthLoading(false)
       }
     }
-  }, [sessionData.combatPower.average, sessionData.lastActiveSector, navigate, location.pathname])
+    
+    checkAuthAndProfile()
+  }, [])
 
   // Forge Command Victory Logic
   useEffect(() => {
@@ -500,6 +545,16 @@ function App() {
   return (
     <NeuroProvider>
       <div className="min-h-screen bg-black text-white">
+        {/* Loading Guardrail - Show while checking auth */}
+        {isAuthLoading ? (
+          <div className="min-h-screen bg-black text-white flex items-center justify-center">
+            <div className="text-center space-y-6">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+              <h2 className="text-2xl font-bold text-purple-400">Loading Operator Data...</h2>
+              <p className="text-gray-400">Securing your command interface</p>
+            </div>
+          </div>
+        ) : (
           {/* Status Report - Always Visible */}
           <StatusReportErrorBoundary callSign={identityData.callSign} aiSupportLevel={aiSupportLevel}>
             <StatusReport 
@@ -585,8 +640,9 @@ function App() {
               onComplete={() => setVictorySequenceActive(false)}
             />
           )}
-        </div>
-      </NeuroProvider>
+        )}
+      </div>
+    </NeuroProvider>
   )
 }
 
