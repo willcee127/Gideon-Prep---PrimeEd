@@ -84,6 +84,12 @@ function App() {
   const userName = sessionData?.userName || 'Scholar';
   const [correctAnswers, setCorrectAnswers] = useState(0);
 
+  // Adaptive AI Auto-Leveler State
+  const [streak, setStreak] = useState(0);
+  const [aiSupportLevel, setAiSupportLevel] = useState(() => {
+    return parseInt(localStorage.getItem('gideon_ai_support_level') || '3');
+  });
+
   // Session tracking timer
   const startTime = useRef(Date.now());
 
@@ -247,6 +253,95 @@ function App() {
     // Tactical tip received
   }
 
+  // Adaptive AI Auto-Leveler Functions
+  const updateStreak = (isCorrect) => {
+    if (isCorrect) {
+      const newStreak = streak + 1
+      setStreak(newStreak)
+      
+      // Check for level-down trigger (5 correct in a row)
+      if (newStreak >= 5) {
+        levelDownSupport()
+      }
+    } else {
+      setStreak(0)
+    }
+  }
+
+  const levelDownSupport = async () => {
+    const newSupportLevel = Math.max(1, aiSupportLevel - 1)
+    
+    // Update local state
+    setAiSupportLevel(newSupportLevel)
+    setStreak(0)
+    
+    // Update localStorage
+    localStorage.setItem('gideon_ai_support_level', String(newSupportLevel))
+    
+    // Update sessionData for UI reflection
+    setSessionData(prev => ({
+      ...prev,
+      aiSupportLevel: newSupportLevel
+    }))
+    
+    // Sync to Supabase
+    try {
+      const userId = localStorage.getItem('gideon_user_id') || sessionData?.user_id || 'anonymous'
+      const callSign = localStorage.getItem('gideon_call_sign')
+      
+      if (callSign) {
+        await supabase
+          .from('profiles')
+          .update({ 
+            ai_support_level: newSupportLevel,
+            current_streak: 0,
+            updated_at: new Date().toISOString()
+          })
+          .eq('call_sign', callSign)
+        
+        console.log(`AI Support Level reduced to ${newSupportLevel} - Student becoming more independent`)
+        
+        // Show UI feedback
+        showLevelUpNotification(newSupportLevel)
+      }
+    } catch (error) {
+      console.error('Failed to sync AI support level:', error)
+    }
+  }
+
+  const showLevelUpNotification = (newLevel) => {
+    // Create notification element
+    const notification = document.createElement('div')
+    notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-pulse'
+    notification.innerHTML = `
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">🎯</span>
+        <div>
+          <div class="font-bold">Level Up!</div>
+          <div class="text-sm">AI Support Reduced to Level ${newLevel}</div>
+        </div>
+      </div>
+    `
+    
+    document.body.appendChild(notification)
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification)
+      }
+    }, 3000)
+  }
+
+  const handleProblemSuccessWithStreak = () => {
+    handleProblemSuccess()
+    updateStreak(true) // Increment streak on correct answer
+  }
+
+  const handleProblemMiss = () => {
+    updateStreak(false) // Reset streak on incorrect answer
+  }
+
   return (
     <Router>
       <NeuroProvider>
@@ -307,7 +402,8 @@ function App() {
                 selectedNode={selectedNode}
                 userName={userName}
                 completedNodes={completedNodes}
-                onProblemSuccess={handleProblemSuccess}
+                onProblemSuccess={handleProblemSuccessWithStreak}
+                onProblemMiss={handleProblemMiss}
                 onShowCommandCalc={handleShowCommandCalc}
               />
 

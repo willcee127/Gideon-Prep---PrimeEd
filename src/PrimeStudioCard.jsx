@@ -13,7 +13,7 @@ import SuccessBadge from './components/SuccessBadge'
 import { getNodeById, getUnlockedNodes } from './data/mathContent'
 import { supabase } from './supabase'
 
-const PrimeStudioCard = ({ userName }) => {
+const PrimeStudioCard = ({ userName, onProblemSuccess, onProblemMiss }) => {
   const { 
     identityStrikeTrigger, 
     isInVerveMode,
@@ -687,6 +687,7 @@ const PrimeStudioCard = ({ userName }) => {
               <ProblemEngine 
                 nodeId={selectedNode?.id || 'ged-001'} 
                 onSuccess={handleProblemSuccess}
+                onProblemMiss={onProblemMiss}
                 onProblemComplete={handleProblemComplete}
                 userName={userName}
               />

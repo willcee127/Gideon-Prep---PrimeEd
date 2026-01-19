@@ -10,6 +10,7 @@ const SlideInPanel = ({
   userName, 
   completedNodes,
   onProblemSuccess,
+  onProblemMiss,
   onShowCommandCalc
 }) => {
   return (
@@ -56,6 +57,8 @@ const SlideInPanel = ({
               userName={userName}
               practiceMode={true}
               selectedNode={selectedNode}
+              onProblemSuccess={onProblemSuccess}
+              onProblemMiss={onProblemMiss}
             />
           </div>
         </motion.div>
