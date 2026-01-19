@@ -20,6 +20,12 @@ const Initiation = ({ onComplete }) => {
     setIsLoading(true)
     
     try {
+      // Get current auth session first
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError) {
+        throw sessionError
+      }
+      
       // First check if email already exists
       const { data: existingProfile, error: checkError } = await supabase
         .from('profiles')
@@ -58,17 +64,22 @@ const Initiation = ({ onComplete }) => {
         return
       }
       
-      // New user - proceed with profile creation
+      // New user - proceed with profile creation using upsert
+      const profileData = {
+        id: session?.user?.id, // Use auth user id if available
+        full_name: fullName.trim(),
+        call_sign: callSign.trim(),
+        email: email.trim(),
+        ai_support_level: 3, // Default to Aura level
+        current_streak: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+      
       const { data, error } = await supabase
         .from('profiles')
-        .insert({
-          full_name: fullName.trim(),
-          call_sign: callSign.trim(),
-          email: email.trim(),
-          ai_support_level: 3, // Default to Aura level
-          current_streak: 0,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+        .upsert(profileData, {
+          onConflict: 'email' // Conflict on email column
         })
         .select()
         .single()
@@ -117,16 +128,17 @@ const Initiation = ({ onComplete }) => {
         code: error.code,
         hint: error.hint
       })
-      setIsLoading(false)
       
       // Provide specific error messages
       if (error.message?.includes('column') || error.message?.includes('not found')) {
-        alert('Database schema error: Column not found. Please contact support.')
+        alert(`Save Failed: ${error.message}. Hint: ${error.hint}`)
       } else if (error.message?.includes('permission') || error.code === '42501') {
-        alert('Permission denied. Please check your account access.')
+        alert(`Save Failed: ${error.message}. Hint: ${error.hint}`)
       } else {
-        alert(`Failed to save your identity: ${error.message || 'Unknown error'}. Please try again.`)
+        alert(`Save Failed: ${error.message || 'Unknown error'}. Hint: ${error.hint || 'Check Supabase table schema'}`)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
