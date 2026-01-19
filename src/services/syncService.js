@@ -1,4 +1,4 @@
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../lib/supabase';
 
 export const reportToCommander = async (payload) => {
   const { call_sign, rank, command_level, last_event, morale_score, zone_id, email } = payload;

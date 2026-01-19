@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 const ProgressLedger = ({ userName, isOpen, onClose }) => {
   const [stats, setStats] = useState({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 import { Activity, Target, Zap, RefreshCw, AlertTriangle } from 'lucide-react'
 
 const TacticalAnalyticsDashboard = () => {
@@ -258,7 +258,7 @@ const TacticalAnalyticsDashboard = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TacticalAnalyticsDashboard
+export default TacticalAnalyticsDashboard;

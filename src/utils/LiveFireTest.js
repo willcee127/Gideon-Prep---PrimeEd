@@ -1,7 +1,7 @@
 // Live Fire Test Script - Comprehensive System Validation
 import { SocraticCoPilot } from '../services/SocraticCoPilotService'
 import { CommissioningService } from '../services/CommissioningService'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 class LiveFireTest {
   constructor() {

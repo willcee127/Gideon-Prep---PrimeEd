@@ -11,7 +11,7 @@ import MasteryMap from './components/MasteryMap'
 import ProgressLedger from './components/ProgressLedger'
 import SuccessBadge from './components/SuccessBadge'
 import { getNodeById, getUnlockedNodes } from './data/mathContent'
-import { supabase } from './supabase'
+import { supabase } from './lib/supabase'
 
 const PrimeStudioCard = ({ userName, onProblemSuccess, onProblemMiss }) => {
   const { 

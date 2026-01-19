@@ -189,6 +189,7 @@ const RangeQual = ({ onComplete, callSign }) => {
       </div>
     )
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
@@ -246,7 +247,8 @@ const RangeQual = ({ onComplete, callSign }) => {
               initial={{ width: '0%' }}
               animate={{ width: `${(currentLevel / 10) * 100}%` }}
               transition={{ duration: 0.5 }}
-            />
+            >
+            </motion.div>
           </div>
 
           {/* Problem */}
@@ -296,4 +298,4 @@ const RangeQual = ({ onComplete, callSign }) => {
   )
 }
 
-export default RangeQual
+export default RangeQual;

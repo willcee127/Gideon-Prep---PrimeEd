@@ -100,4 +100,4 @@ class CommissioningService {
   }
 }
 
-export default CommissioningService
+export default CommissioningService;

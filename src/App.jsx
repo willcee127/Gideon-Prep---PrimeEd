@@ -518,7 +518,10 @@ function App() {
           {/* Main Routes */}
           <Routes>
             <Route path="/" element={<Navigate to="/recruitment" replace />} />
-            <Route path="/recruitment" element={<RecruitmentPage />} />
+            <Route path="/recruitment" element={<Initiation onComplete={(data) => {
+              // Handle initiation completion
+              console.log('Initiation completed:', data)
+            }} />} />
             <Route path="/initiation" element={<Initiation onComplete={(data) => {
               // Handle initiation completion
               console.log('Initiation completed:', data)

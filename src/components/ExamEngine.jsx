@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNeuro } from '../context/NeuroProvider'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 import { getNodeById } from '../data/mathContent'
 
 const ExamEngine = ({ nodeId, onComplete, userName }) => {

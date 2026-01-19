@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react'
 import useStressSensor from '../hooks/useStressSensor'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 const NeuroContext = createContext()
 

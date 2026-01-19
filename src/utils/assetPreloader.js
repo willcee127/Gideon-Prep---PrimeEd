@@ -132,4 +132,4 @@ class AssetPreloader {
 // Create singleton instance
 const assetPreloader = new AssetPreloader()
 
-export default assetPreloader
+export default assetPreloader;

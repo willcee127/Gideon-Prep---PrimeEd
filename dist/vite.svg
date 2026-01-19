@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" style="ms-interpolation-mode: nearest-neighbor;">
+  <style>
+    path {
+      fill: #888;
+    }
+    @media (prefers-color-scheme: light) {
+      path {
+        fill: #4a5568;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      path {
+        fill: #fff;
+      }
+    }
+  </style>
+  <path d="M15 3.5v-1.5a1.5 1.5 0 0 0-3 0v1.5a1.5 1.5 0 0 0 3 0h1.5a1.5 1.5 0 0 0 3 0v-1.5a1.5 1.5 0 0 0-3 0H15Zm-7.5-1.5a1.5 1.5 0 0 0-3 0v1.5a1.5 1.5 0 0 0 3 0h1.5a1.5 1.5 0 0 0 3 0v-1.5a1.5 1.5 0 0 0-3 0H7.5Zm6-6V7.5A1.5 1.5 0 0 1 12h1.5a1.5 1.5 0 0 1 1.5v1.5a1.5 1.5 0 0 1-1.5H12a1.5 1.5 0 0 1-1.5V9A1.5 1.5 0 0 0 10.5h1.5A1.5 1.5 0 0 0 13.5v1.5a1.5 1.5 0 0 0 1.5H15a1.5 1.5 0 0 0 1.5V16.5a1.5 1.5 0 0 0-1.5H12A1.5 1.5 0 0 0 10.5h-1.5A1.5 1.5 0 0 0 7.5V9a1.5 1.5 0 0 1 1.5h1.5a1.5 1.5 0 0 1 1.5v1.5a1.5 1.5 0 0 1-1.5H12a1.5 1.5 0 0 1-1.5V9a1.5 1.5 0 0 0-1.5H12A1.5 1.5 0 0 0 10.5h1.5A1.5 1.5 0 0 0 13.5v1.5a1.5 1.5 0 0 0 1.5H15a1.5 1.5 0 0 0 1.5V16.5a1.5 1.5 0 0 0-1.5H12Z"/>
+</svg>

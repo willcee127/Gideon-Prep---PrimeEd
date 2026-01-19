@@ -352,7 +352,7 @@ class ProblemForge {
 export const problemForge = new ProblemForge()
 
 // Export class for testing/custom instances
-export default ProblemForge
+export default ProblemForge;
 
 // Mock Forge Service - Generate infinite tactical reps
 export const generateMockProblem = (zone, difficulty) => {

@@ -1,6 +1,6 @@
 // Socratic CoPilot Service with Tactical Intel Integration
 import React, { useState } from 'react'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 const SocraticCoPilot = () => {
   const [frictionCount, setFrictionCount] = useState(new Map())
@@ -112,4 +112,4 @@ const SocraticCoPilot = () => {
   }
 }
 
-export default SocraticCoPilot
+export default SocraticCoPilot;

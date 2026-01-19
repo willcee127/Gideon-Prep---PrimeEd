@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { mathContent, getNodeById, getAllNodes } from '../data/mathContent'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 import ReconMissionButton from './ReconMissionButton'
 import SocraticCoPilot from '../services/SocraticCoPilotService'
 

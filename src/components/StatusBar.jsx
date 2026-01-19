@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useNeuro } from '../context/NeuroProvider'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 const StatusBar = ({ userName, completedNodes, correctAnswers, isWelcomeKitActive, onShowIntel }) => {
   const { stressLevel, isStressed } = useNeuro()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNeuro } from '../context/NeuroProvider'
-import { supabase, memoryAPI } from '../supabase'
+import { supabase } from '../lib/supabase'
 import { getNodeById } from '../data/mathContent'
 import { problemForge } from '../services/ProblemForge'
 import SocraticCoPilot from '../services/SocraticCoPilotService.jsx'

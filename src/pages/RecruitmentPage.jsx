@@ -142,4 +142,4 @@ const RecruitmentPage = () => {
   )
 }
 
-export default RecruitmentPage
+export default RecruitmentPage;

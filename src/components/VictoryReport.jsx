@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNeuro } from '../context/NeuroProvider'
-import { supabase } from '../supabase'
+import { supabase } from '../lib/supabase'
 
 const VictoryReport = ({ userName, completedNodes, correctAnswers, onDownloadComplete }) => {
   const [showConfetti, setShowConfetti] = useState(false)
