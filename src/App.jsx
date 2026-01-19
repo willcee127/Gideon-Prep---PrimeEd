@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
 import Initiation from './components/Initiation'
 import MasteryMap from './components/MasteryMap'
@@ -486,9 +486,8 @@ function App() {
   const userName = sessionData?.userName || 'Scholar'
 
   return (
-    <Router>
-      <NeuroProvider>
-        <div className="min-h-screen bg-black text-white">
+    <NeuroProvider>
+      <div className="min-h-screen bg-black text-white">
           {/* Status Report - Always Visible */}
           <StatusReportErrorBoundary callSign={identityData.callSign} aiSupportLevel={aiSupportLevel}>
             <StatusReport 
@@ -576,7 +575,6 @@ function App() {
           )}
         </div>
       </NeuroProvider>
-    </Router>
   )
 }
 
