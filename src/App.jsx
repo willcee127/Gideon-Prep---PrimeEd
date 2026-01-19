@@ -112,6 +112,7 @@ function App() {
   const [forgeModeActive, setForgeModeActive] = useState(false)
   const [victorySequenceActive, setVictorySequenceActive] = useState(false)
   const [isAuthLoading, setIsAuthLoading] = useState(true)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
 
   // Identity State for Status Report
   const [identityData, setIdentityData] = useState(() => {
@@ -298,6 +299,7 @@ function App() {
         console.error('Auth hydration error:', error)
       } finally {
         setIsAuthLoading(false)
+        setIsInitialLoading(false)
       }
     }
     
@@ -545,8 +547,16 @@ function App() {
   return (
     <NeuroProvider>
       <div className="min-h-screen bg-black text-white">
-        {/* Loading Guardrail - Show while checking auth */}
-        {isAuthLoading ? (
+        {/* Initial Loading Guardrail - Show while checking auth and profile */}
+        {isInitialLoading ? (
+          <div className="min-h-screen bg-black text-white flex items-center justify-center">
+            <div className="text-center space-y-6">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+              <h2 className="text-2xl font-bold text-purple-400">Re-establishing Command Connection...</h2>
+              <p className="text-gray-400">Securing your operator profile</p>
+            </div>
+          </div>
+        ) : isAuthLoading ? (
           <div className="min-h-screen bg-black text-white flex items-center justify-center">
             <div className="text-center space-y-6">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
