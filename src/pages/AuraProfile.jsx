@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import AuraPowerBar from '../components/AuraPowerBar'
+import useMilestone from '../hooks/useMilestone'
+import MilestoneCelebration from '../components/MilestoneCelebration'
 
 const AuraProfile = () => {
   const [growthLog, setGrowthLog] = useState([])
@@ -9,6 +11,7 @@ const AuraProfile = () => {
   const [powerBarWidth, setPowerBarWidth] = useState(0)
   
   const identityData = JSON.parse(localStorage.getItem('gideon_identity_data') || '{}')
+  const { showCelebration } = useMilestone(identityData.combat_power || 0)
 
   const pulseVariants = {
     pulse: {
@@ -63,6 +66,7 @@ const AuraProfile = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
+      <MilestoneCelebration show={showCelebration} />
       <AnimatePresence mode="wait">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
