@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import AuraPowerBar from '../components/AuraPowerBar'
 import useMilestone from '../hooks/useMilestone'
 import MilestoneCelebration from '../components/MilestoneCelebration'
+import Level4Badge from '../components/Level4Badge'
 
 const AuraProfile = () => {
   const [growthLog, setGrowthLog] = useState([])
@@ -11,7 +12,7 @@ const AuraProfile = () => {
   const [powerBarWidth, setPowerBarWidth] = useState(0)
   
   const identityData = JSON.parse(localStorage.getItem('gideon_identity_data') || '{}')
-  const { showCelebration } = useMilestone(identityData.combat_power || 0)
+  const { showCelebration, level4Unlock } = useMilestone(identityData.combat_power || 0)
 
   const pulseVariants = {
     pulse: {
@@ -67,6 +68,7 @@ const AuraProfile = () => {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <MilestoneCelebration show={showCelebration} />
+      <Level4Badge show={level4Unlock} />
       <AnimatePresence mode="wait">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
