@@ -50,8 +50,7 @@ const SuccessBadge = ({ userName, isVisible, onClose, isFirstNode }) => {
       await supabase
         .from('profiles')
         .update({
-          achievements: achievementData,
-          updated_at: new Date().toISOString()
+          achievements: achievementData
         })
         .eq('id', profileId)
 

@@ -38,6 +38,15 @@ const RecruitmentPage = () => {
     localStorage.setItem('gideon_call_sign', callSign.trim())
     localStorage.setItem('gideon_comms', comms.trim())
     
+    // Create identityData object for immediate state refresh
+    const identityData = {
+      callSign: callSign.trim(),
+      comms: comms.trim(),
+      combat_power: 3, // Default to Level 3 for new recruits
+      ai_support_level: 3
+    }
+    localStorage.setItem('gideon_identity_data', JSON.stringify(identityData))
+    
     // Simulate processing
     setTimeout(() => {
       setIsSubmitting(false)

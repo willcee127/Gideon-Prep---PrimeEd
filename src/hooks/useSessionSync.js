@@ -79,8 +79,7 @@ const useSessionSync = (initialState = {}) => {
       supabase.from('profiles').upsert({
         user_id: sessionData.user_id || 'anonymous',
         is_mission_ready: true,
-        combat_power: sessionData.combatPower.average,
-        updated_at: new Date().toISOString()
+        combat_power: sessionData.combatPower.average
       }).then(({ error }) => {
         if (error) {
           console.error('Failed to sync mission ready status to Supabase:', error)
@@ -97,8 +96,7 @@ const useSessionSync = (initialState = {}) => {
       supabase.from('profiles').upsert({
         user_id: sessionData.user_id || 'anonymous',
         deployment_step: sessionData.deployment_step,
-        registration_complete: sessionData.registration_complete,
-        updated_at: new Date().toISOString()
+        registration_complete: sessionData.registration_complete
       }).then(({ error }) => {
         if (error) {
           console.error('Failed to sync deployment status to Supabase:', error)

@@ -534,8 +534,7 @@ function App() {
           .from('profiles')
           .update({ 
             ai_support_level: newSupportLevel,
-            current_streak: 0,
-            updated_at: new Date().toISOString()
+            current_streak: 0
           })
           .eq('id', userId) // Use profile_id instead of call_sign
       

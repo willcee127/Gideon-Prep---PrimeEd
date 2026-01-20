@@ -106,8 +106,7 @@ const CapstoneCertificate = ({ isVisible, onClose }) => {
         .from('profiles')
         .update({
           achievements: achievementData,
-          capstone_earned: true,
-          updated_at: new Date().toISOString()
+          capstone_earned: true
         })
         .eq('id', profile.id)
 

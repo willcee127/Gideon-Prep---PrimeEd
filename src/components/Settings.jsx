@@ -37,8 +37,7 @@ const Settings = () => {
       const { data, error } = await supabase
         .from('profiles')
         .update({ 
-          call_sign: callSign.trim(),
-          updated_at: new Date().toISOString()
+          call_sign: callSign.trim()
         })
         .eq('id', userId)
 
