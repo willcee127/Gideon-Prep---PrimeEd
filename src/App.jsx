@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { NeuroProvider } from './context/NeuroProvider' 
+import { AuthProvider, useAuth } from './context/AuthContext'
+import BrandLoading from './components/BrandLoading'
 import Initiation from './components/Initiation'
 import MasteryMap from './components/MasteryMap'
 import SlideInPanel from './components/SlideInPanel'
@@ -116,6 +118,9 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   const navigate = useNavigate()
   const location = useLocation()
+  
+  // Use auth context for robust state management
+  const { user, isLoading, showBrandLoading } = useAuth()
   
   // Use session sync hook for robust state persistence
   const { sessionData, setSessionData } = useSessionSync({
@@ -589,9 +594,12 @@ function App() {
   const userName = sessionData?.userName || 'Scholar'
 
   return (
-    <NeuroProvider>
-      <div className="min-h-screen bg-black text-white">
-        {isInitialLoading ? (
+    <AuthProvider>
+      <NeuroProvider>
+        <div className="min-h-screen bg-black text-white">
+          {showBrandLoading ? (
+            <BrandLoading />
+          ) : isLoading ? (
           <div className="min-h-screen bg-black text-white flex items-center justify-center">
             <div className="text-center space-y-6">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
@@ -637,7 +645,15 @@ function App() {
           {/* Main Routes */}
           <Routes>
             <Route path="/" element={<Navigate to="/recruitment" replace />} />
-            <Route path="/recruitment" element={<RecruitmentPage />} />
+            <Route path="/recruitment" element={
+              <ProtectedRoute>
+                {!user && !isLoading ? (
+                  <RecruitmentPage />
+                ) : (
+                  <Navigate to="/mission" replace />
+                )}
+              </ProtectedRoute>
+            } />
             <Route path="/initiation" element={<Initiation onComplete={(data) => {
               // Handle initiation completion
               console.log('Initiation completed:', data)
@@ -709,9 +725,11 @@ function App() {
           )}
           </>
         )}
-      </div>
-    </NeuroProvider>
+        </div>
+      </NeuroProvider>
+    </AuthProvider>
   )
+
 }
 
 export default App
